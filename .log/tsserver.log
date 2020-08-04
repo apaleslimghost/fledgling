@@ -1,0 +1,12 @@
+Info 0    [21:33:24.426] Starting TS Server
+Info 1    [21:33:24.427] Version: 3.8.3
+Info 2    [21:33:24.428] Arguments: /usr/local/Cellar/node/14.4.0/bin/node /usr/local/bin/tsserver --logFile /Users/kara.brightwell/Projects/fledgling/.log/tsserver.log --logVerbosity info --cancellationPipeName /private/var/folders/48/c184q35n1h3fgscm8rvxmp800000gp/T/4c02b63ea20b2f989893efabc66a6cdd/tscancellation*
+Info 3    [21:33:24.428] Platform: darwin NodeVersion: 14 CaseSensitive: false
+Info 4    [21:33:24.451] Search path: /Users/kara.brightwell/Projects/fledgling/app/javascript/packs
+Info 5    [21:33:24.453] For info: /Users/kara.brightwell/Projects/fledgling/app/javascript/packs/hello_react.jsx :: No config files found.
+Info 6    [21:33:24.459] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 7    [21:33:27.234] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true Elapsed: 2775ms
+Info 8    [21:33:27.234] Project '/dev/null/inferredProject1*' (Inferred) 
+Info 9    [21:33:27.234] 	Files (140)
+
+Info 10   [21:33:27.234] -----------------------------------------------

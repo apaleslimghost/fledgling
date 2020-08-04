@@ -13,10 +13,9 @@ module Fledgling
   class Application < Rails::Application
     config.load_defaults 6.0
 
-    config.generators.template_engine = false
-    config.generators.view_specs = false
-    config.generators.assets = false
-    config.generators.helper = false
-    config.generators.system_tests = false
+    config.generators.view_specs = nil
+    config.generators.assets = nil
+    config.generators.helper = nil
+    config.generators.system_tests = nil
   end
 end
