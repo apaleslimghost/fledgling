@@ -1,3 +1,15 @@
 <h1><%= @project.title %></h1>
 
 <p><%= @project.description %></p>
+
+<ul>
+<% @project.tasks.each do |task| %>
+<li><%= task.title %>
+<% end %>
+
+<%= form_with model: [@project, @project.tasks.build], local: true do |form| %>
+    <%= form.label :title %>
+    <%= form.text_field :title %>
+    <%= form.submit %>
+<% end %>
+</ul>
