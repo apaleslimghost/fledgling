@@ -1,4 +1,7 @@
 <h1><%= @project.title %></h1>
+<% if @project.parent %>
+    <%= link_to @project.parent.title, @project.parent %>
+<% end %>
 
 <p><%= @project.description %></p>
 
@@ -7,9 +10,21 @@
 <li><%= task.title %>
 <% end %>
 
-<%= form_with model: [@project, @project.tasks.build], local: true do |form| %>
+<%= form_with model: [@project, @project.tasks.new], local: true do |form| %>
     <%= form.label :title %>
     <%= form.text_field :title %>
     <%= form.submit %>
 <% end %>
+</ul>
+
+<ul>
+    <% @project.subprojects.each do |subproject| %>
+        <li><%= link_to subproject.title, subproject %>
+    <% end %>
+
+    <%= form_with model: [@project, @project.subprojects.new], local: true do |form| %>
+        <%= form.label :title %>
+        <%= form.text_field :title %>
+        <%= form.submit %>
+    <% end %>
 </ul>

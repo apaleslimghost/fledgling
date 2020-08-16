@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_04_133500) do
+ActiveRecord::Schema.define(version: 2020_08_16_123943) do
 
   create_table "actions", force: :cascade do |t|
     t.string "title"
@@ -26,6 +26,19 @@ ActiveRecord::Schema.define(version: 2020_08_04_133500) do
     t.text "description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "parent_id"
+    t.index ["parent_id"], name: "index_projects_on_parent_id"
+  end
+
+  create_table "relations", force: :cascade do |t|
+    t.integer "from_id", null: false
+    t.integer "to_id", null: false
+    t.integer "count"
+    t.integer "hierarchy"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["from_id"], name: "index_relations_on_from_id"
+    t.index ["to_id"], name: "index_relations_on_to_id"
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -37,5 +50,7 @@ ActiveRecord::Schema.define(version: 2020_08_04_133500) do
   end
 
   add_foreign_key "actions", "projects"
+  add_foreign_key "relations", "froms"
+  add_foreign_key "relations", "tos"
   add_foreign_key "tasks", "projects"
 end

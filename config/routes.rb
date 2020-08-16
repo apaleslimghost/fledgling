@@ -4,5 +4,6 @@ Rails.application.routes.draw do
   root 'home#index'
   resources :projects do
     resources :tasks
+    resources :projects, only: [:create]
   end
 end
