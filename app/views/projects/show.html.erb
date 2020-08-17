@@ -6,7 +6,7 @@
 <p><%= @project.description %></p>
 
 <ul>
-<% @project.tasks.each do |task| %>
+<% @project.hierarchy_tasks.each do |task| %>
 <li><%= task.title %>
 <% end %>
 
