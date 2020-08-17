@@ -10,13 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_16_123943) do
+ActiveRecord::Schema.define(version: 2020_08_17_201426) do
+
+  create_table "project_hierarchies", id: false, force: :cascade do |t|
+    t.integer "ancestor_id", null: false
+    t.integer "descendant_id", null: false
+    t.integer "generations", null: false
+    t.index ["ancestor_id", "descendant_id", "generations"], name: "project_anc_desc_idx", unique: true
+    t.index ["descendant_id"], name: "project_desc_idx"
+  end
 
   create_table "projects", force: :cascade do |t|
     t.text "title"
     t.text "description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "parent_id"
   end
 
   create_table "tasks", force: :cascade do |t|
