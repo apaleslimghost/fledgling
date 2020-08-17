@@ -57,6 +57,9 @@ GEM
       tzinfo (~> 1.1)
       zeitwerk (~> 2.2, >= 2.2.2)
     builder (3.2.4)
+    closure_tree (7.1.0)
+      activerecord (>= 4.2.10)
+      with_advisory_lock (>= 4.0.0)
     concurrent-ruby (1.1.6)
     crass (1.0.6)
     erubi (1.9.0)
@@ -146,12 +149,15 @@ GEM
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    with_advisory_lock (4.6.0)
+      activerecord (>= 4.2)
     zeitwerk (2.4.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  closure_tree
   jbuilder (~> 2.7)
   listen (~> 3.2)
   puma (~> 4.1)

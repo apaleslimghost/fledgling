@@ -1,33 +1,27 @@
 class ProjectsController < ApplicationController
-	def index
-		@projects = Project.all
-	end
+  def index
+    @projects = Project.all
+  end
 
-	def new
-		@project = Project.new
-	end
+  def new
+    @project = Project.new
+  end
 
-	def create
-    puts params
-    if params[:project_id]
-      @parent = Project.find(params[:project_id])
-      @project = @parent.subprojects.new(project_params)
+  def create
+    @project = Project.new(project_params)
+
+    if @project.save
+      redirect_to @project
     else
-      @project = Project.new(project_params)
+      render 'new'
+     end
     end
 
-		if @project.save
-			redirect_to @project
-		else
-			render 'new'
-		end
-	  end
+  private def project_params
+    params.require(:project).permit(:title, :description)
+  end
 
-    private def project_params
-      params.require(:project).permit(:title, :description)
-    end
-
-	def show
-		@project = Project.find(params[:id])
-	end
+  def show
+    @project = Project.find(params[:id])
+  end
 end

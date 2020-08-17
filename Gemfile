@@ -9,7 +9,7 @@ gem 'puma', '~> 4.1'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.7'
 gem 'webpacker'
-# gem 'typed_dag'
+gem 'closure_tree'
 
 group :development do
   gem 'listen', '~> 3.2'
