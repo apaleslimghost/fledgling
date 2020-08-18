@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_17_201426) do
+ActiveRecord::Schema.define(version: 2020_08_17_210158) do
 
   create_table "project_hierarchies", id: false, force: :cascade do |t|
     t.integer "ancestor_id", null: false
@@ -33,6 +33,8 @@ ActiveRecord::Schema.define(version: 2020_08_17_201426) do
     t.integer "project_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "completed"
+    t.string "description"
     t.index ["project_id"], name: "index_tasks_on_project_id"
   end
 

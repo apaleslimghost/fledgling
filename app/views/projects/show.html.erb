@@ -7,7 +7,12 @@
 
 <ul>
 <% @project.hierarchy_tasks.each do |task| %>
-<li><%= task.title %>
+    <li>
+        <% if task.completed %>
+            <s><%= task.title %></s>
+        <% else %>
+            <%= task.title %>
+        <% end %>
 <% end %>
 
 <%= form_with model: [@project, @project.tasks.new], local: true do |form| %>

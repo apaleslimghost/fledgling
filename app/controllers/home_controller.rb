@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
   def index
-    @projects = Project.all
+    redirect_to controller: :projects, action: :index
   end
 end
