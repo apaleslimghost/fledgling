@@ -5,7 +5,11 @@ class ProjectsController < ApplicationController
   end
 
   def new
-    @project = Project.new
+    render component: 'ProjectForm', props: { project: Project.new }
+  end
+
+  def edit
+    render component: 'ProjectForm', props: { project: Project.find(params[:id]) }
   end
 
   def create
@@ -19,7 +23,18 @@ class ProjectsController < ApplicationController
     if @project.save
       redirect_to @project
     else
+      # TODO render form with errors
       render 'new'
+    end
+  end
+
+  def update
+    @project = Project.find(params[:id])
+
+    if @project.update(project_params)
+      redirect_to @project
+    else
+      # TODO render form with errors
     end
   end
 
