@@ -8,7 +8,7 @@ module React::Rails::ControllerRenderer::Patch
     props = options.fetch(:props, {}).merge(@controller.default_props)
     super(
       component_name,
-      options.merge({camelize_props: true, props: props}),
+      options.merge({prerender: :static, camelize_props: true, props: props}),
       &block
     )
   end
