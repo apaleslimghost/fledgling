@@ -1,3 +1,10 @@
 class ApplicationController < ActionController::Base
-  skip_before_action :verify_authenticity_token
+  def default_props
+    {
+      csrf: {
+        token: form_authenticity_token,
+        param: request_forgery_protection_token
+      }
+    }
+  end
 end

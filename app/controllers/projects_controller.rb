@@ -49,7 +49,7 @@ class ProjectsController < ApplicationController
              children: @project.children,
              parent: @project.parent,
              tasks: @project.hierarchy_tasks,
-             newTask: Task.new(project: @project),
+             new_task: Task.new(project: @project),
              subproject: Project.new(parent: @project)
            }
   end

@@ -1,14 +1,17 @@
 import React, { createContext, useContext } from 'react'
+import {CSRFContext} from './CSRF'
 
 const Model = createContext()
 
 export function Form({ model, children, ...props }) {
     const {url, method} = model._meta
+    const {param, token} = useContext(CSRFContext)
     const unsupportedMethod = !['get', 'post'].includes(method)
     const actualMethod = unsupportedMethod ? 'post' : method
 
     return (
         <form action={url} method={actualMethod} {...props}>
+          {token && <input name={param} value={token} type='hidden' />}
           {unsupportedMethod &&
            <input name="_method" type="hidden" value={method} />}
 

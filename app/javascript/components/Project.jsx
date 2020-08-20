@@ -1,12 +1,14 @@
 import React from 'react'
+
+import Wrapper from './Wrapper'
 import ProjectForm from './ProjectForm'
 import ProjectList from './ProjectList'
 import TaskList from './TaskList'
 import TaskForm from './TaskForm'
 import Link from './Link'
 
-export default ({ project, parent, children, tasks, subproject, newTask }) => (
-    <>
+export default ({ project, parent, children, tasks, subproject, newTask, csrf }) => (
+    <Wrapper csrf={csrf}>
       <h1>{project.title}</h1>
       {parent && (
           <Link to={parent}>
@@ -20,5 +22,5 @@ export default ({ project, parent, children, tasks, subproject, newTask }) => (
 
       { tasks.length > 0 && <TaskList tasks={tasks}/> }
       <TaskForm task={newTask} />
-    </>
+    </Wrapper>
 )
