@@ -23,5 +23,5 @@ export function Input({ name, ...props }) {
   const model = useContext(Model)
   const fullName = `${model._meta.modelName}[${name}]`
 
-  return <input name={fullName} defaultValue={model[name]} {...props}/>
+  return <input name={fullName} defaultValue={model[name] || ''} {...props}/>
 }
