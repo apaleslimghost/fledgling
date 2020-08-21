@@ -5,7 +5,7 @@ const Model = createContext()
 
 export function Form({ model, children, ...props }) {
     const {url, method} = model._meta
-    const {param, token} = useContext(CSRFContext)
+    const {param, token} = useContext(CSRFContext) || {}
     const unsupportedMethod = !['get', 'post'].includes(method)
     const actualMethod = unsupportedMethod ? 'post' : method
 

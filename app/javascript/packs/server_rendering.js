@@ -1,5 +1,15 @@
-// By default, this pack is loaded for server-side rendering.
-// It must expose react_ujs as `ReactRailsUJS` and prepare a require context.
-var componentRequireContext = require.context("components", true);
-var ReactRailsUJS = require("react_ujs");
-ReactRailsUJS.useContext(componentRequireContext);
+import React from 'react'
+import ReactRailsUJS from 'react_ujs'
+import Wrapper from '../components/Wrapper'
+import * as ReactDomServer from 'react-dom/server'
+
+ReactRailsUJS.useContext(require.context('components', true))
+
+ReactRailsUJS.serverRender = function(renderFunction, componentName, {wrapperProps, ...props}) {
+    const Component = this.getConstructor(componentName)
+    return ReactDomServer[renderFunction](
+        <Wrapper {...wrapperProps}>
+          <Component {...props}/>
+        </Wrapper>
+    )
+}
