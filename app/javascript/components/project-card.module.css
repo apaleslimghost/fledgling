@@ -1,6 +1,11 @@
 .main {
+    display: block;
+    background: white;
+    padding: 0.5rem;
+    min-height: 6rem;
 }
 
 .title {
-    color: red;
+    margin: 0;
+    font-weight: normal;
 }

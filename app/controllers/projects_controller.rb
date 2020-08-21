@@ -1,7 +1,7 @@
 class ProjectsController < ApplicationController
   def index
     @projects = Project.roots
-    render component: 'ProjectList', props: { projects: @projects }
+    render component: 'ProjectsPage', props: { projects: @projects }
   end
 
   def new
