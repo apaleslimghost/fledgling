@@ -3,9 +3,13 @@
     background: white;
     padding: 0.5rem;
     min-height: 6rem;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 2px;
 }
 
 .title {
     margin: 0;
-    font-weight: normal;
+    color: var(--colour-title);
+    font-size: 2rem;
 }

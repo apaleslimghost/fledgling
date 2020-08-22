@@ -61,6 +61,7 @@ GEM
       babel-source (>= 4.0, < 6)
       execjs (~> 2.0)
     builder (3.2.4)
+    chroma (0.2.0)
     closure_tree (7.1.0)
       activerecord (>= 4.2.10)
       with_advisory_lock (>= 4.0.0)
@@ -72,6 +73,7 @@ GEM
     ffi (1.13.1)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
+    hsluv (1.0.1)
     i18n (1.8.5)
       concurrent-ruby (~> 1.0)
     jbuilder (2.10.0)
@@ -170,7 +172,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  chroma
   closure_tree
+  hsluv
   jbuilder (~> 2.7)
   listen (~> 3.2)
   puma (~> 4.1)

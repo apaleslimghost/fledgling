@@ -3,8 +3,12 @@ class ApplicationRecord < ActiveRecord::Base
 
   self.abstract_class = true
 
+  def include_methods
+    []
+  end
+
   def as_json(options = {})
-    super(options.merge methods: [:_meta])
+    super(options.merge methods: [:_meta, *include_methods])
   end
 
   def form_method

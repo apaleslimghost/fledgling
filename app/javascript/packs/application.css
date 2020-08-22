@@ -1,19 +1,8 @@
-@import '../components/colours.css';
-
-:root {
-    --bg: white;
-    --fg: var(--steel-0);
+* {
+    box-sizing: border-box;
 }
 
-@media(prefers-colour-scheme: dark) {
-    :root {
-        --bg: var(--steel-0);
-        --fg: var(--steel-8);
-    }
-}
-
-body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+body {    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     background: var(--bg);
     color: var(--fg);
     margin: 0;
@@ -28,4 +17,3 @@ body, :root {
 body > :last-child {
     flex: 1;
 }
-

@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
       },
       packs: {
         styles: asset_pack_path('application.css'),
-        scripts: asset_pack_path('application.js'),
+        scripts: asset_pack_path('application.js')
       }
     }
   end

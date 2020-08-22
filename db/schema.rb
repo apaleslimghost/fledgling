@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_17_210158) do
+ActiveRecord::Schema.define(version: 2020_08_22_141250) do
 
   create_table "project_hierarchies", id: false, force: :cascade do |t|
     t.integer "ancestor_id", null: false
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 2020_08_17_210158) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "parent_id"
+    t.string "colour"
   end
 
   create_table "tasks", force: :cascade do |t|

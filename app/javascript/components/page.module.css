@@ -1,0 +1,36 @@
+.wrapper {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.header h1 {
+    font-size: 6rem;
+    margin-bottom: -4rem;
+    position: relative;
+    color: var(--colour-title);
+    font-weight: 900;
+}
+
+.header, .content {
+    width: 100%;
+    max-width: 60rem;
+    padding: 2rem 2rem 0;
+    margin: 0 auto;
+}
+
+.header {
+    min-height: 10rem;
+    margin-bottom: 2rem;
+}
+
+.background {
+    flex: 1;
+    background: linear-gradient(
+        0.4turn,
+        var(--colour-gradient_start),
+        var(--colour-base),
+        var(--colour-base),
+        var(--colour-base),
+        var(--colour-gradient_end)
+    );
+}

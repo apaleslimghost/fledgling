@@ -1,15 +1,16 @@
 import React from 'react'
 
-import Wrapper from './Wrapper'
+import Page from './Page'
 import ProjectForm from './ProjectForm'
 import ProjectList from './ProjectList'
 import TaskList from './TaskList'
 import TaskForm from './TaskForm'
 import Link from './Link'
 
+import colourStyle from './colour-style'
+
 export default ({ project, parent, children, tasks, subproject, newTask }) => (
-    <>
-      <h1>{project.title}</h1>
+  <Page title={project.title} style={colourStyle(project.colours)}>
       {parent && (
           <Link to={parent}>
             {parent.title}
@@ -22,5 +23,5 @@ export default ({ project, parent, children, tasks, subproject, newTask }) => (
 
       { tasks.length > 0 && <TaskList tasks={tasks}/> }
       <TaskForm task={newTask} />
-    </>
+    </Page>
 )

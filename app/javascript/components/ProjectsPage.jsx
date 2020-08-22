@@ -1,17 +1,17 @@
 import React from 'react'
+import Page from './Page'
 import ProjectList from './ProjectList'
-import styles from './projects-page.module.css'
+import colourStyle from './colour-style'
+
+const defaultColours = {
+    title: '#4D001C',
+    base: '#F975A6',
+    gradient_start: '#FFB678',
+    gradient_end: '#B67AEF'
+}
 
 export default ({ projects }) => (
-    <>
-      <header className={styles.header}>
-        <h1>Projects</h1>
-      </header>
-
-      <div className={styles.background}>
-        <main className={styles.content}>
-            <ProjectList projects={projects}/>
-        </main>
-      </div>
-    </>
+    <Page title='Projects' style={colourStyle(defaultColours)}>
+      <ProjectList projects={projects}/>
+    </Page>
 )
