@@ -6,6 +6,18 @@
     text-decoration: none;
     color: inherit;
     border-radius: 2px;
+    position: relative;
+}
+
+.main::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-shadow: -1rem 1rem 16rem var(--parent-colour-title);
+    z-index: -1;
 }
 
 .title {

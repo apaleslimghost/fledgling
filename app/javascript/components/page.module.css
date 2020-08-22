@@ -9,6 +9,8 @@
     position: relative;
     color: var(--colour-title);
     font-weight: 900;
+    z-index: 1;
+    line-height: 1;
 }
 
 .header, .content {
@@ -24,6 +26,9 @@
 }
 
 .background {
+    overflow: hidden;
+    position: relative;
+    z-index: 0;
     flex: 1;
     background: linear-gradient(
         0.4turn,
@@ -33,4 +38,8 @@
         var(--colour-base),
         var(--colour-gradient_end)
     );
+}
+
+.content {
+    --parent-colour-title: var(--colour-title);
 }
