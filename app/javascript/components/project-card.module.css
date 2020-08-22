@@ -1,12 +1,25 @@
 .main {
     display: block;
-    background: white;
+    background: linear-gradient(
+        0.35turn,
+        var(--colour-base) -100%,
+        white
+    );
     padding: 0.5rem;
     min-height: 6rem;
     text-decoration: none;
     color: inherit;
-    border-radius: 2px;
+    border-radius: 0.3rem;
     position: relative;
+    transition: background-image 300ms;
+}
+
+.main:hover {
+    background: linear-gradient(
+        0.35turn,
+        var(--colour-base) -30%,
+        white 130%
+    );
 }
 
 .main::after {
@@ -16,8 +29,13 @@
     left: 0;
     right: 0;
     bottom: 0;
-    box-shadow: -1rem 1rem 16rem var(--parent-colour-title);
+    box-shadow: -1rem 1rem 20rem var(--parent-colour-title);
     z-index: -1;
+    transition: box-shadow 300ms;
+}
+
+.main:hover::after {
+    box-shadow: -1rem 1rem 12rem var(--parent-colour-title);
 }
 
 .title {
