@@ -19,8 +19,7 @@ export default ({ project, parent, children, tasks, subproject, newTask }) => (
       </Link>
     )}
   >
-      { tasks.length > 0 && <TaskList tasks={tasks}/> }
-      <TaskForm task={newTask} />
+      <TaskList tasks={tasks} newTask={newTask} />
 
       { children.length > 0 && <ProjectList projects={children}/>}
       <ProjectForm project={subproject} />
