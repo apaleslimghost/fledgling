@@ -49,8 +49,8 @@ class ProjectsController < ApplicationController
     render component: 'Project', props: {
              project: @project,
              children: @project.children,
-             parent: @project.parent,
              tasks: @project.hierarchy_tasks,
+             breadcrumbs: @project.breadcrumbs,
              new_task: Task.new(project: @project),
              subproject: Project.new(parent: @project)
            }

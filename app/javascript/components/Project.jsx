@@ -4,24 +4,19 @@ import Page from './Page'
 import ProjectForm from './ProjectForm'
 import ProjectList from './ProjectList'
 import TaskList from './TaskList'
-import TaskForm from './TaskForm'
-import Link from './Link'
+import Breadcrumbs from './Breadcrumbs'
 
 import colourStyle from './colour-style'
 
-export default ({ project, parent, children, tasks, subproject, newTask }) => (
+export default ({ project, parent, children, tasks, breadcrumbs, subproject, newTask }) => (
   <Page
     title={project.title}
     style={colourStyle(project.colours)}
-    header={parent && (
-      <Link to={parent}>
-        {parent.title}
-      </Link>
-    )}
+    header={<Breadcrumbs breadcrumbs={breadcrumbs} />}
   >
-      <TaskList tasks={tasks} newTask={newTask} />
+    <TaskList tasks={tasks} newTask={newTask} />
 
-      { children.length > 0 && <ProjectList projects={children}/>}
-      <ProjectForm project={subproject} />
-    </Page>
+    { children.length > 0 && <ProjectList projects={children}/>}
+    <ProjectForm project={subproject} />
+  </Page>
 )

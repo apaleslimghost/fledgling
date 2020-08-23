@@ -14,6 +14,10 @@ class Project < ApplicationRecord
     self_and_descendants.flat_map(&:tasks)
   end
 
+  def breadcrumbs
+    ancestors.reverse
+  end
+
   def path_to
     if parent and not persisted?
       polymorphic_path([parent, self])
