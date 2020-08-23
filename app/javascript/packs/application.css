@@ -2,18 +2,13 @@
     box-sizing: border-box;
 }
 
-body {    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--bg);
-    color: var(--fg);
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 18px;
     margin: 0;
-    display: flex;
-    flex-direction: column;
 }
 
 body, :root {
     height: 100%;
 }
 
-body > :last-child {
-    flex: 1;
-}
