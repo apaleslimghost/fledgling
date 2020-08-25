@@ -15,7 +15,6 @@
     bottom: 0;
     box-shadow: -1rem 1rem 20rem var(--colour-title);
     z-index: -1;
-    transition: box-shadow 300ms;
 }
 
 .item {

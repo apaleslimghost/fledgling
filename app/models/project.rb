@@ -31,12 +31,16 @@ class Project < ApplicationRecord
   end
 
   def default_colour
+    return unless title
+
     spin = 360 / Math.sqrt(2)
-    hue = title.hash * spin
+    hue = title.sum * spin
     Hsluv.hpluv_to_hex(hue, 100, 82.5)
   end
 
   def title_colour
+    return unless colour
+
     hsl = colour.paint.hsl
     hsl.s = 1
     hsl.l = 0.15
@@ -44,6 +48,8 @@ class Project < ApplicationRecord
   end
 
   def colours
+    return unless colour
+
     {
       base: colour,
       title: title_colour,
