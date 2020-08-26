@@ -3,9 +3,10 @@ import {CSRFContext} from './CSRF.jsx'
 
 export default ({ csrf, packs, children }) => (
   <CSRFContext.Provider value={csrf}>
-    <html>
+    <html lang='en'>
       <head>
         <title>Fledgling</title>
+        <meta charset='utf8' />
         <meta name='csrf-param' value={csrf.param}/>
         <meta name='csrf-token' value={csrf.token}/>
 

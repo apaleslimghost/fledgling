@@ -1,7 +1,8 @@
 .main {
     list-style: none;
     margin: 0;
-    padding: 0.5rem;
+    padding: 0 0.25rem;
+    font-size: 1.2em;
 }
 
 .item {
