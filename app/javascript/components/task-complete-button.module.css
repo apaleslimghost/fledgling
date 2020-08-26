@@ -1,0 +1,9 @@
+.form {
+    display: inline-block;
+    margin-right: 0.5rem;
+}
+
+.button {
+    width: 2em;
+    text-align: center;
+}

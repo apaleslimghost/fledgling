@@ -1,0 +1,43 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 18px;
+    margin: 0;
+}
+
+body, :root {
+    height: 100%;
+}
+
+button, input[type='button'], input[type='submit'] {
+    font-family: inherit;
+    font-size: 0.8em;
+    border: 2px solid currentColor;
+    background: transparent;
+    color: var(--colour-title, inherit);
+    font-weight: 900;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 0 0.4em;
+    position: relative;
+
+    &:after {
+        content: '';
+        position: absolute;
+        top: -8px;
+        left: -8px;
+        right: -8px;
+        bottom: -8px;
+    }
+
+    &:hover {
+        background: var(--colour-base);
+    }
+
+    &:active {
+        background: var(--colour-gradient_start);
+    }
+}
