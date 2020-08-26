@@ -3,11 +3,11 @@ import TaskForm from './TaskForm'
 import TaskCompleteButton from './TaskCompleteButton'
 import styles from './task-list.module.css'
 
-export default ({ tasks, newTask }) => (
+export default ({ tasks, newTask, project }) => (
     <ul className={styles.main}>
       {tasks.map(task => (
         <li className={`${styles.item} ${task.completed ? styles.completed : ''}`} key={task.id}>
-          <TaskCompleteButton task={task} />
+          <TaskCompleteButton task={task} project={project} />
           {task.title}
         </li>
       ))}
