@@ -1,7 +1,6 @@
 .main {
     background: white;
     border-radius: 0.3rem;
-    list-style: none;
     position: relative;
     padding: 0.5rem 1rem;
 }
@@ -15,6 +14,12 @@
     bottom: 0;
     box-shadow: -1rem 1rem 20rem var(--colour-title);
     z-index: -1;
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .item {

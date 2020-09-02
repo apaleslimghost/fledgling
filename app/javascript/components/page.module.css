@@ -50,4 +50,7 @@
 
 .content {
     --parent-colour-title: var(--colour-title);
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
 }
