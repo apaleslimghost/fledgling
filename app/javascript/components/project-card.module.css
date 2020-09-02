@@ -22,7 +22,7 @@
     );
 }
 
-.main::after {
+.main::before {
     content: '';
     position: absolute;
     top: 0;
@@ -34,7 +34,7 @@
     transition: box-shadow 300ms;
 }
 
-.main:hover::after {
+.main:hover::before {
     box-shadow: -1rem 1rem 12rem var(--parent-colour-title);
 }
 
