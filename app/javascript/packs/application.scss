@@ -41,3 +41,19 @@ button, input[type='button'], input[type='submit'] {
         background: var(--colour-gradient_start);
     }
 }
+
+a:link, a:visited {
+    color: var(--colour-title);
+}
+
+a:hover, a:active {
+    background: var(--colour-title);
+    color: white;
+    box-shadow: 0 0 0 3px var(--colour-title);
+    border-radius: 3px;
+    text-decoration: none;
+}
+
+a:active {
+    color: var(--colour-base);
+}

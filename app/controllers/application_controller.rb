@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   include ActionView::Helpers::AssetUrlHelper
 
   layout false
+  per_request_react_rails_prerenderer
 
   def default_props
     {

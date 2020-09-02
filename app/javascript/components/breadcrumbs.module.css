@@ -3,6 +3,8 @@
     margin: 0;
     padding: 0 0.25rem;
     font-size: 1.2em;
+    position: relative;
+    z-index: 1;
 }
 
 .item {
@@ -17,7 +19,6 @@
 }
 
 .link {
-    color: var(--colour-title);
     font-weight: 900;
     text-decoration-thickness: 1px;
 }
