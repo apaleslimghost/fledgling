@@ -1,19 +1,8 @@
 .main {
-    background: white;
-    border-radius: 0.3rem;
-    position: relative;
-    padding: 0.5rem 1rem;
-}
+    composes: card from 'card.module.css';
 
-.main::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    box-shadow: -1rem 1rem 20rem var(--colour-title);
-    z-index: -1;
+    background: white;
+    padding-inline: 1rem;
 }
 
 .list {

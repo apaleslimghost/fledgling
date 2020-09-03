@@ -1,0 +1,19 @@
+.card {
+    position: relative;
+    padding: 0.5rem;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-shadow: -1rem 1rem 20rem var(--parent-colour-title, var(--colour-title));
+    z-index: -1;
+}
+
+.card, .card::before {
+    border-radius: 0.3rem;
+}

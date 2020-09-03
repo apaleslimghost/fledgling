@@ -1,15 +1,15 @@
 .main {
+    composes: card from 'card.module.css';
+
     display: block;
     background: linear-gradient(
         0.35turn,
         var(--colour-base) -100%,
         white
     );
-    padding: 0.5rem;
     min-height: 6rem;
     text-decoration: none;
     color: inherit;
-    border-radius: 0.3rem;
     position: relative;
     transition: background-image 300ms;
 }
@@ -20,22 +20,6 @@
         var(--colour-base) -30%,
         white 130%
     );
-}
-
-.main::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    box-shadow: -1rem 1rem 20rem var(--parent-colour-title);
-    z-index: -1;
-    transition: box-shadow 300ms;
-}
-
-.main:hover::before {
-    box-shadow: -1rem 1rem 12rem var(--parent-colour-title);
 }
 
 .title {
