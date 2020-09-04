@@ -7,6 +7,7 @@ class TasksController < ApplicationController
 
   def update
     @task = Task.find(params[:id])
+
     if @task.update(task_params)
       redirect_to params[:return_to] || @task.project
     end

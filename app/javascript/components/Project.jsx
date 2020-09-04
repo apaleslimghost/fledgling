@@ -8,7 +8,7 @@ import Breadcrumbs from './Breadcrumbs'
 
 import colourStyle from './colour-style'
 
-export default ({ project, children, tasks, breadcrumbs, subproject, newTask }) => (
+export default ({ project, children, tasks, breadcrumbs, subproject, newTask, newProject }) => (
   <Page
     title={project.title}
     style={colourStyle(project.colours)}
@@ -16,7 +16,8 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask }) 
   >
     <TaskList tasks={tasks} newTask={newTask} project={project} />
 
-    { children.length > 0 && <ProjectList projects={children}/>}
-    <ProjectForm project={subproject} />
+    {(children.length > 0 || newProject) && (
+      <ProjectList projects={children} newProject={newProject}/>
+    )}
   </Page>
 )

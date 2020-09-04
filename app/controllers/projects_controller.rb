@@ -48,6 +48,7 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     render component: 'Project', props: {
              project: @project,
+             new_project: Project.new(title: 'New project…'),
              children: @project.children,
              tasks: @project.hierarchy_tasks,
              breadcrumbs: @project.breadcrumbs,
