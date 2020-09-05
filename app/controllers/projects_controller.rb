@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   def index
-    render ProjectPageComponent.new(projects: Project.roots)
+    render_component ProjectPageComponent.new(projects: Project.roots)
   end
 
   def new

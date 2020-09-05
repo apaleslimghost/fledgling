@@ -2,8 +2,12 @@ class ApplicationController < ActionController::Base
   include Webpacker::Helper
   include ActionView::Helpers::AssetUrlHelper
 
-  layout false
   per_request_react_rails_prerenderer
+
+  def render_component(component, **options)
+    html = component.render_in view_context
+    render options.reverse_merge({ html: html, layout: true })
+  end
 
   def default_props
     {
