@@ -1,9 +1,6 @@
 class ProjectsController < ApplicationController
   def index
-    @projects = Project.roots
-
-    puts @projects.to_json
-    render component: 'ProjectsPage', props: { projects: @projects }
+    render ProjectPageComponent.new(projects: Project.roots)
   end
 
   def new

@@ -17,3 +17,6 @@ gem 'chroma'
 group :development do
   gem 'listen', '~> 3.2'
 end
+
+gem "view_component", "~> 2.18"
+gem "arbre", "~> 1.3"
