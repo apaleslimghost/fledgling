@@ -4,7 +4,7 @@ class ProjectsController < ApplicationController
   end
 
   def new
-    render component: 'ProjectForm', props: { project: Project.new }
+    render_component ProjectFormComponent.new(project: Project.new)
   end
 
   def edit
