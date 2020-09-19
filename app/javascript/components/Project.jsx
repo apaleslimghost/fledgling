@@ -11,7 +11,7 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask }) 
   <Page
     title={project.title}
     style={colourStyle(project.colours)}
-    header={<Breadcrumbs breadcrumbs={breadcrumbs} />}
+    header={breadcrumbs && <Breadcrumbs breadcrumbs={breadcrumbs} />}
   >
     <TaskList tasks={tasks} newTask={newTask} project={project} />
 

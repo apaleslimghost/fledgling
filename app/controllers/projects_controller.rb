@@ -1,9 +1,21 @@
 class ProjectsController < ApplicationController
   def index
-    @projects = Project.roots
+    project = Project.new(
+      title: 'Projects',
+      children: Project.roots
+    )
 
-    puts @projects.to_json
-    render component: 'ProjectsPage', props: { projects: @projects }
+    render component: 'Project', props: project_props(project)
+  end
+
+  def show
+    project = Project.find(params[:id])
+    props = project_props(project).merge({
+                                           new_task: Task.new(project: project),
+                                           breadcrumbs: project.breadcrumbs,
+                                         })
+    
+    render component: 'Project', props: props
   end
 
   def new
@@ -40,19 +52,18 @@ class ProjectsController < ApplicationController
     end
   end
 
-  private def project_params
+  private
+
+  def project_params
     params.require(:project).permit(:title, :description)
   end
 
-  def show
-    @project = Project.find(params[:id])
-    render component: 'Project', props: {
-             project: @project,
-             children: @project.children,
-             tasks: @project.hierarchy_tasks,
-             breadcrumbs: @project.breadcrumbs,
-             new_task: Task.new(project: @project),
-             subproject: Project.new(parent: @project, title: 'New project…')
-           }
+  def project_props(project)
+    {
+      project: project,
+      children: project.children,
+      tasks: project.hierarchy_tasks,
+      subproject: Project.new(parent: project.persisted? ? project : nil, title: 'New project…')
+    }
   end
 end

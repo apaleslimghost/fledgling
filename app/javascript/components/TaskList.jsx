@@ -37,10 +37,12 @@ export default ({ tasks, newTask, project }) => {
 
   return (
     <div className={styles .main}>
-      <TaskForm task={newTask} />
+      {newTask && <TaskForm task={newTask} />}
+
       {(incomplete.length > 0 || newTask) && (
         <List tasks={incomplete} project={project} />
       )}
+
       {complete.length > 0 && (
         <details className={styles.details}>
           <summary className={styles.summary}>Completed tasks</summary>
