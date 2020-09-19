@@ -1,6 +1,6 @@
 class Task < ApplicationRecord
-  def path_to
-    polymorphic_path([project, self])
+  def path_arguments
+    [project, self]
   end
 
   def include_methods

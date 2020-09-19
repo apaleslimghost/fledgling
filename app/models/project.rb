@@ -18,9 +18,9 @@ class Project < ApplicationRecord
     ancestors.reverse
   end
 
-  def path_to
+  def path_arguments
     if parent and not persisted?
-      polymorphic_path([parent, self])
+      [parent, self]
     else
       super
     end

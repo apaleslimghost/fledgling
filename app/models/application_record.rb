@@ -19,14 +19,38 @@ class ApplicationRecord < ActiveRecord::Base
     end
   end
 
-  def path_to
-    polymorphic_path(self)
+  def path_arguments
+    [self]
+  end
+
+  def show_action
+    if persisted?
+      nil
+    else
+      :new
+    end
+  end
+
+  def edit_action
+    if persisted?
+      :edit
+    else
+      :new
+    end
+  end
+
+  def paths
+    {
+      action: polymorphic_path(path_arguments),
+      show: polymorphic_path(path_arguments, action: show_action),
+      edit: polymorphic_path(path_arguments, action: edit_action)
+    }
   end
 
   def _meta
     {
       modelName: self.class.model_name.singular,
-      url: path_to,
+      urls: paths,
       method: form_method
     }
   end

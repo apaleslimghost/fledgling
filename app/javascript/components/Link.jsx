@@ -1,5 +1,5 @@
 import React from 'react'
 
-export default ({ to,  ...props }) => (
-    <a href={to._meta.url} {...props} />
+export default ({ to, action = 'show', ...props }) => (
+    <a href={to._meta.urls[action]} {...props} />
 )
