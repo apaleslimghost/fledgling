@@ -17,3 +17,5 @@ gem 'chroma'
 group :development do
   gem 'listen', '~> 3.2'
 end
+
+gem "bcrypt", "~> 3.1"

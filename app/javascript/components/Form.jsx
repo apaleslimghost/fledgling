@@ -1,24 +1,36 @@
 import React, { createContext, useContext } from 'react'
-import {CSRFContext} from './CSRF'
+import { CSRFContext } from './CSRF'
 
 const Model = createContext()
 
+const getFormProps = ({ model, ...props }) => {
+  if(model) {
+    const {urls, method} = model._meta
+
+    return { ...props, action: urls.action, method }
+  }
+
+  return props
+}
+
 export function Form({ model, children, ...props }) {
-  const {urls, method} = model._meta
   const {param, token} = useContext(CSRFContext) || {}
+  const { method, ...formProps } = getFormProps({ model, ...props })
   const unsupportedMethod = !['get', 'post'].includes(method)
   const actualMethod = unsupportedMethod ? 'post' : method
 
   return (
-    <form action={urls.action} method={actualMethod} {...props}>
+    <form method={actualMethod} {...formProps}>
       {token && <input name={param} value={token} type='hidden' />}
       {unsupportedMethod && (
        <input name="_method" type="hidden" value={method} />
       )}
 
-      <Model.Provider value={model}>
-        {children}
-      </Model.Provider>
+      {model ? (
+        <Model.Provider value={model}>
+          {children}
+        </Model.Provider>
+      ) : children}
     </form>
   )
 }

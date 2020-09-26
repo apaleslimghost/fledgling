@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_22_141250) do
+ActiveRecord::Schema.define(version: 2020_09_20_094529) do
 
   create_table "project_hierarchies", id: false, force: :cascade do |t|
     t.integer "ancestor_id", null: false
@@ -27,6 +27,8 @@ ActiveRecord::Schema.define(version: 2020_08_22_141250) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "parent_id"
     t.string "colour"
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -39,5 +41,17 @@ ActiveRecord::Schema.define(version: 2020_08_22_141250) do
     t.index ["project_id"], name: "index_tasks_on_project_id"
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "email"
+    t.string "password_digest"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "projects_id"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["projects_id"], name: "index_users_on_projects_id"
+  end
+
+  add_foreign_key "projects", "users"
   add_foreign_key "tasks", "projects"
+  add_foreign_key "users", "projects", column: "projects_id"
 end

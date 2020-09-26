@@ -1,4 +1,5 @@
 class Project < ApplicationRecord
+  belongs_to :user
   has_many :tasks
   validates :title, presence: true
 
@@ -15,10 +16,11 @@ class Project < ApplicationRecord
   end
 
   def breadcrumbs
-    ancestors.reverse
+    ancestors.reverse.drop(1)
   end
 
   def path_arguments
+    puts title, parent
     if parent and not persisted?
       [parent, self]
     else
