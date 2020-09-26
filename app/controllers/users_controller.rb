@@ -8,6 +8,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
+      session[:user_id] = user.id
       redirect_to @user.default_project, notice: 'User was successfully created.'
     else
       puts @user.errors.full_messages
