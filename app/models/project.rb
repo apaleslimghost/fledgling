@@ -20,7 +20,6 @@ class Project < ApplicationRecord
   end
 
   def path_arguments
-    puts title, parent
     if parent and not persisted?
       [parent, self]
     else

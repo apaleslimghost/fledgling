@@ -7,8 +7,6 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
-    puts 'WHAT'
-    puts @user.projects.count
     if @user.save
       redirect_to @user.default_project, notice: 'User was successfully created.'
     else
