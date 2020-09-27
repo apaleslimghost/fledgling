@@ -1,11 +1,34 @@
 import React from "react"
 import { Form, Input } from './Form'
+import Page from './Page'
+import Breadcrumbs from './Breadcrumbs'
+import colourStyle from './colour-style'
 
-const ProjectForm = ({ project }) => (
-  <Form model={project}>
-    <Input name='title' />
+import styles from './project-form.module.css'
 
-    <input type='submit' />
+const ProjectForm = ({ project, breadcrumbs }) => (
+  <Form model={project} className={styles.form}>
+    <Page
+      title={
+        <Input
+          autoFocus='autofocus'
+          name='title'
+          placeholder={!project.title && (project.id ? 'Project…' : 'New project…')}
+          className={styles.seamless}
+        />
+      }
+      style={colourStyle(project.colours)}
+      header={
+        <div className={styles.headerWrapper}>
+          <Breadcrumbs breadcrumbs={breadcrumbs} />
+          <input type='submit' value={project.id ? 'Update project' : '✚ Create project'} className='primary' />
+        </div>
+      }
+    >
+      <div className={styles.description}>
+        <Input tag='textarea' name='description' className={styles.seamless} placeholder='Project description…' />
+      </div>
+    </Page>
   </Form>
 )
 

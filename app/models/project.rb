@@ -16,7 +16,11 @@ class Project < ApplicationRecord
   end
 
   def breadcrumbs
-    ancestors.reverse.drop(1)
+    if persisted?
+      ancestors.reverse
+    else
+      parent.self_and_ancestors.reverse
+    end
   end
 
   def path_arguments
@@ -32,10 +36,13 @@ class Project < ApplicationRecord
   end
 
   def default_colour
-    return unless title
+    hue = if title
+            spin = 360 / Math.sqrt(2)
+            title.sum * spin
+          else
+            135
+          end
 
-    spin = 360 / Math.sqrt(2)
-    hue = title.sum * spin
     Hsluv.hpluv_to_hex(hue, 100, 82.5)
   end
 

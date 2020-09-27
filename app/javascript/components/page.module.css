@@ -5,7 +5,8 @@
 }
 
 .header h1 {
-    font-size: calc(2rem + 8vw);
+    font-size: calc(2rem + 6vw);
+    letter-spacing: -0.03em;
     margin-top: 0;
     margin-bottom: -4rem;
     position: relative;

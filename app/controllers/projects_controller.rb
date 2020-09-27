@@ -17,30 +17,20 @@ class ProjectsController < ApplicationController
   end
 
   def new
-    project = if params[:project_id]
-                parent = Project.find(params[:project_id])
-                parent.children.new
-              else
-                Project.new
-              end
-
-    render component: 'ProjectForm', props: { project: project }
+    props = project_props(create_project)
+    puts props
+    render component: 'ProjectForm', props: props
   end
 
   def edit
-    render component: 'ProjectForm', props: { project: Project.find(params[:id]) }
+    render component: 'ProjectForm', props: project_props(Project.find(params[:id]))
   end
 
   def create
-    if params[:project_id]
-      parent = Project.find(params[:project_id])
-      @project = parent.children.new(project_params)
-    else
-      @project = Project.new(project_params)
-    end
+    project = create_project(**project_params)
 
-    if @project.save
-      redirect_to @project
+    if project.save
+      redirect_to project
     else
       # TODO render form with errors
       render 'new'
@@ -59,22 +49,33 @@ class ProjectsController < ApplicationController
 
   private
 
+  def create_project(**attrs)
+    if params[:project_id]
+      parent = Project.find(params[:project_id])
+      parent.children.new(**attrs)
+    else
+      Project.new(**attrs)
+    end
+  end
+
   def project_params
     params.require(:project).permit(:title, :description).merge(user: current_user)
   end
 
   def project_props(project)
     is_default_project = project == current_user.default_project
+    show_breadcrumbs = !is_default_project
+    show_tasks = project.persisted? and !is_default_project
 
     {
       project: project,
       children: project.children,
-      tasks: project.hierarchy_tasks,
       subproject: Project.new(parent: project.persisted? ? project : nil, title: 'New project…'),
-      **(if is_default_project then {} else {
-        new_task: Task.new(project: project),
-        breadcrumbs: project.breadcrumbs,
-      } end)
+      **(if show_tasks then {
+        tasks: project.hierarchy_tasks,
+        new_task: Task.new(project: project)
+      } else {} end),
+      breadcrumbs: (project.breadcrumbs if show_breadcrumbs)
     }
   end
 end

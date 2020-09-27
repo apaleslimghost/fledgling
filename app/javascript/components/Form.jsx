@@ -35,9 +35,9 @@ export function Form({ model, children, ...props }) {
   )
 }
 
-export function Input({ name, ...props }) {
+export function Input({ name, tag: Tag = 'input', ...props }) {
   const model = useContext(Model)
   const fullName = `${model._meta.modelName}[${name}]`
 
-  return <input name={fullName} defaultValue={model[name] || ''} {...props}/>
+  return <Tag name={fullName} defaultValue={model[name] || ''} {...props} />
 }

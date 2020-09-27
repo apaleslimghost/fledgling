@@ -30,6 +30,20 @@ button, input[type='button'], input[type='submit'] {
     &:active {
         background: var(--colour-gradient_start);
     }
+
+    &.primary {
+        background: var(--colour-title, inherit);
+        border-color: var(--colour-title, inherit);
+        color: white;
+
+        &:hover {
+            color: var(--colour-base);
+        }
+
+        &:active {
+            color: var(--colour-gradient_start);
+        }
+    }
 }
 
 button, input[type='button'], input[type='submit'], a:link {

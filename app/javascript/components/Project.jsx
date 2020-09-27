@@ -13,7 +13,9 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask }) 
     style={colourStyle(project.colours)}
     header={breadcrumbs && <Breadcrumbs breadcrumbs={breadcrumbs} />}
   >
-    <TaskList tasks={tasks} newTask={newTask} project={project} />
+    {(tasks.length > 0 || newTask) && (
+      <TaskList tasks={tasks} newTask={newTask} project={project} />
+    )}
 
     {(children.length > 0 || subproject) && (
       <ProjectList projects={children} newProject={subproject}/>
