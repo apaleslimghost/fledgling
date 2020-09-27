@@ -2,29 +2,7 @@
     height: 100%;
 }
 
-.seamless {
-    font: inherit;
-    letter-spacing: inherit;
-    color: inherit;
-    width: 100%;
-    border: 0 none;
-    background: transparent;
-}
-
 .description {
     composes: card from './card.module.css';
     background: white;
 }
-
-input.seamless {
-    padding: 0;
-    border-bottom: 0.02em dotted;
-    height: 1em;
-    margin-bottom: 0.1em;
-}
-
-textarea.seamless {
-    resize: vertical;
-    min-height: 10em;
-}
-

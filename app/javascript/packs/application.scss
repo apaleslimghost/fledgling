@@ -20,7 +20,6 @@ button, input[type='button'], input[type='submit'] {
     color: var(--colour-title, inherit);
     font-weight: 900;
     border-radius: 3px;
-    cursor: pointer;
     padding: 0 0.4em;
 
     &:hover {
@@ -59,6 +58,26 @@ button, input[type='button'], input[type='submit'], a:link {
     }
 }
 
+textarea, input:not([type=button]):not([type=submit]) {
+    font: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    width: 100%;
+    border: 0 none;
+    background: transparent;
+}
+
+input:not([type=button]):not([type=submit]) {
+    padding: 0;
+    border-bottom: calc(0.02em + 2px) dotted;
+    margin-bottom: 0.1em;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 10em;
+}
+
 a:link, a:visited {
     color: var(--colour-title);
 }
@@ -75,6 +94,6 @@ a:active {
     color: var(--colour-base);
 }
 
-summary {
+summary ,button, input[type='button'], input[type='submit']  {
     cursor: pointer;
 }
