@@ -6,8 +6,12 @@ import Link from './Link'
 import colourStyle from './colour-style'
 import styles from './task-list.module.css'
 
-const List = ({ tasks, project }) => (
+const List = ({ tasks, project, children }) => (
   <ul className={styles.list}>
+    {Children.map(children, (child, index) => (
+      <li className={styles.item} key={index}>{child}</li>
+    ))}
+
     {tasks.map(task => (
       <li className={styles.item} key={task.id}>
         <TaskCompleteButton task={task} project={project} />
@@ -37,10 +41,11 @@ export default ({ tasks, newTask, project }) => {
 
   return (
     <div className={styles .main}>
-      {newTask && <TaskForm task={newTask} />}
 
       {(incomplete.length > 0 || newTask) && (
-        <List tasks={incomplete} project={project} />
+        <List tasks={incomplete} project={project}>
+          {newTask && <TaskForm task={newTask} />}
+        </List>
       )}
 
       {complete.length > 0 && (

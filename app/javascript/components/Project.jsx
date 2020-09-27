@@ -15,15 +15,15 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask, is
     style={colourStyle(project.colours)}
     aux={<>
       {breadcrumbs && <Breadcrumbs breadcrumbs={breadcrumbs} />}
-      {!isDefaultProject && <Link to={project} action='edit'>Edit…</Link>}
+    {!isDefaultProject && <Link to={project} action='edit'>Edit…</Link>}
     </>}
   >
-    {(tasks.length > 0 || newTask) && (
-      <TaskList tasks={tasks} newTask={newTask} project={project} />
-    )}
-
     {project.description && (
       <div className={styles.description}>{project.description}</div>
+    )}
+
+    {(tasks.length > 0 || newTask) && (
+      <TaskList tasks={tasks} newTask={newTask} project={project} />
     )}
 
     {(children.length > 0 || subproject) && (

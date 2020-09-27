@@ -2,7 +2,7 @@
     composes: card from 'card.module.css';
 
     background: white;
-    padding-inline: 1rem;
+    padding: 0;
 }
 
 .list {
@@ -39,5 +39,23 @@
 
 .summary {
     composes: padded;
+    font-style: italic;
 }
 
+.summary::marker {
+    content: '';
+}
+
+.summary::before {
+    content: '▶';
+    font-style: normal;
+    color: var(--colour-title);
+    display: inline-block;
+    width: 1.6em;
+    text-align: center;
+    margin-right: 0.5rem;
+}
+
+details[open] .summary::before {
+    content: '▼';
+}

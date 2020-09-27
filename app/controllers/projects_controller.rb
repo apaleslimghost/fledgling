@@ -66,10 +66,15 @@ class ProjectsController < ApplicationController
     show_breadcrumbs = !is_default_project
     show_tasks = project.persisted? and !is_default_project
 
+    subproject = Project.new(
+      parent: project.persisted? ? project : nil,
+      title: is_default_project ? 'New project…' : 'Add subproject…'
+    )
+
     {
       project: project,
       children: project.children,
-      subproject: Project.new(parent: project.persisted? ? project : nil, title: 'New project…'),
+      subproject: subproject,
       is_default_project: is_default_project,
       **(if show_tasks then {
         tasks: project.hierarchy_tasks,
