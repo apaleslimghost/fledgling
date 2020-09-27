@@ -6,6 +6,7 @@ import TaskList from './TaskList'
 import Breadcrumbs from './Breadcrumbs'
 import Link from './Link'
 
+import styles from './project.module.css'
 import colourStyle from './colour-style'
 
 export default ({ project, children, tasks, breadcrumbs, subproject, newTask }) => (
@@ -19,6 +20,10 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask }) 
   >
     {(tasks.length > 0 || newTask) && (
       <TaskList tasks={tasks} newTask={newTask} project={project} />
+    )}
+
+    {project.description && (
+      <div className={styles.description}>{project.description}</div>
     )}
 
     {(children.length > 0 || subproject) && (

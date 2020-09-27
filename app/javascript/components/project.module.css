@@ -1,0 +1,4 @@
+.description {
+    composes: card from './card.module.css';
+    background: white;
+}
