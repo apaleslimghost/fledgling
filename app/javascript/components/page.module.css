@@ -21,7 +21,7 @@
 
 .header, .content {
     width: 100%;
-    max-width: 60rem;
+    max-width: 70rem;
     padding: 2rem 2rem 0;
     margin: 0 auto;
 }
@@ -54,4 +54,9 @@
     display: flex;
     flex-direction: column;
     gap: 1em;
+}
+
+.aux {
+    display: flex;
+    justify-content: space-between;
 }

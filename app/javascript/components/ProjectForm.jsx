@@ -18,12 +18,10 @@ const ProjectForm = ({ project, breadcrumbs }) => (
         />
       }
       style={colourStyle(project.colours)}
-      header={
-        <div className={styles.headerWrapper}>
-          <Breadcrumbs breadcrumbs={breadcrumbs} />
-          <input type='submit' value={project.id ? 'Update project' : '✚ Create project'} className='primary' />
-        </div>
-      }
+      aux={<>
+        <Breadcrumbs breadcrumbs={breadcrumbs} />
+        <input type='submit' value={project.id ? 'Update project' : '✚ Create project'} className='primary' />
+      </>}
     >
       <div className={styles.description}>
         <Input tag='textarea' name='description' className={styles.seamless} placeholder='Project description…' />
