@@ -8,7 +8,7 @@ class Project < ApplicationRecord
   after_initialize :set_defaults
 
   def include_methods
-    [:colours]
+    [:colours, :tasks_count, :projects_count]
   end
 
   def hierarchy_tasks
@@ -64,5 +64,13 @@ class Project < ApplicationRecord
       gradient_start: colour.paint.spin(-50).to_hex,
       gradient_end: colour.paint.spin(50).to_hex,
     }
+  end
+
+  def tasks_count
+    ApplicationController.helpers.pluralize(hierarchy_tasks.count, 'task') if hierarchy_tasks.count.positive?
+  end
+
+  def projects_count
+    ApplicationController.helpers.pluralize(descendants.count, 'subproject') if descendants.count.positive?
   end
 end

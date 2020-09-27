@@ -10,5 +10,7 @@ export default ({ project }) => (
     style={colourStyle(project.colours)}
   >
     <h2 className={styles.title}>{project.title}</h2>
+    {project.tasks_count && <div>{project.tasks_count}</div>}
+    {project.projects_count && <div>{project.projects_count}</div>}
   </Link>
 )
