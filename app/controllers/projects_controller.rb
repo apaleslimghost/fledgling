@@ -18,7 +18,6 @@ class ProjectsController < ApplicationController
 
   def new
     props = project_props(create_project)
-    puts props
     render component: 'ProjectForm', props: props
   end
 
@@ -71,6 +70,7 @@ class ProjectsController < ApplicationController
       project: project,
       children: project.children,
       subproject: Project.new(parent: project.persisted? ? project : nil, title: 'New project…'),
+      is_default_project: is_default_project,
       **(if show_tasks then {
         tasks: project.hierarchy_tasks,
         new_task: Task.new(project: project)

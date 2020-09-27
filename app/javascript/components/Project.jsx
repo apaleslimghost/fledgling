@@ -9,13 +9,13 @@ import Link from './Link'
 import styles from './project.module.css'
 import colourStyle from './colour-style'
 
-export default ({ project, children, tasks, breadcrumbs, subproject, newTask }) => (
+export default ({ project, children, tasks, breadcrumbs, subproject, newTask, isDefaultProject }) => (
   <Page
     title={project.title}
     style={colourStyle(project.colours)}
     aux={<>
       {breadcrumbs && <Breadcrumbs breadcrumbs={breadcrumbs} />}
-      <Link to={project} action='edit'>Edit…</Link>
+      {!isDefaultProject && <Link to={project} action='edit'>Edit…</Link>}
     </>}
   >
     {(tasks.length > 0 || newTask) && (
