@@ -41,11 +41,11 @@
     flex: 1;
     background: linear-gradient(
         0.4turn,
-        var(--colour-gradient_start),
+        var(--colour-gradient_start, var(--colour-base)),
         var(--colour-base),
         var(--colour-base),
         var(--colour-base),
-        var(--colour-gradient_end)
+        var(--colour-gradient_end, var(--colour-base))
     );
 }
 
