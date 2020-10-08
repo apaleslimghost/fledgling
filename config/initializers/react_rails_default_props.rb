@@ -5,7 +5,8 @@ module React::Rails::ControllerRenderer::Patch
   end
 
   def call(component_name, options, &block)
-    props = options.fetch(:props, {}).merge(@controller.default_props)
+    orig_props = options.fetch(:props, {})
+    props = orig_props.merge(@controller.default_props(orig_props))
     super(
       component_name,
       options.merge({prerender: :static, camelize_props: true, props: props}),

@@ -1,11 +1,14 @@
 import React from 'react'
 import {CSRFContext} from './CSRF.jsx'
 
-export default ({ csrf, packs, children }) => (
+export default ({ title, csrf, packs, children }) => (
   <CSRFContext.Provider value={csrf}>
     <html lang='en'>
       <head>
-        <title>Fledgling</title>
+        <title>
+          {title && `${title} ❦ `}
+          Fledgling
+        </title>
         <meta charset='utf8' />
         <meta name='csrf-param' value={csrf.param}/>
         <meta name='csrf-token' value={csrf.token}/>

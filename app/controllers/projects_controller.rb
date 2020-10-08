@@ -79,4 +79,8 @@ class ProjectsController < ApplicationController
       new_task: (Task.new(project: project) unless is_default_project or not project.persisted?)
     }
   end
+
+  def wrapper_props(props)
+    super.merge({ title: props[:project].title })
+  end
 end

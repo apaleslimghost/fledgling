@@ -5,13 +5,13 @@ class ApplicationController < ActionController::Base
   layout false
   per_request_react_rails_prerenderer
 
-  def default_props
+  def default_props(props)
     {
-      wrapper_props: wrapper_props
+      wrapper_props: wrapper_props(props)
     }
   end
 
-  def wrapper_props
+  def wrapper_props(*)
     {
       csrf: {
         token: form_authenticity_token,
