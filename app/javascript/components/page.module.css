@@ -26,7 +26,7 @@
 }
 
 .header {
-    min-height: 10rem;
+    min-height: calc(4rem + 7vw);
     margin-bottom: 3.5rem;
     display: flex;
     flex-direction: column;
