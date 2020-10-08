@@ -67,3 +67,25 @@
     justify-content: space-between;
     align-items: flex-end;
 }
+
+.logo {
+    margin-bottom: auto;
+    align-self: flex-start;
+}
+
+.logo img {
+    display: block;
+}
+
+.logo:hover, .logo:active {
+    background: unset;
+}
+
+.logo:hover {
+    box-shadow: 0 0 0 3px white, 0 0 0 6px #0CB7BA;
+}
+
+.logo:active {
+    box-shadow: 0 0 0 3px white, 0 0 0 6px #15FDD9;
+}
+
