@@ -1,4 +1,5 @@
 .description {
     composes: card from './card.module.css';
-    background: white;
+    grid-column: span 2;
+    grid-row: span 1;
 }

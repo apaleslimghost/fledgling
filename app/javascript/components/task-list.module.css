@@ -1,14 +1,26 @@
 .main {
-    composes: card from 'card.module.css';
-
-    background: white;
     padding: 0;
+}
+
+.part {
+    composes: card from 'card.module.css';
+    padding: 0;
+    grid-column: 1 / span 2;
+    grid-row: span var(--task-list-height);
+}
+
+details.part:not([open]) {
+    grid-row: span 1;
 }
 
 .list {
     list-style: none;
     padding: 0;
     margin: 0;
+}
+
+.padded .main {
+    padding: 0;
 }
 
 .padded {
@@ -18,14 +30,16 @@
 .item {
     composes: padded;
     display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
-.item:not(:last-child), .list:not(:last-child) {
+.item:not(:last-child) {
     border-bottom: 2px solid var(--colour-base);
 }
 
 .title {
-    flex: 1;
+    flex-grow: 1;
 }
 
 .projectLink::before {

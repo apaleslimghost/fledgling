@@ -1,0 +1,7 @@
+.form {
+    composes: card from './card.module.css';
+}
+
+.subtitle {
+    color: var(--colour-title);
+}

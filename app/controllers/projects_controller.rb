@@ -63,8 +63,6 @@ class ProjectsController < ApplicationController
 
   def project_props(project)
     is_default_project = project == current_user.default_project
-    show_breadcrumbs = !is_default_project
-    show_tasks = project.persisted? and !is_default_project
 
     subproject = Project.new(
       parent: project.persisted? ? project : nil,
@@ -76,11 +74,9 @@ class ProjectsController < ApplicationController
       children: project.children,
       subproject: subproject,
       is_default_project: is_default_project,
-      **(if show_tasks then {
-        tasks: project.hierarchy_tasks,
-        new_task: Task.new(project: project)
-      } else {} end),
-      breadcrumbs: (project.breadcrumbs if show_breadcrumbs)
+      tasks: project.hierarchy_tasks,
+      breadcrumbs: project.breadcrumbs,
+      new_task: (Task.new(project: project) unless is_default_project or not project.persisted?)
     }
   end
 end

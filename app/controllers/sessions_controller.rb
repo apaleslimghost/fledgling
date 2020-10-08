@@ -1,6 +1,7 @@
 class SessionsController < ApplicationController
   def new
-    render component: 'LoginForm'
+    @user = User.new
+    render component: 'LoginForm', props: { user: @user }
   end
 
   def create

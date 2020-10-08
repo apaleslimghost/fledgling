@@ -1,7 +1,6 @@
 class UsersController < ApplicationController
   def new
-    @user = User.new
-    render component: 'SignupForm', props: { user: @user }
+    redirect_to login_path
   end
 
   def create

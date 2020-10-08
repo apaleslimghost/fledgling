@@ -6,8 +6,9 @@ import Link from './Link'
 import colourStyle from './colour-style'
 import styles from './task-list.module.css'
 
-const List = ({ tasks, project, children }) => (
-  <ul className={styles.list}>
+
+const List = ({ tasks, project, children, className = '', ...props }) => (
+  <ul className={`${styles.list} ${className}`} {...props}>
     {Children.map(children, (child, index) => (
       <li className={styles.item} key={index}>{child}</li>
     ))}
@@ -40,20 +41,19 @@ export default ({ tasks, newTask, project }) => {
   const [ complete, incomplete ] = partition(tasks, 'completed')
 
   return (
-    <div className={styles .main}>
-
+    <>
       {(incomplete.length > 0 || newTask) && (
-        <List tasks={incomplete} project={project}>
+        <List tasks={incomplete} project={project} className={styles.part} style={{'--task-list-height': incomplete.length + (newTask ? 1 : 0)}}>
           {newTask && <TaskForm task={newTask} />}
         </List>
       )}
 
       {complete.length > 0 && (
-        <details className={styles.details}>
+        <details className={styles.part} style={{'--task-list-height': complete.length}}>
           <summary className={styles.summary}>Completed tasks</summary>
           <List tasks={complete} project={project} />
         </details>
       )}
-    </div>
+    </>
   )
 }

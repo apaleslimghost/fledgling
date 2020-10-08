@@ -9,4 +9,7 @@ class User < ApplicationRecord
   def default_project
     projects.first
   end
+
+  def paths
+  end
 end
