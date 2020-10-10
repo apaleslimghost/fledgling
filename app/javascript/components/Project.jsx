@@ -19,7 +19,9 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask, is
     </>}
   >
     {project.description && (
-      <div className={styles.description}>{project.description}</div>
+      <div className={styles.description} style={{
+        '--description-height': Math.max(1, Math.floor(project.description.length / 50 / 2))
+      }}>{project.description}</div>
     )}
 
     {(tasks.length > 0 || newTask) && (
