@@ -5,8 +5,13 @@
 .part {
     composes: card from 'card.module.css';
     padding: 0;
-    grid-column: 1 / span 2;
     grid-row: span var(--task-list-height);
+}
+
+@media (min-width: 30rem) {
+    .part {
+        grid-column: 1 / span 2;
+    }
 }
 
 details.part:not([open]) {
