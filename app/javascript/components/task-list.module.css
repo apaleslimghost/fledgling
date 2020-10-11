@@ -5,17 +5,22 @@
 .part {
     composes: card from 'card.module.css';
     padding: 0;
-    grid-row: span var(--task-list-height);
+}
+
+@supports not (grid-template-rows: masonry) {
+    .part {
+        grid-row: span var(--task-list-height);
+    }
 }
 
 @media (min-width: 30rem) {
     .part {
         grid-column: 1 / span 2;
     }
-}
 
-details.part:not([open]) {
-    grid-row: span 1;
+    details.part:not([open]) {
+        grid-row: span 1;
+    }
 }
 
 .list {
