@@ -8,13 +8,13 @@
     }
 }
 
-@media (min-width: 30rem) {
+@media (min-width: 32rem) {
     .description {
         grid-column: span 2;
     }
 }
 
-@media (min-width: 48rem) {
+@media (min-width: 64rem) {
     .description {
         grid-column: 3 / -1;
     }
