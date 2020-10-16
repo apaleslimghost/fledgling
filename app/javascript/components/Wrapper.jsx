@@ -13,6 +13,7 @@ export default ({ title, csrf, packs, children }) => (
         <meta name='csrf-param' value={csrf.param}/>
         <meta name='csrf-token' value={csrf.token}/>
 
+        <link rel='stylesheet' href='/global.css' data-turbolinks-track='reload' />
         <link rel='stylesheet' href={packs.styles} data-turbolinks-track='reload' />
         <link rel='icon' href='/favicon.svg' />
         <script src={packs.scripts} data-turbolinks-track='reload' />

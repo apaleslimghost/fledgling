@@ -23,6 +23,27 @@
     color: var(--colour-title);
 }
 
+.primary, .primary:visited, .primary:hover, .primary:active {
+    background: linear-gradient(
+        0.35turn,
+        var(--colour-title),
+        var(--colour-gradient_start) 300%
+    );
+}
+
+
+.primary, .primary:visited {
+    color: white;
+}
+
+.primary:hover, .primary:active {
+    color: var(--colour-base);
+}
+
+.primary .title::before {
+    content: '+ ';
+}
+
 .title {
     margin: 0;
     font-size: 2rem;

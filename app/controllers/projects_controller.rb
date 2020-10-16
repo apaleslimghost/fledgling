@@ -13,16 +13,16 @@ class ProjectsController < ApplicationController
     project = Project.find(params[:id])
     props = project_props(project)
 
-    render component: 'Project', props: props
+    render component: "Project", props: props
   end
 
   def new
     props = project_props(create_project)
-    render component: 'ProjectForm', props: props
+    render component: "ProjectForm", props: props
   end
 
   def edit
-    render component: 'ProjectForm', props: project_props(Project.find(params[:id]))
+    render component: "ProjectForm", props: project_props(Project.find(params[:id]))
   end
 
   def create
@@ -32,7 +32,7 @@ class ProjectsController < ApplicationController
       redirect_to project
     else
       # TODO render form with errors
-      render 'new'
+      render "new"
     end
   end
 
@@ -66,7 +66,8 @@ class ProjectsController < ApplicationController
 
     subproject = Project.new(
       parent: project.persisted? ? project : nil,
-      title: is_default_project ? 'New project…' : 'Add subproject…'
+      title: is_default_project ? "New project…" : "Add subproject…",
+      colour: project.colour,
     )
 
     {
@@ -76,7 +77,7 @@ class ProjectsController < ApplicationController
       is_default_project: is_default_project,
       tasks: project.hierarchy_tasks,
       breadcrumbs: project.breadcrumbs,
-      new_task: (Task.new(project: project) unless is_default_project or not project.persisted?)
+      new_task: (Task.new(project: project) unless is_default_project or not project.persisted?),
     }
   end
 

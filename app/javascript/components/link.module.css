@@ -1,0 +1,15 @@
+.link, .link:visited {
+    color: var(--colour-title);
+}
+
+.link:hover, .link:active {
+    background: var(--colour-title);
+    color: white;
+    box-shadow: 0 0 0 3px var(--colour-title);
+    border-radius: 3px;
+    text-decoration: none;
+}
+
+.link:active {
+    color: var(--colour-base);
+}
