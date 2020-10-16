@@ -79,7 +79,7 @@
     align-self: flex-start;
 }
 
-.logo img {
+.logo svg {
     display: block;
 }
 
@@ -88,10 +88,10 @@
 }
 
 .logo:hover {
-    box-shadow: 0 0 0 3px white, 0 0 0 6px #0CB7BA;
+    box-shadow: 0 0 0 3px white, 0 0 0 6px var(--colour-title);
 }
 
 .logo:active {
-    box-shadow: 0 0 0 3px white, 0 0 0 6px #15FDD9;
+    box-shadow: 0 0 0 3px white, 0 0 0 6px var(--colour-gradient_start);
 }
 
