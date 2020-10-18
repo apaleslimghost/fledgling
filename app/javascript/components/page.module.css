@@ -48,25 +48,6 @@
     );
 }
 
-.content {
-    --parent-colour-title: var(--colour-title);
-    display: grid;
-    gap: 1em;
-    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
-    grid-template-rows: masonry;
-    align-items: flex-start;
-}
-
-@supports not (grid-template-rows: masonry) {
-    .content {
-        grid-auto-flow: row dense;
-    }
-
-    .content > * {
-        grid-row: span 2;
-    }
-}
-
 .aux {
     display: flex;
     justify-content: space-between;

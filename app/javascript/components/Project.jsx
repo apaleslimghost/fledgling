@@ -13,6 +13,7 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask, is
   <Page
     title={project.title}
     style={colourStyle(project.colours)}
+    contentClass={styles.grid}
     aux={<>
       {breadcrumbs.length > 0 && <Breadcrumbs breadcrumbs={breadcrumbs} />}
       {!isDefaultProject && <Link to={project} action='edit'>Edit…</Link>}

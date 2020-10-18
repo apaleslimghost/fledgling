@@ -19,3 +19,22 @@
         grid-column: 3 / -1;
     }
 }
+
+.grid {
+    --parent-colour-title: var(--colour-title);
+    display: grid;
+    gap: 1em;
+    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+    grid-template-rows: masonry;
+    align-items: flex-start;
+}
+
+@supports not (grid-template-rows: masonry) {
+    .grid {
+        grid-auto-flow: row dense;
+    }
+
+    .grid > * {
+        grid-row: span 2;
+    }
+}
