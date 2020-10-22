@@ -20,7 +20,9 @@ const ProjectForm = ({ project, breadcrumbs }) => (
       style={colourStyle(project.colours)}
       aux={<>
         <Breadcrumbs breadcrumbs={breadcrumbs} />
-        <input type='submit' value={project.id ? 'Update project' : '✚ Create project'} className='primary' />
+        <button type='submit' className='primary'>
+           {project.id ? 'Update project' : '✚ Create project'}
+        </button>
       </>}
     >
       <div className={styles.description}>

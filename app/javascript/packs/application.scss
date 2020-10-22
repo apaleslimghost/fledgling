@@ -12,14 +12,14 @@ body, :root {
     height: 100%;
 }
 
-button, input[type='button'], input[type='submit'] {
+button {
     font-family: inherit;
     font-size: 0.8em;
     border: 2px solid currentColor;
     background: transparent;
     color: var(--colour-title, inherit);
     font-weight: 900;
-    border-radius: 3px;
+    border-radius: calc(0.75em - 9px);
     padding: 0 0.4em;
 
     &:hover {
@@ -43,9 +43,14 @@ button, input[type='button'], input[type='submit'] {
             color: var(--colour-gradient_start);
         }
     }
+
+    &.big {
+        font-size: 0.9em;
+        padding: 0.2em 0.6em;
+    }
 }
 
-button, input[type='button'], input[type='submit'], a:link {
+button, a:link {
     position: relative;
 
     &:after {
@@ -58,7 +63,7 @@ button, input[type='button'], input[type='submit'], a:link {
     }
 }
 
-textarea, input:not([type=button]):not([type=submit]) {
+textarea, input {
     font: inherit;
     letter-spacing: inherit;
     color: inherit;
@@ -67,7 +72,7 @@ textarea, input:not([type=button]):not([type=submit]) {
     background: transparent;
 }
 
-input:not([type=button]):not([type=submit]) {
+input {
     padding: 0;
     border-bottom: calc(0.02em + 2px) dotted;
     margin-bottom: 0.1em;
@@ -78,6 +83,6 @@ textarea {
     min-height: 10em;
 }
 
-summary ,button, input[type='button'], input[type='submit']  {
+summary, button  {
     cursor: pointer;
 }

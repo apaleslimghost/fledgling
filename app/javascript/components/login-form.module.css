@@ -1,7 +1,47 @@
 .form {
     composes: card from './card.module.css';
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+
+    flex: 1;
+    min-width: 12rem;
+    font-size: 1.2em;
 }
 
-.subtitle {
+.fields {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.form button {
+    align-self: flex-end;
+}
+
+.title {
+    composes: title from './card.module.css';
     color: var(--colour-title);
+}
+
+.forms {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.label {
+    font-size: 0.8em;
+    flex: 1;
+}
+
+.label input {
+    margin-top: 0.5rem;
+    font-size: 1.25em;
+}
+
+.wide {
+    flex-basis: 100%;
 }

@@ -18,3 +18,11 @@
 .card, .card::before {
     border-radius: 0.3rem;
 }
+
+.title {
+    margin: 0;
+    font-size: 2em;
+    padding-block: 0.1em 0.2em;
+    line-height: 0.8;
+    letter-spacing: -0.02em;
+}
