@@ -1,0 +1,38 @@
+
+.nav {
+    display: flex;
+    padding: 0.5rem;
+}
+
+.logo {
+    margin-right: auto;
+}
+
+.logo svg {
+    display: block;
+}
+
+.logo:hover, .logo:active {
+    background: unset;
+}
+
+.logo:hover {
+    box-shadow: 0 0 0 3px white, 0 0 0 6px var(--colour-title);
+}
+
+.logo:active {
+    box-shadow: 0 0 0 3px white, 0 0 0 6px var(--colour-gradient_start);
+}
+
+.user {
+    margin-block: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.gravatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 1rem;
+}

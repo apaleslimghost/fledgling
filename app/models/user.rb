@@ -9,4 +9,12 @@ class User < ApplicationRecord
   def default_project
     projects.first
   end
+
+  def gravatar
+    Gravatar.src email
+  end
+
+  def include_methods
+    [:gravatar]
+  end
 end

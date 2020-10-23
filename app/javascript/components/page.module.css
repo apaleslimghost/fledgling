@@ -26,7 +26,7 @@
 }
 
 .header {
-    min-height: calc(4rem + 7vw);
+    min-height: 7vw;
     margin-bottom: 3.5rem;
     display: flex;
     flex-direction: column;
@@ -52,27 +52,5 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-}
-
-.logo {
-    margin-top: -1rem;
-    margin-bottom: auto;
-    align-self: flex-start;
-}
-
-.logo svg {
-    display: block;
-}
-
-.logo:hover, .logo:active {
-    background: unset;
-}
-
-.logo:hover {
-    box-shadow: 0 0 0 3px white, 0 0 0 6px var(--colour-title);
-}
-
-.logo:active {
-    box-shadow: 0 0 0 3px white, 0 0 0 6px var(--colour-gradient_start);
 }
 

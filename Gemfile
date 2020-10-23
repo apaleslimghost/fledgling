@@ -19,3 +19,5 @@ group :development do
 end
 
 gem "bcrypt", "~> 3.1"
+
+gem "rb-gravatar", "~> 1.0"
