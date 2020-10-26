@@ -9,10 +9,17 @@ export default ({ user }) => (
       </a>
 
       {user && (
-          <span className={styles.user}>
+        <details className={styles.user}>
+          <summary>
             <img className={styles.gravatar} src={user.gravatar} />
-            <span>{user.email}</span>
-          </span>
+            {user.email}
+          </summary>
+          <ul className={styles.menu}>
+            <li>
+              <a href='/log-out'>Log out</a>
+            </li>
+          </ul>
+        </details>
       )}
     </nav>
 )

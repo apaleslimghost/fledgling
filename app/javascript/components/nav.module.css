@@ -26,9 +26,25 @@
 
 .user {
     margin-block: 0.25rem;
+    position: relative;
+}
+
+.user summary {
     display: flex;
-    align-items: center;
     gap: 0.5rem;
+    align-items: center;
+}
+
+.user summary::after {
+    content: ' ▿';
+}
+
+.user[open] summary::after {
+    content: ' ▵';
+}
+
+.menu {
+    position: absolute;
 }
 
 .gravatar {
