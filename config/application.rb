@@ -1,4 +1,4 @@
-require_relative 'boot'
+require_relative "boot"
 
 require "rails"
 
@@ -12,6 +12,8 @@ Bundler.require(*Rails.groups)
 module Fledgling
   class Application < Rails::Application
     config.load_defaults 6.0
+
+    config.force_ssl = true
 
     config.generators.template_engine = nil
     config.generators.view_specs = nil
