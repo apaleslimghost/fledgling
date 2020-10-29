@@ -7,8 +7,8 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      session[:user_id] = user.id
-      redirect_to @user.default_project, notice: 'User was successfully created.'
+      session[:user_id] = @user.id
+      redirect_to @user.default_project, notice: "User was successfully created."
     else
       puts @user.errors.full_messages
     end
@@ -16,7 +16,7 @@ class UsersController < ApplicationController
 
   def update
     if @user.update(user_params)
-      redirect_to @user, notice: 'User was successfully updated.'
+      redirect_to @user, notice: "User was successfully updated."
     else
       render :edit
     end

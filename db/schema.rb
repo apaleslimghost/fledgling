@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 2020_09_20_094529) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "project_hierarchies", id: false, force: :cascade do |t|
     t.integer "ancestor_id", null: false
     t.integer "descendant_id", null: false
@@ -27,13 +30,13 @@ ActiveRecord::Schema.define(version: 2020_09_20_094529) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "parent_id"
     t.string "colour"
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
   create_table "tasks", force: :cascade do |t|
     t.string "title"
-    t.integer "project_id", null: false
+    t.bigint "project_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "completed"
@@ -46,7 +49,7 @@ ActiveRecord::Schema.define(version: 2020_09_20_094529) do
     t.string "password_digest"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "projects_id"
+    t.bigint "projects_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["projects_id"], name: "index_users_on_projects_id"
   end
