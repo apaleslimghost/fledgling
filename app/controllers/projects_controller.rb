@@ -1,6 +1,16 @@
 class ProjectsController < ApplicationController
   # TODO enforce ownership/user presence
 
+  before_action :check_project_access, only: [:show, :edit, :update]
+
+  def check_project_access
+    @project = Project.find(params[:id])
+
+    if not @project or not current_user or @project.user != current_user
+      raise ActionController::RoutingError.new("Not Found")
+    end
+  end
+
   def index
     if current_user
       redirect_to current_user.default_project
@@ -10,10 +20,7 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    project = Project.find(params[:id])
-    props = project_props(project)
-
-    render component: "Project", props: props
+    render component: "Project", props: project_props(@project)
   end
 
   def new
@@ -22,7 +29,7 @@ class ProjectsController < ApplicationController
   end
 
   def edit
-    render component: "ProjectForm", props: project_props(Project.find(params[:id]))
+    render component: "ProjectForm", props: project_props(@project)
   end
 
   def create
@@ -32,13 +39,10 @@ class ProjectsController < ApplicationController
       redirect_to project
     else
       # TODO render form with errors
-      render "new"
     end
   end
 
   def update
-    @project = Project.find(params[:id])
-
     if @project.update(project_params)
       redirect_to @project
     else
