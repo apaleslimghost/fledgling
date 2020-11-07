@@ -16,7 +16,6 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask, is
     contentClass={styles.grid}
     aux={<>
       {breadcrumbs.length > 0 && <Breadcrumbs breadcrumbs={breadcrumbs} />}
-      {!isDefaultProject && <Link to={project} action='edit'>Edit…</Link>}
     </>}
   >
     {project.description && (
@@ -24,6 +23,12 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask, is
         '--description-height': Math.max(1, Math.floor(project.description.length / 50 / 2))
       }}>{project.description}</div>
     )}
+
+  {!isDefaultProject && (
+    <div className={styles.actions}>
+      <Link to={project} action='edit'>✎ Edit</Link>
+    </div>
+  )}
 
     {(tasks.length > 0 || newTask) && (
       <TaskList tasks={tasks} newTask={newTask} project={project} />

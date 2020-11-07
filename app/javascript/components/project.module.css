@@ -20,6 +20,20 @@
     }
 }
 
+.actions {
+    composes: part from './task-list.module.css';
+    composes: padded from './task-list.module.css';
+    display: flex;
+    gap: 1.5rem;
+}
+
+.actions > *:not(:first-child)::before {
+    content: '';
+    border-left: 1px solid var(--colour-base);
+    margin-left: -0.75rem;
+    margin-right: 0.75rem;
+}
+
 .grid {
     --parent-colour-title: var(--colour-title);
     display: grid;
