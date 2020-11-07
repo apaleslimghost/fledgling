@@ -13,6 +13,7 @@ export default ({ title, csrf, packs, user, children }) => (
         <meta charset='utf8' />
         <meta name='csrf-param' value={csrf.param}/>
         <meta name='csrf-token' value={csrf.token}/>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
 
         <link rel='stylesheet' href='/global.css' data-turbolinks-track='reload' />
         <link rel='stylesheet' href={packs.styles} data-turbolinks-track='reload' />
