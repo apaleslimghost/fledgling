@@ -1,6 +1,4 @@
 class ProjectsController < ApplicationController
-  # TODO enforce ownership/user presence
-
   before_action :check_project_access, only: [:show, :edit, :update]
 
   def check_project_access
@@ -76,7 +74,7 @@ class ProjectsController < ApplicationController
 
     {
       project: project,
-      children: project.children,
+      children: project.children.where(archived: false),
       subproject: subproject,
       is_default_project: is_default_project,
       tasks: project.hierarchy_tasks,
