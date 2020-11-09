@@ -15,11 +15,14 @@ class Project < ApplicationRecord
     self_and_descendants.where(archived: false).flat_map(&:tasks)
   end
 
-  def breadcrumbs
-    if persisted?
-      ancestors.reverse
-    else
+  def breadcrumbs(include_self: false)
+    if include_self
+      self_and_ancestors.reverse
+    elsif parent
+      # unpersisted projects can't use ancestors, but their parent can
       parent.self_and_ancestors.reverse
+    else
+      []
     end
   end
 
