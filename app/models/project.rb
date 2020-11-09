@@ -12,7 +12,7 @@ class Project < ApplicationRecord
   end
 
   def hierarchy_tasks
-    self_and_descendants.flat_map(&:tasks)
+    self_and_descendants.where(archived: false).flat_map(&:tasks)
   end
 
   def breadcrumbs
@@ -37,11 +37,11 @@ class Project < ApplicationRecord
 
   def default_colour
     hue = if title
-            spin = 360 / Math.sqrt(2)
-            title.sum * spin
-          else
-            135
-          end
+        spin = 360 / Math.sqrt(2)
+        title.sum * spin
+      else
+        135
+      end
 
     Hsluv.hpluv_to_hex(hue, 100, 82.5)
   end
@@ -68,10 +68,10 @@ class Project < ApplicationRecord
 
   def tasks_count
     count = hierarchy_tasks.reject(&:completed).count
-    ApplicationController.helpers.pluralize(count, 'task') if count.positive?
+    ApplicationController.helpers.pluralize(count, "task") if count.positive?
   end
 
   def projects_count
-    ApplicationController.helpers.pluralize(descendants.count, 'subproject') if descendants.count.positive?
+    ApplicationController.helpers.pluralize(descendants.count, "subproject") if descendants.count.positive?
   end
 end
