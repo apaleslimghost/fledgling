@@ -10,7 +10,7 @@ import styles from './task-list.module.css'
 
 const List = ({ tasks, project, children, className = '', ...props }) => (
   <ul className={`${styles.list} ${className}`} {...props}>
-    {Children.map(children, (child, index) => (
+    {Children.toArray(children).filter(Boolean).map((child, index) => (
       <li className={styles.item} key={index}>{child}</li>
     ))}
 
