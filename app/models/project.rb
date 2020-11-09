@@ -82,6 +82,7 @@ class Project < ApplicationRecord
   end
 
   def projects_count
-    ApplicationController.helpers.pluralize(descendants.count, "subproject") if descendants.count.positive?
+    count = descendants.where(archived: false).count
+    ApplicationController.helpers.pluralize(count, "subproject") if count.positive?
   end
 end
