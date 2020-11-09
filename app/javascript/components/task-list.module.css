@@ -88,3 +88,8 @@ details[open] .summary {
 details[open] .summary::before {
     content: '▼';
 }
+
+.completeButton {
+    width: 2em;
+    text-align: center;
+}

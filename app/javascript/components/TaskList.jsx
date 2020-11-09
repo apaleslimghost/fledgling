@@ -1,9 +1,10 @@
 import React, { Children } from 'react'
 import partition from 'lodash.partition'
 import TaskForm from './TaskForm'
-import TaskCompleteButton from './TaskCompleteButton'
+import Action from './Action'
 import Link from './Link'
 import colourStyle from './colour-style'
+import button from './button.module.scss'
 import styles from './task-list.module.css'
 
 
@@ -15,7 +16,19 @@ const List = ({ tasks, project, children, className = '', ...props }) => (
 
     {tasks.map(task => (
       <li className={styles.item} key={task.id}>
-        <TaskCompleteButton task={task} project={project} />
+        <Action
+          model={task}
+          data={{ completed: !task.completed }}
+          formChildren={
+            <input name='return_to' type='hidden' value={project._meta.urls.show}/>
+          }
+          buttonProps={{
+            'aria-label': `Mark task as ${task.completed ? 'complete' : 'incomplete'}`,
+            disabled: project.archived,
+            className: `${button.button} ${styles.completeButton}`
+          }}>
+          <span aria-hidden>{task.completed ? '✗' : '✓'}</span>
+        </Action>
         <span
           className={
             `${styles.title} ${task.completed ? styles.completed : ''}`

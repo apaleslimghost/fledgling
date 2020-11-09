@@ -27,7 +27,9 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask, is
 
   {!isDefaultProject && (
     <div className={styles.actions}>
-      <Link to={project} action='edit'>✎ Edit</Link>
+      {!project.archived && (
+        <Link to={project} action='edit'>✎ Edit</Link>
+      )}
       <Action model={project} data={{ archived: !project.archived }}>
         ♲ {project.archived ? 'Unarchive' : 'Archive'}
       </Action>
@@ -35,11 +37,11 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask, is
   )}
 
     {(tasks.length > 0 || newTask) && (
-      <TaskList tasks={tasks} newTask={newTask} project={project} />
+      <TaskList tasks={tasks} newTask={!project.archived && newTask} project={project} />
     )}
 
     {(children.length > 0 || subproject) && (
-      <ProjectList projects={children} newProject={subproject}/>
+      <ProjectList projects={children} newProject={!project.archived && subproject}/>
     )}
   </Page>
 )

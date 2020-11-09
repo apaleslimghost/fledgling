@@ -14,12 +14,19 @@
     border-radius: calc(0.75em - 9px);
     padding: 0 0.4em;
 
-    &:hover {
-        background: var(--colour-base);
+    &:disabled {
+        opacity: 0.6;
+        cursor: default;
     }
 
-    &:active {
-        background: var(--colour-gradient_start);
+    &:enabled {
+        &:hover {
+            background: var(--colour-base);
+        }
+
+        &:active {
+            background: var(--colour-gradient_start);
+        }
     }
 
     &.primary {
@@ -27,12 +34,14 @@
         border-color: var(--colour-title, inherit);
         color: white;
 
-        &:hover {
-            color: var(--colour-base);
-        }
+        &:enabled {
+            &:hover {
+                color: var(--colour-base);
+            }
 
-        &:active {
-            color: var(--colour-gradient_start);
+            &:active {
+                color: var(--colour-gradient_start);
+            }
         }
     }
 
