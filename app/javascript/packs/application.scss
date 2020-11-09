@@ -12,44 +12,6 @@ body, :root {
     height: 100%;
 }
 
-button {
-    font-family: inherit;
-    font-size: 0.8em;
-    border: 2px solid currentColor;
-    background: transparent;
-    color: var(--colour-title, inherit);
-    font-weight: 900;
-    border-radius: calc(0.75em - 9px);
-    padding: 0 0.4em;
-
-    &:hover {
-        background: var(--colour-base);
-    }
-
-    &:active {
-        background: var(--colour-gradient_start);
-    }
-
-    &.primary {
-        background: var(--colour-title, inherit);
-        border-color: var(--colour-title, inherit);
-        color: white;
-
-        &:hover {
-            color: var(--colour-base);
-        }
-
-        &:active {
-            color: var(--colour-gradient_start);
-        }
-    }
-
-    &.big {
-        font-size: 0.9em;
-        padding: 0.2em 0.6em;
-    }
-}
-
 button, a:link {
     position: relative;
 

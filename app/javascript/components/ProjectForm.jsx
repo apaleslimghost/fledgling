@@ -3,6 +3,7 @@ import { Form, Input } from './Form'
 import Page from './Page'
 import Breadcrumbs from './Breadcrumbs'
 import colourStyle from './colour-style'
+import Button from './Button'
 
 import styles from './project-form.module.css'
 
@@ -20,9 +21,9 @@ const ProjectForm = ({ project, breadcrumbs }) => (
       style={colourStyle(project.colours)}
       aux={<>
         <Breadcrumbs breadcrumbs={breadcrumbs} />
-        <button type='submit' className='primary'>
+        <Button type='submit' className='primary'>
            {project.id ? 'Update project' : '✚ Create project'}
-        </button>
+        </Button>
       </>}
     >
       <div className={styles.description}>

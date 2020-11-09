@@ -1,6 +1,7 @@
 import React from 'react'
 import {Form, Input} from './Form'
 import Page from './Page'
+import Button from './Button'
 
 import styles from './login-form.module.css'
 
@@ -25,7 +26,7 @@ const LoginForm = ({ user }) => (
         </label>
       </div>
 
-      <button type='submit' className='primary big'>Log in</button>
+      <Button type='submit' className='primary big'>Log in</Button>
     </Form>
 
     <Form model={user} className={styles.form}>
@@ -44,7 +45,7 @@ const LoginForm = ({ user }) => (
           <Input name='password_confirmation' type='password' />
         </label>
       </div>
-      <button type='submit' className='big'>Sign up</button>
+      <Button type='submit' className='big'>Sign up</Button>
     </Form>
   </Page>
 )

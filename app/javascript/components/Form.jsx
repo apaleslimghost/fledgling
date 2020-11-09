@@ -41,3 +41,4 @@ export function Input({ name, tag: Tag = 'input', ...props }) {
 
   return <Tag name={fullName} defaultValue={model[name] || ''} {...props} />
 }
+

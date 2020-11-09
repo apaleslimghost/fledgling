@@ -1,5 +1,6 @@
 import React from 'react'
 import { Form, Input } from './Form'
+import Button from './Button'
 import styles from './task-complete-button.module.css'
 
 export default ({ task, project }) => (
@@ -8,8 +9,8 @@ export default ({ task, project }) => (
     {project && (
       <input name='return_to' type='hidden' value={project._meta.urls.show}/>
     )}
-    <button type='submit' aria-label={`Mark task as ${task.completed ? 'complete' : 'incomplete'}`} className={styles.button}>
+    <Button type='submit' aria-label={`Mark task as ${task.completed ? 'complete' : 'incomplete'}`} className={styles.button}>
       <span aria-hidden>{task.completed ? '✗' : '✓'}</span>
-    </button>
+    </Button>
   </Form>
 )
