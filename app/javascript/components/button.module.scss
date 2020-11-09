@@ -1,8 +1,14 @@
+.unstyled {
+    font: inherit;
+    background: transparent;
+    border: 0 none;
+    padding: 0;
+}
+
 .button {
-    font-family: inherit;
+    composes: unstyled;
     font-size: 0.8em;
     border: 2px solid currentColor;
-    background: transparent;
     color: var(--colour-title, inherit);
     font-weight: 900;
     border-radius: calc(0.75em - 9px);

@@ -5,6 +5,7 @@ import ProjectList from './ProjectList'
 import TaskList from './TaskList'
 import Breadcrumbs from './Breadcrumbs'
 import Link from './Link'
+import Action from './Action'
 
 import styles from './project.module.css'
 import colourStyle from './colour-style'
@@ -27,7 +28,9 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask, is
   {!isDefaultProject && (
     <div className={styles.actions}>
       <Link to={project} action='edit'>✎ Edit</Link>
-      <Link to={project} action='action' data={{ archived: true }}>♲ Archive</Link>
+      <Action model={project} data={{ archived: !project.archived }}>
+        ♲ {project.archived ? 'Unarchive' : 'Archive'}
+      </Action>
     </div>
   )}
 
