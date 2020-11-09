@@ -1,12 +1,12 @@
 .link, .link:visited {
     text-decoration: underline;
-    color: var(--colour-title);
+    color: var(--colour-title, black);
 }
 
 .link:hover, .link:active {
-    background: var(--colour-title);
     color: white;
-    box-shadow: 0 0 0 3px var(--colour-title);
+    background: var(--colour-title, black);
+    box-shadow: 0 0 0 3px var(--colour-title, black);
     border-radius: 3px;
     text-decoration: none;
 }

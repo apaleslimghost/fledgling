@@ -2,7 +2,7 @@ import React from 'react'
 import Nav from './Nav.jsx'
 import {CSRFContext} from './CSRF.jsx'
 
-export default ({ title, csrf, packs, user, children }) => (
+export default ({ title, csrf, packs, user, defaultProject, children }) => (
   <CSRFContext.Provider value={csrf}>
     <html lang='en'>
       <head>
@@ -22,7 +22,7 @@ export default ({ title, csrf, packs, user, children }) => (
       </head>
 
       <body>
-        <Nav user={user} />
+        <Nav user={user} defaultProject={defaultProject} />
         {children}
       </body>
     </html>

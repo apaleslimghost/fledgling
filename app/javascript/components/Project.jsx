@@ -10,9 +10,9 @@ import Action from './Action'
 import styles from './project.module.css'
 import colourStyle from './colour-style'
 
-export default ({ project, children, tasks, breadcrumbs, subproject, newTask, isDefaultProject }) => (
+export default ({ project, children, tasks, breadcrumbs, subproject, newTask, isDefaultProject, overrideTitle }) => (
   <Page
-    title={project.title}
+    title={overrideTitle || project.title}
     style={colourStyle(project.colours)}
     contentClass={styles.grid}
     aux={<>

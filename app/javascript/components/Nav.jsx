@@ -1,8 +1,9 @@
 import React from 'react'
 import Logo from './Logo'
+import Link from './Link'
 import styles from './nav.module.css'
 
-export default ({ user }) => (
+export default ({ user, defaultProject }) => (
     <nav className={styles.nav}>
       <a href='/' className={styles.logo}>
         <Logo />
@@ -16,7 +17,10 @@ export default ({ user }) => (
           </summary>
           <ul className={styles.menu}>
             <li>
-              <a href='/log-out'>Log out</a>
+              <Link to={defaultProject} action='archive'>Archived projects</Link>
+            </li>
+            <li>
+              <Link href='/log-out'>Log out</Link>
             </li>
           </ul>
         </details>

@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  before_action :check_project_access, only: [:show, :edit, :update]
+  before_action :check_project_access, only: [:show, :edit, :update, :archive]
 
   def check_project_access
     @project = Project.find(params[:id])
@@ -15,6 +15,17 @@ class ProjectsController < ApplicationController
     else
       redirect_to login_path
     end
+  end
+
+  def archive
+    render component: "Project", props: {
+             project: @project,
+             override_title: "Archive ♺",
+             children: @project.descendants.where(archived: true),
+             breadcrumbs: @project.children.new.breadcrumbs,
+             is_default_project: true,
+             tasks: [],
+           }
   end
 
   def show

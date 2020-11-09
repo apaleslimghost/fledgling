@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   def default_props(props)
     {
-      wrapper_props: wrapper_props(props)
+      wrapper_props: wrapper_props(props),
     }
   end
 
@@ -15,13 +15,14 @@ class ApplicationController < ActionController::Base
     {
       csrf: {
         token: form_authenticity_token,
-        param: request_forgery_protection_token
+        param: request_forgery_protection_token,
       },
       packs: {
-        styles: asset_pack_path('application.css'),
-        scripts: asset_pack_path('application.js')
+        styles: asset_pack_path("application.css"),
+        scripts: asset_pack_path("application.js"),
       },
-      user: current_user
+      user: current_user,
+      default_project: current_user&.default_project,
     }
   end
 

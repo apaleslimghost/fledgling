@@ -31,6 +31,16 @@ class Project < ApplicationRecord
     end
   end
 
+  def paths
+    if persisted?
+      super().merge({
+                      archive: archive_project_path(self),
+                    })
+    else
+      super
+    end
+  end
+
   def set_defaults
     self.colour ||= default_colour
   end
