@@ -30,7 +30,15 @@ export const List = ({
           model={task}
           data={{ completed: !task.completed }}
           formChildren={
-            <input name='return_to' type='hidden' value={project._meta.urls.show}/>
+            <input
+              name='return_to'
+              type='hidden'
+              value={
+                showControls || task.completed
+                  ? project._meta.urls.tasks
+                  : project._meta.urls.show
+              }
+            />
           }
           buttonProps={{
             'aria-label': `Mark task as ${task.completed ? 'complete' : 'incomplete'}`,
@@ -57,7 +65,10 @@ export const List = ({
               <Action
                 model={task}
                 method='delete'
-                style={{ '--colour-title': '#900', '--colour-base': '#fcc' }}>
+                style={{
+                  '--colour-title': '#900',
+                  '--colour-base': '#fcc'
+                }}>
                 ⌫ Delete
               </Action>
             </>
