@@ -67,6 +67,15 @@ export const List = ({
         </span>
 
         <Toolbar inline>
+          {task.project.id !== project.id && (
+            <Link
+              to={task.project}
+              action={linkTasksPage ? 'tasks' : 'show'}
+              style={colourStyle(task.project.colours)}
+            >
+              ☰ {task.project.title}
+            </Link>
+          )}
           {showControls && (
             <>
               <Link to={task} action='edit'>
@@ -81,18 +90,10 @@ export const List = ({
               </Action>
             </>
           )}
-          {task.project.id !== project.id && (
-            <Link
-              to={task.project}
-              action={linkTasksPage ? 'tasks' : 'show'}
-              style={colourStyle(task.project.colours)}
-            >
-              ☰ {task.project.title}
-            </Link>
-          )}
         </Toolbar>
       </li>
     ))}
+
     {Children.toArray(children).filter(Boolean).map((child, index) => (
       <li className={styles.item} key={index}>{child}</li>
     ))}
