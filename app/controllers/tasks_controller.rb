@@ -54,6 +54,7 @@ class TasksController < ApplicationController
       project: project,
       breadcrumbs: project.breadcrumbs(include_self: true),
       new_task: Task.new(project: project),
+      hierarchy_tasks: project.hierarchy_tasks(include_own: false),
     }
   end
 

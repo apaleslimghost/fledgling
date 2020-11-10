@@ -11,8 +11,14 @@ class Project < ApplicationRecord
     [:colours, :tasks_count, :projects_count]
   end
 
-  def hierarchy_tasks
-    tasks + descendants.where(archived: false).flat_map(&:tasks)
+  def hierarchy_tasks(include_own: true)
+    from_descendents = descendants.where(archived: false).flat_map(&:tasks)
+
+    if include_own
+      tasks + from_descendents
+    else
+      from_descendents
+    end
   end
 
   def breadcrumbs(include_self: false)

@@ -5,7 +5,7 @@
 }
 
 .input {
-    composes: title from './task-list.module.css';
+    composes: taskTitle from './task-list.module.css';
     margin-right: 0.5em;
     max-width: 20em;
 }

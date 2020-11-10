@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Children } from 'react'
 import partition from 'lodash.partition'
 import TaskForm from './TaskForm'
 import Action from './Action'
@@ -8,6 +8,7 @@ import Toolbar from './Toolbar'
 import colourStyle from './colour-style'
 import button from './button.module.scss'
 import styles from './task-list.module.css'
+import link from './link.module.css'
 
 export const List = ({
   tasks,
@@ -15,9 +16,18 @@ export const List = ({
   newTask,
   className,
   showControls,
+  linkTasksPage,
+  children,
+  title,
   ...props
 }) => (
   <ul className={`${styles.list} ${className}`} {...props}>
+    {title && (
+      <li className={styles.item}>
+        <h3 className={styles.title}>{title}</h3>
+      </li>
+    )}
+
     {newTask && (
       <li className={styles.item}>
         <TaskForm task={newTask} />
@@ -50,7 +60,7 @@ export const List = ({
 
         <span
           className={
-            `${styles.title} ${task.completed ? styles.completed : ''}`
+            `${styles.taskTitle} ${task.completed ? styles.completed : ''}`
           }
         >
           {task.title}
@@ -65,10 +75,8 @@ export const List = ({
               <Action
                 model={task}
                 method='delete'
-                style={{
-                  '--colour-title': '#900',
-                  '--colour-base': '#fcc'
-                }}>
+                className={link.danger}
+              >
                 ⌫ Delete
               </Action>
             </>
@@ -76,6 +84,7 @@ export const List = ({
           {task.project.id !== project.id && (
             <Link
               to={task.project}
+              action={linkTasksPage ? 'tasks' : 'show'}
               style={colourStyle(task.project.colours)}
             >
               ☰ {task.project.title}
@@ -84,6 +93,9 @@ export const List = ({
         </Toolbar>
       </li>
     ))}
+    {Children.toArray(children).filter(Boolean).map((child, index) => (
+      <li className={styles.item} key={index}>{child}</li>
+    ))}
   </ul>
 )
 
@@ -91,11 +103,11 @@ export const TaskList = ({ className, ...props }) => (
   <List className={`${styles.part} ${className}`} {...props} />
 )
 
-export const FullTaskList = ({ tasks, newTask, project }) => {
+export const FullTaskList = ({ tasks, newTask, project, className }) => {
   const [ complete, incomplete ] = partition(tasks, 'completed')
 
   return (
-    <div className={styles.part}>
+    <div className={`${styles.part} ${className}`}>
       {(incomplete.length > 0 || newTask) && (
         <TaskList
           showControls

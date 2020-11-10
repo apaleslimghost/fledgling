@@ -1,0 +1,14 @@
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.left {
+    flex: 2;
+}
+
+.right {
+    flex: 1;
+}
