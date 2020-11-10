@@ -12,7 +12,7 @@ import styles from './project.module.css'
 import link from './link.module.css'
 import colourStyle from './colour-style'
 
-export default ({ project, children, tasks, breadcrumbs, subproject, newTask, isDefaultProject, overrideTitle }) => (
+export default ({ project, children, tasks, breadcrumbs, subproject, newTask, isDefaultProject, overrideTitle, noDescription }) => (
   <Page
     title={overrideTitle || project.title}
     style={colourStyle(project.colours)}
@@ -21,7 +21,7 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask, is
       {breadcrumbs.length > 0 && <Breadcrumbs breadcrumbs={breadcrumbs} />}
     </>}
   >
-    {project.description && project.description.body && (
+    {!noDescription && (
       <div
         className={styles.description}
         style={{

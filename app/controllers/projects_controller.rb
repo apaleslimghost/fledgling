@@ -95,6 +95,7 @@ class ProjectsController < ApplicationController
       is_default_project: is_default_project,
       tasks: project.hierarchy_tasks.reject(&:completed),
       breadcrumbs: project.breadcrumbs,
+      no_description: project.description.blank?,
       new_task: (Task.new(project: project) unless is_default_project or not project.persisted?),
     }
   end
