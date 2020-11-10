@@ -49,7 +49,16 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask, is
   )}
 
     {(tasks.length > 0 || newTask) && (
-      <TaskList tasks={tasks.slice(0, 10)} newTask={!project.archived && newTask} project={project} className={styles.left} />
+      <TaskList
+        tasks={tasks.slice(0, 10)}
+        newTask={!project.archived && newTask}
+        project={project}
+        className={styles.left}
+      >
+        {tasks.length > 10 && (
+          <Link to={project} action='tasks'>More tasks&hellip;</Link>
+        )}
+      </TaskList>
     )}
 
     {(children.length > 0 || subproject) && (
