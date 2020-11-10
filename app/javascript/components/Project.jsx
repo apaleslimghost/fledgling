@@ -22,9 +22,13 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask, is
     </>}
   >
     {project.description && (
-      <div className={styles.description} style={{
-        '--description-height': Math.max(1, Math.floor(project.description.length / 50 / 2))
-      }}>{project.description}</div>
+      <div
+        className={styles.description}
+        style={{
+          '--description-height': Math.max(1, Math.floor(project.description.length / 50 / 2))
+        }}
+        dangerouslySetInnerHTML={{__html: project.description.body}}
+      />
     )}
 
   {!isDefaultProject && (

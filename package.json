@@ -3,6 +3,7 @@
   "private": true,
   "dependencies": {
     "@babel/preset-react": "^7.10.4",
+    "@rails/actiontext": "^6.0.3-2",
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "5.1.1",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
@@ -12,6 +13,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react_ujs": "^2.6.1",
+    "trix": "^1.2.0",
     "turbolinks": "^5.2.0"
   },
   "version": "0.1.0",

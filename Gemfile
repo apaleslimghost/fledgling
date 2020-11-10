@@ -22,3 +22,5 @@ gem "bcrypt", "~> 3.1"
 gem "rb-gravatar", "~> 1.0"
 
 gem "pg", "~> 1.2"
+
+gem "actiontext", "~> 6.0"

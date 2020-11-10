@@ -2,13 +2,14 @@ class Project < ApplicationRecord
   belongs_to :user
   has_many :tasks, dependent: :destroy
   validates :title, presence: true
+  has_rich_text :description
 
   has_closure_tree(dependent: :destroy)
 
   after_initialize :set_defaults
 
   def include_methods
-    [:colours, :tasks_count, :projects_count]
+    [:description, :colours, :tasks_count, :projects_count]
   end
 
   def hierarchy_tasks(include_own: true)

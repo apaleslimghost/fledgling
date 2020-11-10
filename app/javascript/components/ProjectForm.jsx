@@ -27,7 +27,8 @@ const ProjectForm = ({ project, breadcrumbs }) => (
       </>}
     >
       <div className={styles.description}>
-        <Input tag='textarea' name='description' className={styles.seamless} placeholder='Project description…' />
+        <input type='hidden' id={`project-${project.id}-description`} name='project[description]' value={project.description && project.description.body} />
+        <trix-editor input={`project-${project.id}-description`} />
       </div>
     </Page>
   </Form>
