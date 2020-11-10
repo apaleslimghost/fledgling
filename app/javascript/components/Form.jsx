@@ -5,9 +5,9 @@ const Model = createContext()
 
 const getFormProps = ({ model, ...props }) => {
   if(model) {
-    const {urls, method} = model._meta
+    const { urls, method } = model._meta
 
-    return { ...props, action: urls.action, method }
+    return { action: urls.action, method, ...props }
   }
 
   return props

@@ -3,6 +3,8 @@ import partition from 'lodash.partition'
 import TaskForm from './TaskForm'
 import Action from './Action'
 import Link from './Link'
+import Toolbar from './Toolbar'
+
 import colourStyle from './colour-style'
 import button from './button.module.scss'
 import styles from './task-list.module.css'
@@ -46,14 +48,29 @@ export const List = ({
           {task.title}
         </span>
 
-        {task.project.id !== project.id && (
-          <Link
-            to={task.project}
-            style={colourStyle(task.project.colours)}
-          >
-            ☰ {task.project.title}
-          </Link>
-        )}
+        <Toolbar inline>
+          {showControls && (
+            <>
+              <Link to={task} action='edit'>
+                ✎ Edit
+              </Link>
+              <Action
+                model={task}
+                method='delete'
+                style={{ '--colour-title': '#900', '--colour-base': '#fcc' }}>
+                ⌫ Delete
+              </Action>
+            </>
+          )}
+          {task.project.id !== project.id && (
+            <Link
+              to={task.project}
+              style={colourStyle(task.project.colours)}
+            >
+              ☰ {task.project.title}
+            </Link>
+          )}
+        </Toolbar>
       </li>
     ))}
   </ul>

@@ -5,7 +5,7 @@ import button from './button.module.scss'
 
 export default ({ data, className, children, formChildren, buttonProps, ...props }) => (
     <Form {...props}>
-      {Object.keys(data).map(key => (
+      {data && Object.keys(data).map(key => (
           <Input type='hidden' name={key} key={key} value={data[key]} />
       ))}
       {formChildren}
