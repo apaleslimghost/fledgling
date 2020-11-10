@@ -1,4 +1,4 @@
-import React, { Children } from 'react'
+import React from 'react'
 import partition from 'lodash.partition'
 import TaskForm from './TaskForm'
 import Action from './Action'
@@ -7,12 +7,13 @@ import colourStyle from './colour-style'
 import button from './button.module.scss'
 import styles from './task-list.module.css'
 
-
-const List = ({ tasks, project, children, className = '', ...props }) => (
+export const TaskList = ({ tasks, project, newTask, className = styles.part, ...props }) => (
   <ul className={`${styles.list} ${className}`} {...props}>
-    {Children.toArray(children).filter(Boolean).map((child, index) => (
-      <li className={styles.item} key={index}>{child}</li>
-    ))}
+    {newTask && (
+      <li className={styles.item}>
+        <TaskForm task={newTask} />
+      </li>
+    )}
 
     {tasks.map(task => (
       <li className={styles.item} key={task.id}>
@@ -50,23 +51,21 @@ const List = ({ tasks, project, children, className = '', ...props }) => (
   </ul>
 )
 
-export default ({ tasks, newTask, project }) => {
+export const FullTaskList = ({ tasks, newTask, project }) => {
   const [ complete, incomplete ] = partition(tasks, 'completed')
 
   return (
-    <>
+    <div className={styles.part}>
       {(incomplete.length > 0 || newTask) && (
-        <List tasks={incomplete} project={project} className={styles.part} style={{'--task-list-height': incomplete.length + (newTask ? 1 : 0)}}>
-          {newTask && <TaskForm task={newTask} />}
-        </List>
+        <TaskList tasks={incomplete} newTask={newTask} project={project} style={{'--task-list-height': incomplete.length + (newTask ? 1 : 0)}} className='' />
       )}
 
       {complete.length > 0 && (
-        <details className={styles.part} style={{'--task-list-height': complete.length}}>
+        <details style={{'--task-list-height': complete.length}}>
           <summary className={styles.summary}>Completed tasks</summary>
-          <List tasks={complete} project={project} />
+          <TaskList tasks={complete} project={project} className='' />
         </details>
       )}
-    </>
+    </div>
   )
 }

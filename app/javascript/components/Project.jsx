@@ -2,7 +2,7 @@ import React from 'react'
 
 import Page from './Page'
 import ProjectList from './ProjectList'
-import TaskList from './TaskList'
+import { TaskList } from './TaskList'
 import Breadcrumbs from './Breadcrumbs'
 import Link from './Link'
 import Action from './Action'

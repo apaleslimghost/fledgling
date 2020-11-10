@@ -88,7 +88,7 @@ class ProjectsController < ApplicationController
       children: project.children.where(archived: false),
       subproject: subproject,
       is_default_project: is_default_project,
-      tasks: project.hierarchy_tasks,
+      tasks: project.hierarchy_tasks.reject(&:completed),
       breadcrumbs: project.breadcrumbs,
       new_task: (Task.new(project: project) unless is_default_project or not project.persisted?),
     }
