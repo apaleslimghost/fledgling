@@ -1,0 +1,12 @@
+.toolbar {
+    composes: card from './card.module.css';
+    display: flex;
+    gap: 1.5rem;
+}
+
+.toolbar > *:not(:first-child)::before {
+    content: '';
+    border-left: 1px solid var(--colour-base);
+    margin-left: -0.75rem;
+    margin-right: 0.75rem;
+}

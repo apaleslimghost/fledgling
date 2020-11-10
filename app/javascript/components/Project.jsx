@@ -6,6 +6,7 @@ import { TaskList } from './TaskList'
 import Breadcrumbs from './Breadcrumbs'
 import Link from './Link'
 import Action from './Action'
+import Toolbar from './Toolbar'
 
 import styles from './project.module.css'
 import colourStyle from './colour-style'
@@ -26,7 +27,7 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask, is
     )}
 
   {!isDefaultProject && (
-    <div className={styles.actions}>
+    <Toolbar className={styles.left}>
       <Link to={project} action='tasks'>☰ Tasks</Link>
       {!project.archived && (
         <Link to={project} action='edit'>✎ Edit</Link>
@@ -34,11 +35,11 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask, is
       <Action model={project} data={{ archived: !project.archived }}>
         ♲ {project.archived ? 'Unarchive' : 'Archive'}
       </Action>
-    </div>
+    </Toolbar>
   )}
 
     {(tasks.length > 0 || newTask) && (
-      <TaskList tasks={tasks} newTask={!project.archived && newTask} project={project} />
+      <TaskList tasks={tasks} newTask={!project.archived && newTask} project={project} className={styles.left} />
     )}
 
     {(children.length > 0 || subproject) && (

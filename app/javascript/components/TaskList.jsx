@@ -7,7 +7,14 @@ import colourStyle from './colour-style'
 import button from './button.module.scss'
 import styles from './task-list.module.css'
 
-export const TaskList = ({ tasks, project, newTask, className = styles.part, ...props }) => (
+export const List = ({
+  tasks,
+  project,
+  newTask,
+  className,
+  showControls,
+  ...props
+}) => (
   <ul className={`${styles.list} ${className}`} {...props}>
     {newTask && (
       <li className={styles.item}>
@@ -30,6 +37,7 @@ export const TaskList = ({ tasks, project, newTask, className = styles.part, ...
           }}>
           <span aria-hidden>{task.completed ? '✗' : '✓'}</span>
         </Action>
+
         <span
           className={
             `${styles.title} ${task.completed ? styles.completed : ''}`
@@ -37,18 +45,22 @@ export const TaskList = ({ tasks, project, newTask, className = styles.part, ...
         >
           {task.title}
         </span>
+
         {task.project.id !== project.id && (
           <Link
             to={task.project}
-            className={styles.projectLink}
             style={colourStyle(task.project.colours)}
           >
-            {task.project.title}
+            ☰ {task.project.title}
           </Link>
         )}
       </li>
     ))}
   </ul>
+)
+
+export const TaskList = ({ className, ...props }) => (
+  <List className={`${styles.part} ${className}`} {...props} />
 )
 
 export const FullTaskList = ({ tasks, newTask, project }) => {
@@ -57,7 +69,13 @@ export const FullTaskList = ({ tasks, newTask, project }) => {
   return (
     <div className={styles.part}>
       {(incomplete.length > 0 || newTask) && (
-        <TaskList tasks={incomplete} newTask={newTask} project={project} style={{'--task-list-height': incomplete.length + (newTask ? 1 : 0)}} className='' />
+        <TaskList
+          showControls
+          tasks={incomplete}
+          newTask={newTask}
+          project={project}
+          style={{'--task-list-height': incomplete.length + (newTask ? 1 : 0)}}
+          className='' />
       )}
 
       {complete.length > 0 && (

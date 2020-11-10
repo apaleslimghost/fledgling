@@ -20,20 +20,6 @@
     }
 }
 
-.actions {
-    composes: part from './task-list.module.css';
-    composes: padded from './task-list.module.css';
-    display: flex;
-    gap: 1.5rem;
-}
-
-.actions > *:not(:first-child)::before {
-    content: '';
-    border-left: 1px solid var(--colour-base);
-    margin-left: -0.75rem;
-    margin-right: 0.75rem;
-}
-
 .grid {
     --parent-colour-title: var(--colour-title);
     display: grid;
@@ -50,5 +36,17 @@
 
     .grid > * {
         grid-row: span 2;
+    }
+}
+
+@supports not (grid-template-rows: masonry) {
+    .left {
+        grid-row: span var(--task-list-height, 1);
+    }
+}
+
+@media (min-width: 30rem) {
+    .left {
+        grid-column: 1 / span 2;
     }
 }
