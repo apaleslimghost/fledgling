@@ -38,6 +38,7 @@ class Project < ApplicationRecord
     if persisted?
       super().merge({
                       archive: archive_project_path(self),
+                      tasks: project_tasks_path(self),
                     })
     else
       super

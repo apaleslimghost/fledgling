@@ -27,6 +27,7 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask, is
 
   {!isDefaultProject && (
     <div className={styles.actions}>
+      <Link to={project} action='tasks'>☰ Tasks</Link>
       {!project.archived && (
         <Link to={project} action='edit'>✎ Edit</Link>
       )}
