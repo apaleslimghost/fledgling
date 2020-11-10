@@ -21,7 +21,7 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask, is
       {breadcrumbs.length > 0 && <Breadcrumbs breadcrumbs={breadcrumbs} />}
     </>}
   >
-    {project.description && project.description.body (
+    {project.description && project.description.body && (
       <div
         className={styles.description}
         style={{
