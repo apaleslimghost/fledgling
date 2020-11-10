@@ -49,13 +49,25 @@ class TasksController < ApplicationController
   end
 
   def tasks_props(tasks, project)
-    {
-      tasks: tasks,
+    is_default_project = project == current_user.default_project
+
+    base = {
       project: project,
       breadcrumbs: project.breadcrumbs(include_self: true),
-      new_task: Task.new(project: project),
-      hierarchy_tasks: project.hierarchy_tasks(include_own: false),
     }
+
+    if is_default_project
+      base.merge({
+                   tasks: project.hierarchy_tasks,
+                   hierarchy_tasks: [],
+                 })
+    else
+      base.merge({
+                   tasks: tasks,
+                   hierarchy_tasks: project.hierarchy_tasks(include_own: false),
+                   new_task: Task.new(project: project),
+                 })
+    end
   end
 
   def wrapper_props(props)
