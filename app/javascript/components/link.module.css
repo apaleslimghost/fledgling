@@ -14,3 +14,8 @@
 .link:active {
     color: var(--colour-base);
 }
+
+.danger {
+    --colour-title: #900;
+    --colour-base: #fcc;
+}

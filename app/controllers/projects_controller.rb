@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  before_action :check_project_access, only: [:show, :edit, :update, :archive]
+  before_action :check_project_access, only: [:show, :edit, :update, :archive, :destroy]
 
   def check_project_access
     @project = Project.find(params[:id])
@@ -57,6 +57,11 @@ class ProjectsController < ApplicationController
     else
       # TODO render form with errors
     end
+  end
+
+  def destroy
+    @project.destroy
+    redirect_to archive_project_path(current_user.default_project)
   end
 
   private

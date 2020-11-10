@@ -9,6 +9,7 @@ import Action from './Action'
 import Toolbar from './Toolbar'
 
 import styles from './project.module.css'
+import link from './link.module.css'
 import colourStyle from './colour-style'
 
 export default ({ project, children, tasks, breadcrumbs, subproject, newTask, isDefaultProject, overrideTitle }) => (
@@ -35,6 +36,15 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask, is
       <Action model={project} data={{ archived: !project.archived }}>
         ♲ {project.archived ? 'Unarchive' : 'Archive'}
       </Action>
+      {project.archived && (
+        <Action
+          model={project}
+          method='delete'
+          className={link.danger}
+        >
+          ⌫ Delete
+        </Action>
+      )}
     </Toolbar>
   )}
 

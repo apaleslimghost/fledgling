@@ -1,9 +1,9 @@
 class Project < ApplicationRecord
   belongs_to :user
-  has_many :tasks
+  has_many :tasks, dependent: :destroy
   validates :title, presence: true
 
-  has_closure_tree
+  has_closure_tree(dependent: :destroy)
 
   after_initialize :set_defaults
 
@@ -12,7 +12,7 @@ class Project < ApplicationRecord
   end
 
   def hierarchy_tasks
-    self_and_descendants.where(archived: false).flat_map(&:tasks)
+    tasks + descendants.where(archived: false).flat_map(&:tasks)
   end
 
   def breadcrumbs(include_self: false)
