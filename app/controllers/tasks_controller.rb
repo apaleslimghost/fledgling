@@ -33,4 +33,8 @@ class TasksController < ApplicationController
       new_task: Task.new(project: project),
     }
   end
+
+  def wrapper_props(props)
+    super.merge({ title: "#{props[:project].title} Tasks" })
+  end
 end
