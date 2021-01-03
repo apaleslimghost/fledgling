@@ -20,7 +20,6 @@
 
 .header, .content {
     width: 100%;
-    max-width: 70rem;
     padding: 2rem 2rem 0;
     margin: 0 auto;
 }
