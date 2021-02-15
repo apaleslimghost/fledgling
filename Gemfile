@@ -9,7 +9,8 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.7'
 gem 'webpacker'
 gem 'closure_tree'
-gem 'react-rails'
+# until https://github.com/reactjs/react-rails/pull/1099 is merged
+gem 'react-rails', github: 'ksylvest/react-rails', branch: 'ksylvest/fix-uri-open-warning-and-error'
 gem 'hsluv'
 gem 'chroma'
 
