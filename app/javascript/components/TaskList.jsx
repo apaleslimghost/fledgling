@@ -75,7 +75,7 @@ export const List = ({
               action={linkTasksPage ? 'tasks' : 'show'}
               style={colourStyle(task.project.colours)}
             >
-              <FontAwesomeIcon icon="project-diagram" /> {task.project.title}
+              <FontAwesomeIcon icon="sitemap" /> {task.project.title}
             </Link>
           )}
           {showControls && (
