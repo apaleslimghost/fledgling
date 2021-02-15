@@ -1,5 +1,7 @@
 import React, { Children } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import partition from 'lodash.partition'
+
 import TaskForm from './TaskForm'
 import Action from './Action'
 import Link from './Link'
@@ -55,7 +57,7 @@ export const List = ({
             disabled: project.archived,
             className: `${button.button} ${styles.completeButton}`
           }}>
-          <span aria-hidden>{task.completed ? '✗' : '✓'}</span>
+          <FontAwesomeIcon icon={task.completed ? 'times' : 'check'} />
         </Action>
 
         <span
@@ -73,20 +75,20 @@ export const List = ({
               action={linkTasksPage ? 'tasks' : 'show'}
               style={colourStyle(task.project.colours)}
             >
-              ☰ {task.project.title}
+              <FontAwesomeIcon icon="project-diagram" /> {task.project.title}
             </Link>
           )}
           {showControls && (
             <>
               <Link to={task} action='edit'>
-                ✎ Edit
+                <FontAwesomeIcon icon="edit" /> Edit
               </Link>
               <Action
                 model={task}
                 method='delete'
                 className={link.danger}
               >
-                ⌫ Delete
+                <FontAwesomeIcon icon="trash-alt" /> Delete
               </Action>
             </>
           )}

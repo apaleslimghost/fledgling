@@ -88,7 +88,7 @@ class Project < ApplicationRecord
   end
 
   def tasks_count
-    count = hierarchy_tasks.count
+    count = hierarchy_tasks.select { |task| !task.completed }.count
     ApplicationController.helpers.pluralize(count, "task") if count.positive?
   end
 

@@ -1,4 +1,5 @@
 import React from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import Page from './Page'
 import ProjectList from './ProjectList'
@@ -33,12 +34,12 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask, is
 
   {!isDefaultProject && (
     <Toolbar className={styles.left}>
-      <Link to={project} action='tasks'>☰ Tasks</Link>
+      <Link to={project} action='tasks'><FontAwesomeIcon icon="tasks" /> Tasks</Link>
       {!project.archived && (
-        <Link to={project} action='edit'>✎ Edit</Link>
+        <Link to={project} action='edit'><FontAwesomeIcon icon="edit" /> Edit</Link>
       )}
       <Action model={project} data={{ archived: !project.archived }}>
-        ♲ {project.archived ? 'Unarchive' : 'Archive'}
+          <FontAwesomeIcon icon="archive" /> {project.archived ? 'Unarchive' : 'Archive'}
       </Action>
       {project.archived && (
         <Action
@@ -46,7 +47,7 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask, is
           method='delete'
           className={link.danger}
         >
-          ⌫ Delete
+          <FontAwesomeIcon icon="trash-alt" /> Delete
         </Action>
       )}
     </Toolbar>

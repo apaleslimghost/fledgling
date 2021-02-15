@@ -1,4 +1,5 @@
 import React from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Form, Input } from './Form'
 import styles from './task-form.module.css'
 import Button from './Button'
@@ -9,6 +10,11 @@ export default ({ task, project, className }) => (
     {task.id && project && (
       <input type='hidden' name='return_to' value={project._meta.urls.tasks} />
     )}
-    <Button type='submit'>{task.id ? '✓ Save' : '✚ Add'} task</Button>
+    <Button type='submit'>
+      {task.id
+        ? <><FontAwesomeIcon icon="save" /> Save</>
+        : <><FontAwesomeIcon icon="plus" /> Add</>
+      } task
+     </Button>
   </Form>
 )

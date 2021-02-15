@@ -1,4 +1,6 @@
 import React from "react"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 import { Form, Input } from './Form'
 import Page from './Page'
 import Breadcrumbs from './Breadcrumbs'
@@ -22,7 +24,10 @@ const ProjectForm = ({ project, breadcrumbs }) => (
       aux={<>
         <Breadcrumbs breadcrumbs={breadcrumbs} />
         <Button type='submit' className='primary'>
-           {project.id ? 'Update project' : '✚ Create project'}
+          {project.id
+            ? <><FontAwesomeIcon icon="save" /> Update</>
+            : <><FontAwesomeIcon icon="plus" /> Create</>
+          } project
         </Button>
       </>}
     >

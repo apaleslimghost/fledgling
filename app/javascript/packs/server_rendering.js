@@ -1,7 +1,11 @@
 import React from 'react'
 import ReactRailsUJS from 'react_ujs'
-import Wrapper from '../components/Wrapper'
 import * as ReactDomServer from 'react-dom/server'
+import Wrapper from '../components/Wrapper'
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+library.add(fas)
 
 const context = require.context('components', true)
 
