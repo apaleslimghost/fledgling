@@ -3,9 +3,13 @@ Rails.application.routes.draw do
   root "home#index"
 
   resources :projects do
-    resources :tasks
+    resources :tasks do
+      get "move", on: :member, to: "tasks#move"
+    end
+
     resources :projects, only: [:new, :create]
     get "archive", on: :member, to: "projects#archive"
+    get "move", on: :member, to: "projects#move"
   end
 
   resources :users, only: [:new, :edit, :create, :update]

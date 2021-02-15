@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  before_action :check_project_access, only: [:show, :edit, :update, :archive, :destroy]
+  before_action :check_project_access, only: [:show, :edit, :update, :archive, :destroy, :move]
 
   def check_project_access
     @project = Project.find(params[:id])
@@ -26,6 +26,14 @@ class ProjectsController < ApplicationController
              is_default_project: true,
              tasks: [],
            }
+  end
+
+  def move
+    render component: "ProjectTree", props: {
+      tree: current_user.default_project.json_tree,
+      project: @project,
+      breadcrumbs: @project.breadcrumbs
+    }
   end
 
   def show

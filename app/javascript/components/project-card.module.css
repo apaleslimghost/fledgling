@@ -39,8 +39,15 @@
     color: var(--colour-base);
 }
 
-.primary .title::before {
-    content: '+ ';
+.small {
+    min-height: auto;
+    display: flex;
+    gap: 1ch;
+}
+
+.small .title {
+    margin-right: auto;
+    font-size: 1.2em;
 }
 
 .title {

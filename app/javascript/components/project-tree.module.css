@@ -1,0 +1,18 @@
+.tree {
+   margin-top: 0.5rem;
+   list-style: none;
+   padding: 0;
+}
+
+.tree .tree {
+   margin-left: 2rem;
+}
+
+.item {
+   margin-bottom: 0.5rem;
+}
+
+.disabled {
+   opacity: 0.6;
+   pointer-events: none;
+}

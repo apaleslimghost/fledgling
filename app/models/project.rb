@@ -46,6 +46,7 @@ class Project < ApplicationRecord
       super().merge({
                       archive: archive_project_path(self),
                       tasks: project_tasks_path(self),
+                      move: move_project_path(self)
                     })
     else
       super
@@ -95,5 +96,12 @@ class Project < ApplicationRecord
   def projects_count
     count = descendants.where(archived: false).count
     ApplicationController.helpers.pluralize(count, "subproject") if count.positive?
+  end
+
+  def json_tree
+    {
+      item: self,
+      children: children.map(&:json_tree)
+    }
   end
 end
