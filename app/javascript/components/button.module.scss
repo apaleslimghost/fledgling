@@ -1,5 +1,6 @@
 .unstyled {
     font: inherit;
+    border-style: none;
     background: transparent;
     border: 0 none;
     padding: 0;
@@ -13,11 +14,6 @@
     font-weight: 900;
     border-radius: calc(0.75em - 9px);
     padding: 0 0.4em;
-
-    &:disabled {
-        opacity: 0.6;
-        cursor: default;
-    }
 
     &:enabled {
         &:hover {

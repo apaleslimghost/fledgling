@@ -35,11 +35,15 @@ export default ({ project, children, tasks, breadcrumbs, subproject, newTask, is
   {!isDefaultProject && (
     <Toolbar className={styles.left}>
       <Link to={project} action='tasks'><FontAwesomeIcon icon="tasks" /> Tasks</Link>
-      {!project.archived && (
+      {!project.archived && <>
         <Link to={project} action='edit'><FontAwesomeIcon icon="edit" /> Edit</Link>
-      )}
+        <Link to={project} action='move'><FontAwesomeIcon icon="file-export" /> Move</Link>
+      </>}
       <Action model={project} data={{ archived: !project.archived }}>
-          <FontAwesomeIcon icon="archive" /> {project.archived ? 'Unarchive' : 'Archive'}
+          {project.archived
+            ? <><FontAwesomeIcon icon="trash-restore-alt" /> Unarchive</>
+            : <><FontAwesomeIcon icon="archive" /> Archive</>
+          }
       </Action>
       {project.archived && (
         <Action

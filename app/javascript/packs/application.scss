@@ -26,6 +26,12 @@ button, a:link {
         right: -.5em;
         bottom: -.5em;
     }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: default;
+        pointer-events: none;
+    }
 }
 
 textarea, input {

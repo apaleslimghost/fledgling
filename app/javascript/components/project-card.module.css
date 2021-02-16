@@ -41,15 +41,18 @@
 
 .small {
     min-height: auto;
-    display: flex;
-    gap: 1ch;
 }
 
 .small .title {
-    margin-right: auto;
     font-size: 1.2em;
 }
 
 .title {
     composes: title from './card.module.css';
+}
+
+.details {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }

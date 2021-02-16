@@ -3,14 +3,19 @@ import Link from './Link'
 import colourStyle from './colour-style'
 import styles from './project-card.module.css'
 
-export default ({ project, primary, small }) => (
-  <Link
-    to={project}
-    className={`${styles.main} ${primary ? styles.primary : ''} ${small ? styles.small : ''}`}
+const ProjectLink = ({ project, ...props }) => <Link to={project} {...props} />
+
+export default ({ as: Component = ProjectLink, project, accessory, primary, small, className, ...props }) => (
+  <Component
+    project={project}
+    className={`${styles.main} ${primary ? styles.primary : ''} ${small ? styles.small : ''} ${className}`}
     style={colourStyle(project.colours)}
+    {...props}
   >
-    <h2 className={styles.title}>{!project.id && '+ '}{project.title}</h2>
-    {project.tasks_count && <div>{project.tasks_count}</div>}
-    {project.projects_count && <div>{project.projects_count}</div>}
-  </Link>
+    <h2 className={styles.title}>{accessory} {project.title}</h2>
+    {!small && <ul class={styles.details}>
+      {project.tasks_count && <li>{project.tasks_count}</li>}
+      {project.projects_count && <li>{project.projects_count}</li>}
+    </ul>}
+  </Component>
 )
