@@ -101,7 +101,7 @@ class Project < ApplicationRecord
   def json_tree
     {
       item: self,
-      children: children.map(&:json_tree)
+      children: children.where(archived: false).map(&:json_tree)
     }
   end
 end
