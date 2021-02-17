@@ -1,11 +1,10 @@
 .tree {
    margin-top: 0.5rem;
-   list-style: none;
    padding: 0;
 }
 
 .item .tree {
-   margin-left: 2rem;
+   margin-left: 1rem;
 }
 
 .item {
@@ -14,4 +13,5 @@
 
 .root {
    composes: grid from './project.module.css';
+   --column-width: 9rem;
 }
