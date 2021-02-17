@@ -11,3 +11,7 @@
 .item {
    margin-bottom: 0.5rem;
 }
+
+.root {
+   composes: grid from './project.module.css';
+}

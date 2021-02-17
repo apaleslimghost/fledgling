@@ -11,12 +11,12 @@ import styles from './project-tree.module.css'
 
 const CurrentProjectContext = createContext(null)
 
-const ProjectTreeChildren = ({ projects, disabled }) => (
-   <ul class={styles.tree}>
+const ProjectTreeChildren = ({ projects, disabled, root }) => (
+   <div class={`${styles.tree} ${root ? styles.root : ''}`}>
       {projects.map(child => (
          <ProjectTree entry={child} disabled={disabled} />
       ))}
-   </ul>
+   </div>
 )
 
 const MoveToProjectForm = ({ project, children, className, ...props }) => {
@@ -32,14 +32,14 @@ const MoveToProjectForm = ({ project, children, className, ...props }) => {
    </Action>
 }
 
-const ProjectTree = ({ entry: { item, children }, as: As = 'li', isChild, disabled: parentDisabled }) => {
+const ProjectTree = ({ entry: { item, children }, root, disabled: parentDisabled }) => {
    const currentProject = useContext(CurrentProjectContext)
    const isCurrent = currentProject.id === item.id
    const isParent = children.some(child => child.item.id === currentProject.id)
    const disableChildren = isCurrent || parentDisabled
    const disabled = isParent || disableChildren
 
-   return <As class={styles.item}>
+   return <div class={styles.item}>
       <ProjectCard
          as={MoveToProjectForm}
          small
@@ -49,9 +49,9 @@ const ProjectTree = ({ entry: { item, children }, as: As = 'li', isChild, disabl
          accessory={!disabled && <FontAwesomeIcon icon="file-export" />}
       />
       {children.length > 0 && (
-         <ProjectTreeChildren projects={children} disabled={disableChildren} />
+         <ProjectTreeChildren projects={children} disabled={disableChildren} root={root} />
       )}
-   </As>
+   </div>
 }
 
 export default ({ tree, project, breadcrumbs }) => (
@@ -64,7 +64,7 @@ export default ({ tree, project, breadcrumbs }) => (
       </>}
    >
       <CurrentProjectContext.Provider value={project}>
-         <ProjectTree entry={tree} as='div' />
+         <ProjectTree entry={tree} root />
       </CurrentProjectContext.Provider>
    </Page>
 )
