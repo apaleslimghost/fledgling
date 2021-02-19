@@ -2,6 +2,7 @@
     display: flex;
     gap: 1.5rem;
     --parent-colour-base: var(--colour-base);
+    white-space: nowrap;
 }
 
 .toolbar > *:not(:first-child)::before {
