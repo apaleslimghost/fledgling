@@ -12,6 +12,7 @@
     color: var(--colour-title);
     position: relative;
     transition: background-image 300ms;
+    hyphens: auto;
 }
 
 .main:hover {
