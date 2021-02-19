@@ -10,6 +10,7 @@ import colourStyle from './colour-style'
 import styles from './project-tree.module.css'
 
 const CurrentProjectContext = createContext(null)
+const SubjectContext = createContext(null)
 
 const ProjectTreeChildren = ({ projects, disabled, root }) => (
    <div class={`${styles.tree} ${root ? styles.root : ''}`}>
@@ -20,12 +21,12 @@ const ProjectTreeChildren = ({ projects, disabled, root }) => (
 )
 
 const MoveToProjectForm = ({ project, children, className, ...props }) => {
-   const currentProject = useContext(CurrentProjectContext)
+   const subject = useContext(SubjectContext)
 
    return <Action
       buttonProps={props}
       className={className}
-      model={currentProject}
+      model={subject}
       data={{parent_id: project.id}}
    >
       {children}
@@ -54,9 +55,9 @@ const ProjectTree = ({ entry: { item, children }, root, disabled: parentDisabled
    </div>
 }
 
-export default ({ tree, project, breadcrumbs }) => (
+export default ({ tree, project, subject, breadcrumbs }) => (
    <Page
-      title={`Move ${project.title} to…`}
+      title={`Move ${subject.title} to…`}
       project={project}
       style={colourStyle(project.colours)}
       aux={<>
@@ -64,7 +65,9 @@ export default ({ tree, project, breadcrumbs }) => (
       </>}
    >
       <CurrentProjectContext.Provider value={project}>
-         <ProjectTree entry={tree} root />
+         <SubjectContext.Provider value={subject}>
+            <ProjectTree entry={tree} root />
+         </SubjectContext.Provider>
       </CurrentProjectContext.Provider>
    </Page>
 )

@@ -83,6 +83,9 @@ export const List = ({
               <Link to={task} action='edit'>
                 <FontAwesomeIcon icon="edit" /> Edit
               </Link>
+              <Link to={task} action='move'>
+                <FontAwesomeIcon icon="file-export" /> Move
+              </Link>
               <Action
                 model={task}
                 method='delete'

@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
-  before_action :check_project_access, only: [:index, :edit, :create, :update, :destroy]
-  before_action :check_task_exists, only: [:edit, :update, :destroy]
+  before_action :check_project_access, only: [:index, :edit, :create, :update, :destroy, :move]
+  before_action :check_task_exists, only: [:edit, :update, :destroy, :move]
 
   def check_project_access
     @project = Project.find(params[:project_id])
@@ -20,6 +20,15 @@ class TasksController < ApplicationController
 
   def edit
     render component: "TaskEdit", props: { task: @task, project: @project, breadcrumbs: @project.breadcrumbs(include_self: true) }
+  end
+
+  def move
+    render component: "ProjectTree", props: {
+      tree: current_user.default_project.json_tree,
+      project: @project,
+      subject: @task,
+      breadcrumbs: @project.breadcrumbs
+    }
   end
 
   def create
@@ -45,7 +54,7 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:title, :completed)
+    params.require(:task).permit(:title, :completed, :parent_id)
   end
 
   def tasks_props(tasks, project)

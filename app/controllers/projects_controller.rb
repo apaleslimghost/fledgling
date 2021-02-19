@@ -32,6 +32,7 @@ class ProjectsController < ApplicationController
     render component: "ProjectTree", props: {
       tree: current_user.default_project.json_tree,
       project: @project,
+      subject: @project,
       breadcrumbs: @project.breadcrumbs
     }
   end
