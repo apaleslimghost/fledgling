@@ -3,7 +3,9 @@ import dbServer from "~/lib/db.server";
 import { withZod } from "@rvf/zod";
 import { z } from "zod";
 import { useForm, validationError } from "@rvf/remix";
-import { Form, useLoaderData } from "@remix-run/react";
+import { Await, Form, useLoaderData } from "@remix-run/react";
+import { Tag } from "@prisma/client";
+import { Suspense } from "react";
 
 const validator = withZod(
   z.object({
@@ -49,13 +51,25 @@ function NewTask() {
 
 export async function loader() {
   const tasks = await dbServer.task.findMany()
-  return {tasks}
+  const tags = await dbServer.tag.findMany()
+  return {tasks, tags}
+}
+
+function Sidebar({ tags }: { tags: Tag[] }) {
+  return <ul>
+    {tags.map(tag => <li key={tag.id}>
+      <a href={`/tag/${tag.path}`}>{tag.path}</a>
+    </li>)}
+  </ul>
 }
 
 export default function Index() {
-  const {tasks} = useLoaderData<typeof loader>()
+  const {tasks, tags} = useLoaderData<typeof loader>()
+
   return <>
     <NewTask />
+
+    <Sidebar tags={tags} />
 
     <ul>
       {tasks.map(task => <li key={task.id}>{task.text}</li>)}
