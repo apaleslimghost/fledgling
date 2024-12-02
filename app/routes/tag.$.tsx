@@ -8,7 +8,7 @@ export async function loader({params}: LoaderFunctionArgs) {
 		throw redirect('/tags')
 	}
 
-	const tag = await dbServer.tag.findUniqueOrThrow({
+	const tag = await dbServer.tag.findUnique({
 		where: {
 			path
 		},
@@ -17,17 +17,39 @@ export async function loader({params}: LoaderFunctionArgs) {
 		}
 	})
 
-	return {tag}
+	const descendents = await dbServer.tag.findMany({
+		where: {
+			path: {
+				startsWith: path + '/'
+			}
+		},
+		include: {
+			tasks: true
+		}
+	})
+
+	const tasks = [
+		...(tag ? tag.tasks : []),
+		...descendents.flatMap(tag => tag.tasks)
+	]
+
+	return { tag, descendents, path, tasks }
 }
 
 export default function Tag() {
-	const { tag } = useLoaderData<typeof loader>()
+	const { tasks, descendents, path } = useLoaderData<typeof loader>()
 
 	return <>
-		<h1>#{tag.path}</h1>
+		<h1>#{path}</h1>
 
 		<ul>
-			{tag.tasks.map(task => <li key={task.id}>{task.text}</li>)}
+			{descendents.map(tag => <li key={tag.path}>
+				<a href={`/tag/${tag.path}`}>#{tag.path}</a>
+			</li>)}
+		</ul>
+
+		<ul>
+			{tasks.map(task => <li key={task.id}>{task.text}</li>)}
 		</ul>
 	</>
 }

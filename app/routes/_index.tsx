@@ -58,7 +58,7 @@ export async function loader() {
 function Sidebar({ tags }: { tags: Tag[] }) {
   return <ul>
     {tags.map(tag => <li key={tag.id}>
-      <a href={`/tag/${tag.path}`}>{tag.path}</a>
+      <a href={`/tag/${tag.path}`}>#{tag.path}</a>
     </li>)}
   </ul>
 }
