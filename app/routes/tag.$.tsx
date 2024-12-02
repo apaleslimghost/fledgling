@@ -9,6 +9,10 @@ export async function loader({params}: LoaderFunctionArgs) {
 		throw redirect('/tags')
 	}
 
+	if(path.endsWith('/')) {
+		throw redirect(`/tag/${path.slice(0, -1)}`)
+	}
+
 	const tag = await dbServer.tag.findUnique({
 		where: {
 			path
