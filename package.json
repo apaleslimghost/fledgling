@@ -19,12 +19,14 @@
     "@rvf/remix": "^6.3.0",
     "@rvf/zod": "^6.0.3",
     "isbot": "^4.1.0",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.14.0",
+    "@types/lodash": "^4.17.13",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
@@ -42,5 +44,8 @@
   },
   "engines": {
     "node": ">=20.0.0"
+  },
+  "volta": {
+    "node": "22.11.0"
   }
 }
