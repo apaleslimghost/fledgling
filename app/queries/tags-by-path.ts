@@ -11,6 +11,9 @@ export default async function tagsByPath(paths: string[]) {
 				} }
 			])
 		},
+		orderBy: {
+			path: 'asc'
+		},
 		include: {
 			tasks: true
 		}
