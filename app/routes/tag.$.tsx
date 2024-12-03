@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { redirect, useLoaderData } from "@remix-run/react";
+import { Link, redirect, useLoaderData } from "@remix-run/react";
 import dbServer from "~/lib/db.server";
 import uniqBy from 'lodash/uniqBy'
 
@@ -33,6 +33,7 @@ export async function loader({params}: LoaderFunctionArgs) {
 		}
 	})
 
+	// sql? what's that
 	const tasks = uniqBy([
 		...(tag ? tag.tasks : []),
 		...descendents.flatMap(tag => tag.tasks)
@@ -49,12 +50,13 @@ export default function Tag() {
 
 		<ul>
 			{descendents.map(tag => <li key={tag.path}>
-				<a href={`/tag/${tag.path}`}>#{tag.path}</a>
+				<Link to={`/tag/${tag.path}`}>#{tag.path}</Link>
 			</li>)}
 		</ul>
 
 		<ul>
-			{tasks.map(task => <li key={task.id}>{task.text}</li>)}
+			{tasks.map(task => <li key={task.id}>
+				<Link to={`/task/${task.id}`}>{task.text}</Link></li>)}
 		</ul>
 	</>
 }

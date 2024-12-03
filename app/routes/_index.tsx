@@ -3,7 +3,7 @@ import dbServer from "~/lib/db.server";
 import { withZod } from "@rvf/zod";
 import { z } from "zod";
 import { useForm, validationError } from "@rvf/remix";
-import { Await, Form, useLoaderData } from "@remix-run/react";
+import { Await, Form, Link, useLoaderData } from "@remix-run/react";
 import { Tag } from "@prisma/client";
 import { Suspense } from "react";
 
@@ -58,7 +58,7 @@ export async function loader() {
 function Sidebar({ tags }: { tags: Tag[] }) {
   return <ul>
     {tags.map(tag => <li key={tag.id}>
-      <a href={`/tag/${tag.path}`}>#{tag.path}</a>
+      <Link to={`/tag/${tag.path}`}>#{tag.path}</Link>
     </li>)}
   </ul>
 }
