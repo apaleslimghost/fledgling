@@ -72,7 +72,9 @@ export default function Index() {
     <Sidebar tags={tags} />
 
     <ul>
-      {tasks.map(task => <li key={task.id}>{task.text}</li>)}
+      {tasks.map(task => <li key={task.id}>
+        <Link to={`/task/${task.id}`}>{task.text}</Link>
+      </li>)}
     </ul>
   </>
 }
