@@ -1,7 +1,6 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { Link, redirect, useLoaderData } from "@remix-run/react";
-import dbServer from "~/lib/db.server";
-import uniqBy from 'lodash/uniqBy'
+import tagsByPath from "~/queries/tags-by-path";
 
 export async function loader({params}: LoaderFunctionArgs) {
 	const path = params['*']
@@ -13,43 +12,20 @@ export async function loader({params}: LoaderFunctionArgs) {
 		throw redirect(`/tag/${path.slice(0, -1)}`)
 	}
 
-	const tag = await dbServer.tag.findUnique({
-		where: {
-			path
-		},
-		include: {
-			tasks: true
-		}
-	})
-
-	const descendents = await dbServer.tag.findMany({
-		where: {
-			path: {
-				startsWith: path + '/'
-			}
-		},
-		include: {
-			tasks: true
-		}
-	})
-
-	// sql? what's that
-	const tasks = uniqBy([
-		...(tag ? tag.tasks : []),
-		...descendents.flatMap(tag => tag.tasks)
-	], 'id')
-
-	return { tag, descendents, path, tasks }
+	return {
+		...await tagsByPath([path]),
+		path
+	}
 }
 
 export default function Tag() {
-	const { tasks, descendents, path } = useLoaderData<typeof loader>()
+	const { tasks, tags, path } = useLoaderData<typeof loader>()
 
 	return <>
 		<h1>#{path}</h1>
 
 		<ul>
-			{descendents.map(tag => <li key={tag.path}>
+			{tags.map(tag => <li key={tag.path}>
 				<Link to={`/tag/${tag.path}`}>#{tag.path}</Link>
 			</li>)}
 		</ul>
