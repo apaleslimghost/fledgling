@@ -4,8 +4,7 @@ import { withZod } from "@rvf/zod";
 import { z } from "zod";
 import { useForm, validationError } from "@rvf/remix";
 import { Form, useLoaderData } from "@remix-run/react";
-import TaskCard from "~/components/task";
-import {Grid} from '@radix-ui/themes'
+import TaskGrid from "~/components/task-grid";
 
 const validator = withZod(
   z.object({
@@ -58,9 +57,7 @@ export async function loader() {
 export default function Index() {
   const {tasks} = useLoaderData<typeof loader>()
 
-  return <Grid flexGrow='1' columns='repeat(auto-fill, minmax(20em, 1fr))' gap='3'>
-    {tasks.map(task => <TaskCard task={task} key={task.id} />)}
-
+  return <TaskGrid tasks={tasks}>
     <NewTask />
-  </Grid>
+  </TaskGrid>
 }

@@ -15,7 +15,11 @@ export default async function tagsByPath(paths: string[]) {
 			path: 'asc'
 		},
 		include: {
-			tasks: true
+			tasks: {
+				include: {
+					tags: true
+				}
+			}
 		}
 	})
 

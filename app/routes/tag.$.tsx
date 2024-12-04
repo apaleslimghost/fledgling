@@ -3,6 +3,7 @@ import { redirect, useLoaderData } from "@remix-run/react";
 import Link from "~/components/link";
 import tagsByPath from "~/queries/tags-by-path";
 import {Box, Heading} from '@radix-ui/themes'
+import TaskGrid from "~/components/task-grid";
 
 export async function loader({params}: LoaderFunctionArgs) {
 	const path = params['*']
@@ -32,9 +33,6 @@ export default function Tag() {
 			</li>)}
 		</ul>
 
-		<ul>
-			{tasks.map(task => <li key={task.id}>
-				<Link to={`/task/${task.id}`}>{task.text}</Link></li>)}
-		</ul>
+		<TaskGrid tasks={tasks} />
 	</Box>
 }
