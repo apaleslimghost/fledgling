@@ -8,6 +8,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator json {
+  provider = "prisma-json-types-generator"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -21,7 +25,8 @@ model Tag {
 
 model Task {
   id        Int       @id @default(autoincrement())
-  text      String
+  /// [TiptapJSONContent]
+  text      Json      @default("null")
   completed Boolean   @default(false)
   due       DateTime?
   created   DateTime  @default(now())

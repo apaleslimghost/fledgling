@@ -1,16 +1,19 @@
 import {
+  Form,
   Links,
   Meta,
   Outlet,
+  redirect,
   Scripts,
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node"
-import {Theme, Flex, Box} from '@radix-ui/themes'
+import {Theme, Flex, Box, Button} from '@radix-ui/themes'
 import "@radix-ui/themes/styles.css"
 import dbServer from "./lib/db.server";
 import TagTree from "~/components/tag-tree";
+import { FilePlusIcon } from "@radix-ui/react-icons";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -31,6 +34,12 @@ export async function loader() {
   }
 }
 
+export async function action() {
+  const task = await dbServer.task.create({})
+
+  throw redirect(`/task/${task.id}`)
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
   const {tags} = useLoaderData<typeof loader>()
   return (
@@ -45,6 +54,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Theme accentColor="iris" grayColor="mauve" radius="large" scaling="105%">
           <Flex gap='6'>
             <Box flexBasis='16em'>
+              <Form method='post'>
+                <Button>
+                  <FilePlusIcon />
+                  Create
+                </Button>
+              </Form>
+
               <TagTree tags={tags} />
             </Box>
 

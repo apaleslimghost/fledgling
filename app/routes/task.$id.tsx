@@ -5,6 +5,8 @@ import dbServer from "~/lib/db.server";
 import tagsByPath from "~/queries/tags-by-path";
 import {Box, Heading} from '@radix-ui/themes'
 import Link from "~/components/link";
+import { EditorProvider } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
 
 const QuerySchema = z.object({
 	id: z.coerce.number()
@@ -30,21 +32,9 @@ export async function loader({params}: LoaderFunctionArgs) {
 }
 
 export default function Task() {
-	const {task, tags} = useLoaderData<typeof loader>()
+	const {task} = useLoaderData<typeof loader>()
 
 	return <Box>
-		<Heading>{task.text}</Heading>
-
-		<ul>
-			{task.tags.map(tag => <li key={tag.path}>
-				<Link to={`/tag/${tag.path}`}>#{tag.path}</Link>
-			</li>)}
-		</ul>
-
-		<ul>
-			{tags.map(tag => <li key={tag.path}>
-				<Link to={`/tag/${tag.path}`}>#{tag.path}</Link>
-			</li>)}
-		</ul>
+		<EditorProvider extensions={[StarterKit]} content={task.text ?? undefined}></EditorProvider>
 	</Box>
 }
