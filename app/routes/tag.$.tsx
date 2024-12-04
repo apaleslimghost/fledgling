@@ -1,6 +1,8 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { Link, redirect, useLoaderData } from "@remix-run/react";
+import { redirect, useLoaderData } from "@remix-run/react";
+import Link from "~/components/link";
 import tagsByPath from "~/queries/tags-by-path";
+import {Box, Heading} from '@radix-ui/themes'
 
 export async function loader({params}: LoaderFunctionArgs) {
 	const path = params['*']
@@ -21,8 +23,8 @@ export async function loader({params}: LoaderFunctionArgs) {
 export default function Tag() {
 	const { tasks, tags, path } = useLoaderData<typeof loader>()
 
-	return <>
-		<h1>#{path}</h1>
+	return <Box>
+		<Heading>#{path}</Heading>
 
 		<ul>
 			{tags.map(tag => <li key={tag.path}>
@@ -34,5 +36,5 @@ export default function Tag() {
 			{tasks.map(task => <li key={task.id}>
 				<Link to={`/task/${task.id}`}>{task.text}</Link></li>)}
 		</ul>
-	</>
+	</Box>
 }

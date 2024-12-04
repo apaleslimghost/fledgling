@@ -4,8 +4,14 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction } from "@remix-run/node"
+import {Theme} from '@radix-ui/themes'
+import "@radix-ui/themes/styles.css"
+import dbServer from "./lib/db.server";
+import {Flex, Box} from '@radix-ui/themes'
+import TagTree from "~/components/tag-tree";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -20,7 +26,14 @@ export const links: LinksFunction = () => [
   },
 ];
 
+export async function loader() {
+  return {
+    tags: await dbServer.tag.findMany()
+  }
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  const {tags} = useLoaderData<typeof loader>()
   return (
     <html lang="en">
       <head>
@@ -30,7 +43,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        <Theme accentColor="iris" grayColor="mauve" radius="large" scaling="105%">
+          <Flex gap='6'>
+            <Box flexBasis='16em'>
+              <TagTree tags={tags} />
+            </Box>
+
+            {children}
+          </Flex>
+        </Theme>
         <ScrollRestoration />
         <Scripts />
       </body>

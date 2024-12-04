@@ -3,9 +3,9 @@ import dbServer from "~/lib/db.server";
 import { withZod } from "@rvf/zod";
 import { z } from "zod";
 import { useForm, validationError } from "@rvf/remix";
-import { Await, Form, Link, useLoaderData } from "@remix-run/react";
-import { Tag } from "@prisma/client";
-import { Suspense } from "react";
+import { Form, useLoaderData } from "@remix-run/react";
+import TaskCard from "~/components/task";
+import {Grid} from '@radix-ui/themes'
 
 const validator = withZod(
   z.object({
@@ -50,31 +50,17 @@ function NewTask() {
 }
 
 export async function loader() {
-  const tasks = await dbServer.task.findMany()
-  const tags = await dbServer.tag.findMany()
-  return {tasks, tags}
-}
-
-function Sidebar({ tags }: { tags: Tag[] }) {
-  return <ul>
-    {tags.map(tag => <li key={tag.id}>
-      <Link to={`/tag/${tag.path}`}>#{tag.path}</Link>
-    </li>)}
-  </ul>
+  return {tasks: await dbServer.task.findMany({
+    include: {tags: true}
+  })}
 }
 
 export default function Index() {
-  const {tasks, tags} = useLoaderData<typeof loader>()
+  const {tasks} = useLoaderData<typeof loader>()
 
-  return <>
+  return <Grid flexGrow='1' columns='repeat(auto-fill, minmax(20em, 1fr))' gap='3'>
+    {tasks.map(task => <TaskCard task={task} key={task.id} />)}
+
     <NewTask />
-
-    <Sidebar tags={tags} />
-
-    <ul>
-      {tasks.map(task => <li key={task.id}>
-        <Link to={`/task/${task.id}`}>{task.text}</Link>
-      </li>)}
-    </ul>
-  </>
+  </Grid>
 }
