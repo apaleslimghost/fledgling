@@ -7,10 +7,9 @@ import {
   useLoaderData,
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node"
-import {Theme} from '@radix-ui/themes'
+import {Theme, Flex, Box} from '@radix-ui/themes'
 import "@radix-ui/themes/styles.css"
 import dbServer from "./lib/db.server";
-import {Flex, Box} from '@radix-ui/themes'
 import TagTree from "~/components/tag-tree";
 
 export const links: LinksFunction = () => [
