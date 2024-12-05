@@ -4,12 +4,12 @@ import { z } from "zod";
 import dbServer from "~/lib/db.server";
 import tagsByPath from "~/queries/tags-by-path";
 import {Box} from '@radix-ui/themes'
-import { EditorEvents, EditorProvider, JSONContent } from '@tiptap/react'
-import {StarterKit} from '@tiptap/starter-kit'
+import { EditorEvents, JSONContent } from '@tiptap/react'
 import { useCallback } from "react";
 import debounce from "lodash/debounce";
 import { withZod } from "@rvf/zod";
 import { validationError } from "@rvf/remix";
+import Editor from "~/components/editor";
 
 const ActionSchema = z.object({
 	text: z.string().transform(
@@ -74,9 +74,8 @@ export default function Note() {
 	), [fetcher, note])
 
 	return <Box flexGrow='1'>
-		<EditorProvider
+		<Editor
 			onUpdate={onChange}
-			extensions={[StarterKit]}
 			content={note.text ?? undefined}
 			autofocus={!note.text}
 		/>

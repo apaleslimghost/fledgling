@@ -1,7 +1,6 @@
 import { Prisma } from "@prisma/client";
 import {Card, Flex, Box, Checkbox} from '@radix-ui/themes'
-import { EditorProvider } from "@tiptap/react";
-import {StarterKit} from "@tiptap/starter-kit";
+import Editor from "./editor";
 
 export default function NoteCard({ note }: { note: Prisma.NoteGetPayload<{ include: { tags: true } }> }) {
 	return <Card>
@@ -9,7 +8,7 @@ export default function NoteCard({ note }: { note: Prisma.NoteGetPayload<{ inclu
 			<Checkbox checked={note.completed} size='3' />
 
 			<Box>
-				<EditorProvider extensions={[StarterKit]} content={note.text ?? undefined} editable={false} />
+				<Editor content={note.text ?? undefined} editable={false} />
 			</Box>
 		</Flex>
 	</Card>
