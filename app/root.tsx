@@ -7,6 +7,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useRouteLoaderData,
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node"
 import {Theme, Flex, Box, Button} from '@radix-ui/themes'
@@ -41,7 +42,8 @@ export async function action() {
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const {tags} = useLoaderData<typeof loader>()
+  const {tags} = useRouteLoaderData<typeof loader>('root') ?? {}
+
   return (
     <html lang="en">
       <head>
@@ -61,7 +63,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 </Button>
               </Form>
 
-              <TagTree tags={tags} />
+              {tags && <TagTree tags={tags} />}
             </Box>
 
             {children}
