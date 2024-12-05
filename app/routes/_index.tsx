@@ -1,15 +1,15 @@
 import dbServer from "~/lib/db.server";
 import { useLoaderData } from "@remix-run/react";
-import TaskGrid from "~/components/task-grid";
+import NoteGrid from "~/components/note-grid";
 
 export async function loader() {
-  return {tasks: await dbServer.task.findMany({
+  return {notes: await dbServer.note.findMany({
     include: {tags: true}
   })}
 }
 
 export default function Index() {
-  const {tasks} = useLoaderData<typeof loader>()
+  const {notes} = useLoaderData<typeof loader>()
 
-  return <TaskGrid tasks={tasks} />
+  return <NoteGrid notes={notes} />
 }

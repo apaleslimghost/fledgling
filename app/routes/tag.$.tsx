@@ -2,7 +2,7 @@ import type { LoaderFunctionArgs } from "@remix-run/node";
 import { redirect, useLoaderData } from "@remix-run/react";
 import tagsByPath from "~/queries/tags-by-path";
 import {Box, Heading} from '@radix-ui/themes'
-import TaskGrid from "~/components/task-grid";
+import NoteGrid from "~/components/note-grid";
 
 export async function loader({params}: LoaderFunctionArgs) {
 	const path = params['*']
@@ -21,11 +21,11 @@ export async function loader({params}: LoaderFunctionArgs) {
 }
 
 export default function Tag() {
-	const { tasks, path } = useLoaderData<typeof loader>()
+	const { notes, path } = useLoaderData<typeof loader>()
 
 	return <Box>
 		<Heading>#{path}</Heading>
 
-		<TaskGrid tasks={tasks} />
+		<NoteGrid notes={notes} />
 	</Box>
 }

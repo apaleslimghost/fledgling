@@ -26,7 +26,7 @@ const QuerySchema = z.object({
 export async function loader({params}: LoaderFunctionArgs) {
 	const { id } = QuerySchema.parse(params)
 
-	const task = await dbServer.task.findUniqueOrThrow({
+	const note = await dbServer.note.findUniqueOrThrow({
 		where: {
 			id
 		},
@@ -35,11 +35,11 @@ export async function loader({params}: LoaderFunctionArgs) {
 		}
 	})
 
-	const { tags, tasks: relatedTasks } = await tagsByPath(
-		task.tags.map(tag => tag.path)
+	const { tags, notes: relatedNotes } = await tagsByPath(
+		note.tags.map(tag => tag.path)
 	)
 
-	return {task, tags, relatedTasks}
+	return {note, tags, relatedNotes}
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -52,7 +52,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 		return validationError(result.error, result.submittedData)
 	}
 
-	await dbServer.task.update({
+	await dbServer.note.update({
 		where: { id },
 		data: result.data
 	})
@@ -60,8 +60,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
 	return { ok: true }
 }
 
-export default function Task() {
-	const {task} = useLoaderData<typeof loader>()
+export default function Note() {
+	const {note} = useLoaderData<typeof loader>()
 	const fetcher = useFetcher()
 
 	const onChange = useCallback(debounce(
@@ -71,14 +71,14 @@ export default function Task() {
 			fetcher.submit(formData, { method: 'post' })
 		},
 		200
-	), [fetcher, task])
+	), [fetcher, note])
 
 	return <Box flexGrow='1'>
 		<EditorProvider
 			onUpdate={onChange}
 			extensions={[StarterKit]}
-			content={task.text ?? undefined}
-			autofocus={!task.text}
+			content={note.text ?? undefined}
+			autofocus={!note.text}
 		/>
 	</Box>
 }

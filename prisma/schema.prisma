@@ -20,15 +20,16 @@ datasource db {
 model Tag {
   id    Int    @id @default(autoincrement())
   path  String @unique
-  tasks Task[]
+  notes Note[]
 }
 
-model Task {
+model Note {
   id        Int       @id @default(autoincrement())
-  /// [TiptapJSONContent]
-  text      Json      @default("null")
   completed Boolean   @default(false)
   due       DateTime?
   created   DateTime  @default(now())
   tags      Tag[]
+
+  /// [TiptapJSONContent]
+  text Json @default("null")
 }

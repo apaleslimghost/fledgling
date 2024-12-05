@@ -36,9 +36,9 @@ export async function loader() {
 }
 
 export async function action() {
-  const task = await dbServer.task.create({})
+  const note = await dbServer.note.create({})
 
-  throw redirect(`/task/${task.id}`)
+  throw redirect(`/note/${note.id}`)
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {

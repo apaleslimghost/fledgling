@@ -15,7 +15,7 @@ export default async function tagsByPath(paths: string[]) {
 			path: 'asc'
 		},
 		include: {
-			tasks: {
+			notes: {
 				include: {
 					tags: true
 				}
@@ -24,7 +24,7 @@ export default async function tagsByPath(paths: string[]) {
 	})
 
 	// sql? what's that
-	const tasks = uniqBy(tags.flatMap(tag => tag.tasks), 'id')
+	const notes = uniqBy(tags.flatMap(tag => tag.notes), 'id')
 
-	return { tags, tasks }
+	return { tags, notes }
 }
