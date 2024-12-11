@@ -97,6 +97,20 @@ export async function action({ request, params }: ActionFunctionArgs) {
 		}
 	})
 
+	await dbServer.tag.deleteMany({
+		where: {
+			NOT: {
+				notes: {
+					some: {
+						id: {
+							not: undefined
+						}
+					}
+				}
+			}
+		}
+	})
+
 	return { ok: true }
 }
 
