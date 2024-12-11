@@ -86,6 +86,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 		data: {
 			...result.data,
 			tags: {
+				set: [],
 				connectOrCreate: tags.map(
 					path => ({
 						where: { path },
