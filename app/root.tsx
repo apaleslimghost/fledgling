@@ -17,7 +17,15 @@ import 'tippy.js/dist/tippy.css';
 
 export async function loader() {
   return {
-    tags: await dbServer.tag.findMany()
+    tags: await dbServer.tag.findMany({
+      include: {
+        _count: {
+          select: {
+            notes: true
+          }
+        }
+      }
+    })
   }
 }
 
