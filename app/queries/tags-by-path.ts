@@ -26,5 +26,9 @@ export default async function tagsByPath(paths: string[]) {
 	// sql? what's that
 	const notes = uniqBy(tags.flatMap(tag => tag.notes), 'id')
 
-	return { tags, notes }
+	const relatedTags = uniqBy(notes.flatMap(note => note.tags.filter(
+		tag => !tags.some(other => other.path === tag.path)
+	)), 'path')
+
+	return { tags, notes, relatedTags }
 }

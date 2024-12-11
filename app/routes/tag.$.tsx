@@ -3,6 +3,7 @@ import { redirect, useLoaderData } from "@remix-run/react";
 import tagsByPath from "~/queries/tags-by-path";
 import {Box, Heading} from '@radix-ui/themes'
 import NoteGrid from "~/components/note-grid";
+import Link from "~/components/link";
 
 export async function loader({params}: LoaderFunctionArgs) {
 	const path = params['*']
@@ -21,11 +22,23 @@ export async function loader({params}: LoaderFunctionArgs) {
 }
 
 export default function Tag() {
-	const { notes, path } = useLoaderData<typeof loader>()
+	const { notes, path, tags, relatedTags } = useLoaderData<typeof loader>()
 
 	return <Box>
 		<Heading>#{path}</Heading>
 
+		<ul>
+			{tags.map(tag => <li key={tag.path}>
+				<Link to={`/tag/${tag.path}`}>#{tag.path}</Link>
+			</li>)}
+		</ul>
+
 		<NoteGrid notes={notes} />
+
+		<ul>
+			{relatedTags.map(tag => <li key={tag.path}>
+				<Link to={`/tag/${tag.path}`}>#{tag.path}</Link>
+			</li>)}
+		</ul>
 	</Box>
 }
