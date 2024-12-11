@@ -6,7 +6,6 @@ import {
   redirect,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
   useRouteLoaderData,
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node"
@@ -15,6 +14,7 @@ import "@radix-ui/themes/styles.css"
 import dbServer from "./lib/db.server";
 import TagTree from "~/components/tag-tree";
 import { FilePlusIcon } from "@radix-ui/react-icons";
+import 'tippy.js/dist/tippy.css';
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
