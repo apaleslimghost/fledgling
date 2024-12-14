@@ -1,5 +1,6 @@
 import uniqBy from "lodash/uniqBy"
 import type { Note, Prisma } from "@prisma/client"
+import orderBy from "lodash/orderBy"
 
 export type TagWithNotes = Prisma.TagGetPayload<{
 	include: {
@@ -10,12 +11,6 @@ export type TagWithNotes = Prisma.TagGetPayload<{
 type TagTreeJSON = {
 	tag: TagWithNotes
 	children: Record<string, TagTreeJSON>
-}
-
-type HmmJSON = {
-	tag: { path: string }
-	children: Record<string, HmmJSON>,
-	notes: number[]
 }
 
 export class TagTree {
@@ -55,21 +50,8 @@ export class TagTree {
 		}
 	}
 
-	hmm(): HmmJSON {
-		return {
-			children: Object.fromEntries(
-				Object.entries(this.children).map(
-					([k, child]) => [k, child.hmm()]
-				)
-			),
-			tag: { path: this.tag.path },
-			notes: this.notes.map(note => note.id)
-		}
-	}
-
 	addTag(tag: TagWithNotes) {
-		const path = this.tag.path ? this.tag.path.split('/') : []
-		const remainingPath = tag.path.split('/').slice(path.length)
+		const remainingPath = tag.path.split('/').slice(this.path.length)
 
 		if(remainingPath.length === 1) {
 			if(this.children[remainingPath[0]]) {
@@ -80,13 +62,17 @@ export class TagTree {
 		} else {
 			if(!this.children[remainingPath[0]]) {
 				this.children[remainingPath[0]] = new TagTree({
-					path: [...path, remainingPath[0]].join('/'),
+					path: [...this.path, remainingPath[0]].join('/'),
 					notes: []
 				})
 			}
 
 			this.children[remainingPath[0]].addTag(tag)
 		}
+	}
+
+	map<T>(func: (child: TagTree) => T): T[] {
+		return orderBy(Object.values(this.children), [['notes', 'length']], ['desc']).map(func)
 	}
 
 	get notes(): Note[] {
@@ -99,6 +85,10 @@ export class TagTree {
 			],
 			'id'
 		)
+	}
+
+	get path() {
+		return this.tag.path ? this.tag.path.split('/') : []
 	}
 
 	get(path: string[], parentPath: string[] = []): TagTree {
