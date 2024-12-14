@@ -15,7 +15,7 @@ describe('TagTree', () => {
 		const tree = TagTree.build(tags)
 
 		t.assert.deepStrictEqual(tree.toJSON(), {
-			tag: undefined,
+			tag: placeholderTag(''),
 			children: {
 				a: {
 					tag: placeholderTag('a'),

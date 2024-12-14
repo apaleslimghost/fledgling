@@ -18,8 +18,7 @@ datasource db {
 }
 
 model Tag {
-  id    Int    @id @default(autoincrement())
-  path  String @unique
+  path  String @id
   notes Note[]
 }
 

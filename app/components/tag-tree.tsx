@@ -1,25 +1,16 @@
-import { Prisma } from "@prisma/client";
-import set from 'lodash/set'
-import keyBy from 'lodash/keyBy'
 import Link from "./link";
+import { TagTree, TagWithNotes } from "~/lib/tag-tree";
 
-
-
-const TagBranch = ({ tree, path, tags }: { tree: TagPathTree, path: string[], tags: Record<string, TagWithNoteCount> }) => <ul>
-	{Object.entries(tree.children).map(([node, tree]) => <li key={node}>
-		<Link to={`/tag/${[...path, node].join('/')}`}>#{node}</Link>
+const TagBranch = ({ tree }: { tree: TagTree }) => <ul>
+	{Object.entries(tree.children).map(([node, child]) => <li key={child.tag.path}>
+		<Link to={`/tag/${child.tag.path}`}>#{node}</Link>
 		{' '}
-		{tree.count}
-		<TagBranch tree={tree} path={[...path, node]} tags={tags} />
+		{child.notes.length}
+		<TagBranch tree={child} />
 	</li>)}
 </ul>
 
-export default function TagTree({ tags }: { tags: TagWithNoteCount[] }) {
-	const tree = buildTree(tags)
-	const keyed = keyBy(tags, 'path')
-
-	return <>
-		<TagBranch tree={tree} path={[]} tags={keyed} />
-		<pre>{JSON.stringify(tree, null, 2)}</pre>
-	</>
+export default function TagTreeComponent({ tags }: { tags: TagWithNotes[] }) {
+	const tree = TagTree.build(tags)
+	return <TagBranch tree={tree} />
 }

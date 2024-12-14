@@ -1,15 +1,21 @@
 import uniqBy from "lodash/uniqBy"
 import type { Note, Prisma } from "@prisma/client"
 
-type TagWithNotes = Prisma.TagGetPayload<{
+export type TagWithNotes = Prisma.TagGetPayload<{
 	include: {
 		notes: true
 	}
 }>
 
 type TagTreeJSON = {
-	tag?: TagWithNotes
+	tag: TagWithNotes
 	children: Record<string, TagTreeJSON>
+}
+
+type HmmJSON = {
+	tag: { path: string }
+	children: Record<string, HmmJSON>,
+	notes: number[]
 }
 
 export class TagTree {
@@ -34,8 +40,8 @@ export class TagTree {
 	}
 
 	constructor(
-		public tag?: TagWithNotes,
-		private children: Record<string, TagTree> = {},
+		public tag: TagWithNotes = { path: '', notes: [] },
+		public children: Record<string, TagTree> = {},
 	) {}
 
 	toJSON(): TagTreeJSON {
@@ -49,8 +55,20 @@ export class TagTree {
 		}
 	}
 
+	hmm(): HmmJSON {
+		return {
+			children: Object.fromEntries(
+				Object.entries(this.children).map(
+					([k, child]) => [k, child.hmm()]
+				)
+			),
+			tag: { path: this.tag.path },
+			notes: this.notes.map(note => note.id)
+		}
+	}
+
 	addTag(tag: TagWithNotes) {
-		const path = this.tag?.path.split('/') ?? []
+		const path = this.tag.path ? this.tag.path.split('/') : []
 		const remainingPath = tag.path.split('/').slice(path.length)
 
 		if(remainingPath.length === 1) {

@@ -16,9 +16,11 @@ import { FilePlusIcon } from "@radix-ui/react-icons";
 import 'tippy.js/dist/tippy.css';
 
 export async function loader() {
-  const tags = await dbServer.tag.findMany()
-
-
+  const tags = await dbServer.tag.findMany({
+    include: {
+      notes: true
+    }
+  })
 
   return {
     tags
