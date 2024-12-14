@@ -21,6 +21,7 @@
     "@remix-run/serve": "^2.14.0",
     "@rvf/remix": "^6.3.0",
     "@rvf/zod": "^6.0.3",
+    "@tiptap/extension-document": "^2.10.3",
     "@tiptap/extension-link": "^2.10.3",
     "@tiptap/extension-mention": "^2.10.3",
     "@tiptap/html": "^2.10.3",

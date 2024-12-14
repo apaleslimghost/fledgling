@@ -128,5 +128,9 @@ export default function Note() {
 			content={note.text ?? undefined}
 			autofocus={!note.text}
 		/>
+
+		<pre>
+			{JSON.stringify(note.text, null, 2)}
+		</pre>
 	</Box>
 }

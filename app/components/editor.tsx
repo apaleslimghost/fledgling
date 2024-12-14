@@ -1,11 +1,12 @@
 import { Tag } from "@prisma/client";
 import {Link as LinkExtension} from "@tiptap/extension-link";
 import { Mention } from "@tiptap/extension-mention";
-import { EditorProvider, EditorProviderProps, NodeViewWrapper, ReactNodeViewRenderer, ReactRenderer } from "@tiptap/react";
+import { EditorProvider, EditorProviderProps, Node, ReactRenderer } from "@tiptap/react";
 import {StarterKit} from "@tiptap/starter-kit";
 import { SuggestionOptions, SuggestionProps } from "@tiptap/suggestion";
 import tippy, { GetReferenceClientRect, Instance } from 'tippy.js'
 import Link from "./link";
+import Document from "@tiptap/extension-document";
 
 function TagSuggest({items, command}: SuggestionProps<string>) {
 	return <ul>
@@ -65,8 +66,32 @@ const suggestion: Omit<SuggestionOptions<string>, 'editor'> = {
 	}
 }
 
+const Title = Node.create({
+	name: 'title',
+	content: 'text*',
+	renderHTML({ HTMLAttributes }) {
+		return ['h1', HTMLAttributes, 0]
+	},
+	parseHTML() {
+		return [
+			{
+				tag: 'h1',
+			},
+		]
+	},
+})
+
 export const extensions = [
-	StarterKit,
+	Title,
+	Document.extend({
+		content: 'title block*'
+	}),
+	StarterKit.configure({
+		document: false,
+		heading: {
+			levels: [2, 3, 4, 5, 6]
+		}
+	}),
 	Mention.configure({
 		suggestion,
 	}),
