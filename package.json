@@ -38,6 +38,7 @@
   "devDependencies": {
     "@remix-run/dev": "^2.14.0",
     "@types/lodash": "^4.17.13",
+    "@types/node": "^22.10.2",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
@@ -48,8 +49,10 @@
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "expect": "^29.7.0",
     "prisma": "^5.22.0",
     "prisma-json-types-generator": "^3.2.2",
+    "tsx": "^4.19.2",
     "typescript": "^5.1.6",
     "vite": "^5.1.0",
     "vite-tsconfig-paths": "^4.2.1"
@@ -58,6 +61,6 @@
     "node": ">=20.0.0"
   },
   "volta": {
-    "node": "22.11.0"
+    "node": "22.12.0"
   }
 }
