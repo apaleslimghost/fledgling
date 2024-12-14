@@ -94,6 +94,9 @@ export const extensions = [
 	}),
 	Mention.configure({
 		suggestion,
+		HTMLAttributes: {
+			class: 'rt-reset rt-Badge rt-r-size-1 rt-variant-soft'
+		}
 	}),
 	LinkExtension
 ]

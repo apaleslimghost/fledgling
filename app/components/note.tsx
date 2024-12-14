@@ -1,5 +1,5 @@
 import { Note, Prisma } from "@prisma/client";
-import {Card, Flex, Box, Checkbox, Heading} from '@radix-ui/themes'
+import {Card, Flex, Box, Checkbox, Heading, Badge} from '@radix-ui/themes'
 import Link from "./link";
 import { generateHTML } from "@tiptap/html";
 import { extensions } from "./editor";
@@ -9,7 +9,7 @@ const NoteTitle = ({note}: {note: Note}) => {
 		node => node.type === 'title'
 	)
 
-	return <h1 dangerouslySetInnerHTML={{
+	return <Heading dangerouslySetInnerHTML={{
 		__html: title ? generateHTML(title, extensions) : 'untitled note'
 	}} />
 }
@@ -23,6 +23,14 @@ export default function NoteCard({ note }: { note: Prisma.NoteGetPayload<{ inclu
 				<Link to={`/note/${note.id}`}>
 					<NoteTitle note={note} />
 				</Link>
+
+				<Flex gap='1'>
+					{note.tags.map(
+						tag => <Link to={`/tag/${tag.path}`} key={tag.path} asChild>
+							<Badge>#{tag.path}</Badge>
+						</Link>
+					)}
+				</Flex>
 			</Box>
 		</Flex>
 	</Card>
