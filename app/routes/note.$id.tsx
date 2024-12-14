@@ -2,16 +2,14 @@ import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { z } from "zod";
 import dbServer from "~/lib/db.server";
-import tagsByPath from "~/queries/tags-by-path";
-import {Box, Spinner} from '@radix-ui/themes'
+import {Box} from '@radix-ui/themes'
 import { EditorEvents, JSONContent } from '@tiptap/react'
-import { Node } from "@tiptap/pm/model";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import debounce from "lodash/debounce";
 import { withZod } from "@rvf/zod";
 import { validationError } from "@rvf/remix";
 import Editor from "~/components/editor";
-import { Mention, MentionNodeAttrs } from "@tiptap/extension-mention";
+import { MentionNodeAttrs } from "@tiptap/extension-mention";
 
 const ActionSchema = z.object({
 	text: z.string().transform(
@@ -122,11 +120,9 @@ export default function Note() {
 		200
 	), [fetcher, note])
 
-	return <Box flexGrow='1'>
-		<Editor
-			onUpdate={onChange}
-			content={note.text ?? undefined}
-			autofocus={!note.text}
-		/>
-	</Box>
+	return <Editor
+		onUpdate={onChange}
+		content={note.text ?? undefined}
+		autofocus={!note.text}
+	/>
 }

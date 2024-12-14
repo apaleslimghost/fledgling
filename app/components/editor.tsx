@@ -1,7 +1,7 @@
 import { Tag } from "@prisma/client";
 import {Link as LinkExtension} from "@tiptap/extension-link";
 import { Mention } from "@tiptap/extension-mention";
-import { EditorProvider, EditorProviderProps, Node, ReactRenderer } from "@tiptap/react";
+import { EditorProvider, EditorProviderProps, mergeAttributes, Node, ReactRenderer } from "@tiptap/react";
 import {StarterKit} from "@tiptap/starter-kit";
 import { SuggestionOptions, SuggestionProps } from "@tiptap/suggestion";
 import tippy, { GetReferenceClientRect, Instance } from 'tippy.js'
@@ -70,7 +70,9 @@ const Title = Node.create({
 	name: 'title',
 	content: 'text*',
 	renderHTML({ HTMLAttributes }) {
-		return ['h1', HTMLAttributes, 0]
+		return ['h1', mergeAttributes(HTMLAttributes, {
+			class: 'rt-Heading rt-r-size-12'
+		}), 0]
 	},
 	parseHTML() {
 		return [
@@ -82,7 +84,7 @@ const Title = Node.create({
 })
 
 export const extensions = [
-	Title,
+	Title.configure(),
 	Document.extend({
 		content: 'title block*'
 	}),
@@ -96,6 +98,11 @@ export const extensions = [
 		suggestion,
 		HTMLAttributes: {
 			class: 'rt-reset rt-Badge rt-r-size-1 rt-variant-soft'
+		},
+		renderHTML({ options, node }) {
+			return ['a', mergeAttributes(options.HTMLAttributes, {
+				href: `/tag/${node.attrs.id}`
+			}), `${options.suggestion.char}${node.attrs.label ?? node.attrs.id}`]
 		}
 	}),
 	LinkExtension

@@ -24,7 +24,7 @@ export async function loader({params}: LoaderFunctionArgs) {
 export default function Tag() {
 	const { notes, path, tags, relatedTags } = useLoaderData<typeof loader>()
 
-	return <Box>
+	return <>
 		<Heading>#{path}</Heading>
 
 		<ul>
@@ -40,5 +40,5 @@ export default function Tag() {
 				<Link to={`/tag/${tag.path}`}>#{tag.path}</Link>
 			</li>)}
 		</ul>
-	</Box>
+	</>
 }

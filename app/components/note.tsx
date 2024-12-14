@@ -15,7 +15,7 @@ const NoteTitle = ({note}: {note: Note}) => {
 }
 
 export default function NoteCard({ note }: { note: Prisma.NoteGetPayload<{ include: { tags: true } }> }) {
-	return <Card>
+	return <Card variant="surface">
 		<Flex gap='3' align='center'>
 			<Checkbox checked={note.completed} size='3' />
 
@@ -24,7 +24,7 @@ export default function NoteCard({ note }: { note: Prisma.NoteGetPayload<{ inclu
 					<NoteTitle note={note} />
 				</Link>
 
-				<Flex gap='1'>
+				<Flex gap='1' wrap='wrap'>
 					{note.tags.map(
 						tag => <Link to={`/tag/${tag.path}`} key={tag.path} asChild>
 							<Badge>#{tag.path}</Badge>
