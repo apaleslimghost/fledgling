@@ -36,12 +36,7 @@ export async function loader({params}: LoaderFunctionArgs) {
 			tags: true
 		}
 	})
-
-	const { tags, notes: relatedNotes } = await tagsByPath(
-		note.tags.map(tag => tag.path)
-	)
-
-	return {note, tags, relatedNotes}
+	return {note}
 }
 
 interface MentionNode extends JSONContent {

@@ -1,5 +1,25 @@
 import uniqBy from "lodash/uniqBy"
 import dbServer from "~/lib/db.server"
+import set from 'lodash/set'
+import { Prisma } from "@prisma/client"
+
+type TagPathTree = {
+	notes:
+	children: Record<string, TagPathTree>
+}
+
+type TagWithNotes = Prisma.TagGetPayload<{
+	include: {
+		notes: true
+	}
+}>
+
+const intersperse = <T,>(array: T[], inter: T): T[] => array.length <= 1 ? array : [array[0], inter, ...intersperse(array.slice(1), inter)]
+
+const buildTree = (tags: TagWithNotes[]): TagPathTree => tags.reduce(
+	(tree, tag) => set(tree, ['children', ...intersperse(tag.path.split('/'), 'children')], { notes: tag.notes, children: {} }),
+	{ children: {}, notes: [] }
+)
 
 export default async function tagsByPath(paths: string[]) {
 	const tags = await dbServer.tag.findMany({
