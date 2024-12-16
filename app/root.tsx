@@ -64,7 +64,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </Box>
             </Theme>
 
-            <Box p='3' flexGrow='1' style={{height: '100%'}}>
+            <Box pl='3' flexGrow='1' style={{height: '100%'}}>
               <ScrollArea scrollbars="vertical" type="hover">
                 {children}
               </ScrollArea>

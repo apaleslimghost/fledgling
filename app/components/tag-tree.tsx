@@ -3,10 +3,15 @@ import { TagTree, TagWithNotes } from "~/lib/tag-tree";
 
 const TagBranch = ({ tree }: { tree: TagTree }) => <ul>
 	{tree.map(child => <li key={child.tag.path}>
-		<Link to={`/tag/${child.tag.path}`}>#{child.path[child.path.length - 1]}</Link>
-		{' '}
-		{child.notes.length}
-		<TagBranch tree={child} />
+		<details open>
+			<summary>
+				<Link to={`/tag/${child.tag.path}`}>#{child.path[child.path.length - 1]}</Link>
+				{' '}
+				{child.notes.length}
+			</summary>
+
+			<TagBranch tree={child} />
+		</details>
 	</li>)}
 </ul>
 
