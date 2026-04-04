@@ -1,6 +1,6 @@
-import uniqBy from "lodash/uniqBy"
-import type { Note, Prisma } from "@prisma/client"
-import orderBy from "lodash/orderBy"
+import type { Note, Prisma } from '@prisma/client'
+import orderBy from 'lodash/orderBy'
+import uniqBy from 'lodash/uniqBy'
 
 export type TagWithNotes = Prisma.TagGetPayload<{
 	include: {
@@ -18,19 +18,16 @@ export class TagTree {
 		return new TagTree(
 			json.tag,
 			Object.fromEntries(
-				Object.entries(json.children).map(
-					([key, child]) => [
-						key,
-						TagTree.hydrate(child)
-					]
-				)
-			)
+				Object.entries(json.children).map(([key, child]) => [key, TagTree.hydrate(child)]),
+			),
 		)
 	}
 
 	static build(tags: TagWithNotes[]) {
 		const root = new TagTree()
-		tags.forEach(tag => root.addTag(tag))
+		tags.forEach((tag) => {
+			root.addTag(tag)
+		})
 		return root
 	}
 
@@ -42,28 +39,26 @@ export class TagTree {
 	toJSON(): TagTreeJSON {
 		return {
 			children: Object.fromEntries(
-				Object.entries(this.children).map(
-					([k, child]) => [k, child.toJSON()]
-				)
+				Object.entries(this.children).map(([k, child]) => [k, child.toJSON()]),
 			),
-			tag: this.tag
+			tag: this.tag,
 		}
 	}
 
 	addTag(tag: TagWithNotes) {
 		const remainingPath = tag.path.split('/').slice(this.path.length)
 
-		if(remainingPath.length === 1) {
-			if(this.children[remainingPath[0]]) {
+		if (remainingPath.length === 1) {
+			if (this.children[remainingPath[0]]) {
 				this.children[remainingPath[0]].tag = tag
 			} else {
 				this.children[remainingPath[0]] = new TagTree(tag)
 			}
 		} else {
-			if(!this.children[remainingPath[0]]) {
+			if (!this.children[remainingPath[0]]) {
 				this.children[remainingPath[0]] = new TagTree({
 					path: [...this.path, remainingPath[0]].join('/'),
-					notes: []
+					notes: [],
 				})
 			}
 
@@ -77,13 +72,8 @@ export class TagTree {
 
 	get notes(): Note[] {
 		return uniqBy(
-			[
-				...(this.tag?.notes ?? []),
-				...Object.values(this.children).flatMap(
-					child => child.notes
-				)
-			],
-			'id'
+			[...(this.tag?.notes ?? []), ...Object.values(this.children).flatMap((child) => child.notes)],
+			'id',
 		)
 	}
 
@@ -92,12 +82,14 @@ export class TagTree {
 	}
 
 	get(path: string[], parentPath: string[] = []): TagTree {
-		const child = this.children[path[0]] ?? new TagTree({
-			path: [...parentPath, path[0]].join('/'),
-			notes: []
-		})
+		const child =
+			this.children[path[0]] ??
+			new TagTree({
+				path: [...parentPath, path[0]].join('/'),
+				notes: [],
+			})
 
-		if(path.length === 1) {
+		if (path.length === 1) {
 			return child
 		}
 

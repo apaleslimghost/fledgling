@@ -1,15 +1,15 @@
-import { LoaderFunctionArgs } from "@remix-run/node";
-import dbServer from "~/lib/db.server";
+import dbServer from '~/lib/db.server'
+import type { Route } from './+types/tags.search'
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request }: Route.LoaderArgs) {
 	const { searchParams } = new URL(request.url)
 
 	const tags = await dbServer.tag.findMany({
 		where: {
 			path: {
-				contains: searchParams.get('q') ?? ''
-			}
-		}
+				contains: searchParams.get('q') ?? '',
+			},
+		},
 	})
 
 	return { tags }

@@ -1,22 +1,37 @@
-import { Tag } from "@prisma/client";
-import {Link as LinkExtension} from "@tiptap/extension-link";
-import { Mention } from "@tiptap/extension-mention";
-import { EditorProvider, EditorProviderProps, mergeAttributes, Node, ReactRenderer } from "@tiptap/react";
-import {StarterKit} from "@tiptap/starter-kit";
-import { SuggestionOptions, SuggestionProps } from "@tiptap/suggestion";
-import tippy, { GetReferenceClientRect, Instance } from 'tippy.js'
-import Link from "./link";
-import Document from "@tiptap/extension-document";
+import type { Tag } from '@prisma/client'
+import Document from '@tiptap/extension-document'
+import { Link as LinkExtension } from '@tiptap/extension-link'
+import { Mention } from '@tiptap/extension-mention'
+import {
+	EditorProvider,
+	type EditorProviderProps,
+	mergeAttributes,
+	Node,
+	ReactRenderer,
+} from '@tiptap/react'
+import { StarterKit } from '@tiptap/starter-kit'
+import type { SuggestionOptions, SuggestionProps } from '@tiptap/suggestion'
+import tippy, { type GetReferenceClientRect, type Instance } from 'tippy.js'
+import Link from './link'
 
-function TagSuggest({items, command}: SuggestionProps<string>) {
-	return <ul>
-		{items.map(
-			item => <li key={item}><Link to='#' onClick={(e) => {
-				e.preventDefault()
-				command({ id: item })
-			}}>{item}</Link></li>
-		)}
-	</ul>
+function TagSuggest({ items, command }: SuggestionProps<string>) {
+	return (
+		<ul>
+			{items.map((item) => (
+				<li key={item}>
+					<Link
+						to="#"
+						onClick={(e) => {
+							e.preventDefault()
+							command({ id: item })
+						}}
+					>
+						{item}
+					</Link>
+				</li>
+			))}
+		</ul>
+	)
 }
 
 const suggestion: Omit<SuggestionOptions<string>, 'editor'> = {
@@ -27,12 +42,7 @@ const suggestion: Omit<SuggestionOptions<string>, 'editor'> = {
 		const res = await fetch(url)
 		const { tags } = await res.json()
 
-		return [
-			...(query ? [query] : []),
-			...tags.map(
-				(tag: Tag) => tag.path
-			)
-		]
+		return [...(query ? [query] : []), ...tags.map((tag: Tag) => tag.path)]
 	},
 	render() {
 		let component: ReactRenderer
@@ -63,16 +73,20 @@ const suggestion: Omit<SuggestionOptions<string>, 'editor'> = {
 				popup[0].destroy()
 			},
 		}
-	}
+	},
 }
 
 const Title = Node.create({
 	name: 'title',
 	content: 'text*',
 	renderHTML({ HTMLAttributes }) {
-		return ['h1', mergeAttributes(HTMLAttributes, {
-			class: 'rt-Heading rt-r-size-12'
-		}), 0]
+		return [
+			'h1',
+			mergeAttributes(HTMLAttributes, {
+				class: 'rt-Heading rt-r-size-12',
+			}),
+			0,
+		]
 	},
 	parseHTML() {
 		return [
@@ -86,26 +100,30 @@ const Title = Node.create({
 export const extensions = [
 	Title.configure(),
 	Document.extend({
-		content: 'title block*'
+		content: 'title block*',
 	}),
 	StarterKit.configure({
 		document: false,
 		heading: {
-			levels: [2, 3, 4, 5, 6]
-		}
+			levels: [2, 3, 4, 5, 6],
+		},
 	}),
 	Mention.configure({
 		suggestion,
 		HTMLAttributes: {
-			class: 'rt-reset rt-Badge rt-r-size-1 rt-variant-soft'
+			class: 'rt-reset rt-Badge rt-r-size-1 rt-variant-soft',
 		},
 		renderHTML({ options, node }) {
-			return ['a', mergeAttributes(options.HTMLAttributes, {
-				href: `/tag/${node.attrs.id}`
-			}), `${options.suggestion.char}${node.attrs.label ?? node.attrs.id}`]
-		}
+			return [
+				'a',
+				mergeAttributes(options.HTMLAttributes, {
+					href: `/tag/${node.attrs.id}`,
+				}),
+				`${options.suggestion.char}${node.attrs.label ?? node.attrs.id}`,
+			]
+		},
 	}),
-	LinkExtension
+	LinkExtension,
 ]
 
 export default function Editor(props: Omit<EditorProviderProps, 'extensions'>) {

@@ -1,40 +1,34 @@
-import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { useFetcher, useLoaderData } from "@remix-run/react";
-import { z } from "zod";
-import dbServer from "~/lib/db.server";
-import {Box} from '@radix-ui/themes'
-import { EditorEvents, JSONContent } from '@tiptap/react'
-import { useCallback } from "react";
-import debounce from "lodash/debounce";
-import { withZod } from "@rvf/zod";
-import { validationError } from "@rvf/remix";
-import Editor from "~/components/editor";
-import { MentionNodeAttrs } from "@tiptap/extension-mention";
+import { parseFormData, validationError } from '@rvf/react-router'
+import type { MentionNodeAttrs } from '@tiptap/extension-mention'
+import type { EditorEvents, JSONContent } from '@tiptap/react'
+import debounce from 'lodash/debounce'
+import { useMemo } from 'react'
+import { useFetcher } from 'react-router'
+import { z } from 'zod/v4'
+import Editor from '~/components/editor'
+import dbServer from '~/lib/db.server'
+import type { Route } from './+types/note.$id'
 
 const ActionSchema = z.object({
-	text: z.string().transform(
-		text => JSON.parse(text) as JSONContent
-	)
+	text: z.string().transform((text) => JSON.parse(text) as JSONContent),
 })
-
-const actionValidator = withZod(ActionSchema)
 
 const QuerySchema = z.object({
-	id: z.coerce.number()
+	id: z.coerce.number(),
 })
 
-export async function loader({params}: LoaderFunctionArgs) {
+export async function loader({ params }: Route.LoaderArgs) {
 	const { id } = QuerySchema.parse(params)
 
 	const note = await dbServer.note.findUniqueOrThrow({
 		where: {
-			id
+			id,
 		},
 		include: {
-			tags: true
-		}
+			tags: true,
+		},
 	})
-	return {note}
+	return { note }
 }
 
 interface MentionNode extends JSONContent {
@@ -43,36 +37,36 @@ interface MentionNode extends JSONContent {
 }
 
 function isNode<T extends JSONContent>(type: T['type'], obj: unknown): obj is T {
-	if(obj && typeof obj === 'object' && "type" in obj && obj.type === type) {
+	if (obj && typeof obj === 'object' && 'type' in obj && obj.type === type) {
 		return true
 	}
 
 	return false
 }
 
-function* collect<T extends JSONContent>(type: T["type"], tree: JSONContent): Generator<T> {
-	if(isNode<T>(type, tree)) {
+function* collect<T extends JSONContent>(type: T['type'], tree: JSONContent): Generator<T> {
+	if (isNode<T>(type, tree)) {
 		yield tree
 	}
 
-	for(const child of tree.content ?? []) {
+	for (const child of tree.content ?? []) {
 		yield* collect(type, child)
 	}
 }
 
-export async function action({ request, params }: ActionFunctionArgs) {
+export async function action({ request, params }: Route.ActionArgs) {
 	const { id } = QuerySchema.parse(params)
-	const formData = await request.formData()
 
-	const result = await actionValidator.validate(formData)
+	const result = await parseFormData(request, ActionSchema)
 
-	if(result.error) {
+	if (result.error) {
 		return validationError(result.error, result.submittedData)
 	}
 
-	const tags = Array.from(collect<MentionNode>('mention', result.data.text), node => node.attrs.id).filter(
-		tag => tag !== null
-	)
+	const tags = Array.from(
+		collect<MentionNode>('mention', result.data.text),
+		(node) => node.attrs.id,
+	).filter((tag) => tag !== null)
 
 	await dbServer.note.update({
 		where: { id },
@@ -80,14 +74,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
 			...result.data,
 			tags: {
 				set: [],
-				connectOrCreate: tags.map(
-					path => ({
-						where: { path },
-						create: { path }
-					})
-				)
-			}
-		}
+				connectOrCreate: tags.map((path) => ({
+					where: { path },
+					create: { path },
+				})),
+			},
+		},
 	})
 
 	await dbServer.tag.deleteMany({
@@ -96,33 +88,30 @@ export async function action({ request, params }: ActionFunctionArgs) {
 				notes: {
 					some: {
 						id: {
-							not: undefined
-						}
-					}
-				}
-			}
-		}
+							not: undefined,
+						},
+					},
+				},
+			},
+		},
 	})
 
 	return { ok: true }
 }
 
-export default function Note() {
-	const {note} = useLoaderData<typeof loader>()
+export default function Note({ loaderData }: Route.ComponentProps) {
+	const { note } = loaderData
 	const fetcher = useFetcher()
 
-	const onChange = useCallback(debounce(
-		({ editor }: EditorEvents['update']) => {
-			const formData = new FormData()
-			formData.set('text', JSON.stringify(editor.getJSON()))
-			fetcher.submit(formData, { method: 'post' })
-		},
-		200
-	), [fetcher, note])
+	const onChange = useMemo(
+		() =>
+			debounce(({ editor }: EditorEvents['update']) => {
+				const formData = new FormData()
+				formData.set('text', JSON.stringify(editor.getJSON()))
+				fetcher.submit(formData, { method: 'post' })
+			}, 200),
+		[fetcher],
+	)
 
-	return <Editor
-		onUpdate={onChange}
-		content={note.text ?? undefined}
-		autofocus={!note.text}
-	/>
+	return <Editor onUpdate={onChange} content={note.text ?? undefined} autofocus={!note.text} />
 }

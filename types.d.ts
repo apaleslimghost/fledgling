@@ -1,4 +1,4 @@
-import type { JSONContent } from "@tiptap/react"
+import type { JSONContent } from '@tiptap/react'
 
 declare global {
 	namespace PrismaJson {
