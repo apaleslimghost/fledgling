@@ -1,3 +1,11 @@
 body {
 	margin: 0;
 }
+
+.tiptap .is-editor-empty:first-child::before {
+	color: #0003;
+	content: attr(data-placeholder);
+	float: left;
+	height: 0;
+	pointer-events: none;
+}

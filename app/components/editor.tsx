@@ -1,5 +1,6 @@
 import Document from '@tiptap/extension-document'
 import { Mention } from '@tiptap/extension-mention'
+import { Placeholder } from '@tiptap/extensions'
 import {
 	EditorProvider,
 	type EditorProviderProps,
@@ -121,6 +122,15 @@ export const extensions = [
 				}),
 				`${options.suggestion.char}${node.attrs.label ?? node.attrs.id}`,
 			]
+		},
+	}),
+	Placeholder.configure({
+		placeholder: ({ node }) => {
+			console.log(node.type.name)
+			if (node.type.name === 'title') {
+				return 'Untitled note'
+			}
+			return ''
 		},
 	}),
 ]
