@@ -15,10 +15,6 @@ const ActionSchema = z.object({
 	text: z.string().transform((text) => JSON.parse(text) as JSONContent),
 })
 
-const QuerySchema = z.object({
-	id: z.coerce.number(),
-})
-
 interface MentionNode extends JSONContent {
 	type: 'mention'
 	attrs: MentionNodeAttrs
@@ -43,32 +39,26 @@ function* collect<T extends JSONContent>(type: T['type'], tree: JSONContent): Ge
 }
 
 export async function clientAction({ request, params }: Route.ClientActionArgs) {
-	const { id } = QuerySchema.parse(params)
-
 	const result = await parseFormData(request, ActionSchema)
 
 	if (result.error) {
 		return validationError(result.error, result.submittedData)
 	}
 
-	const tags = Array.from(
-		collect<MentionNode>('mention', result.data.text),
-		(node) => node.attrs.id,
-	).filter((tag) => tag !== null)
+	// const tags = Array.from(
+	// 	collect<MentionNode>('mention', result.data.text),
+	// 	(node) => node.attrs.id,
+	// ).filter((tag) => tag !== null)
+	//
+	const note = await database.notes
+		.findOne({
+			selector: {
+				id: params.id,
+			},
+		})
+		.exec(true)
 
-	// await dbServer.note.update({
-	// 	where: { id },
-	// 	data: {
-	// 		...result.data,
-	// 		tags: {
-	// 			set: [],
-	// 			connectOrCreate: tags.map((path) => ({
-	// 				where: { path },
-	// 				create: { path },
-	// 			})),
-	// 		},
-	// 	},
-	// })
+	await note.patch(result.data)
 
 	// await dbServer.tag.deleteMany({
 	// 	where: {

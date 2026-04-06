@@ -126,7 +126,6 @@ export const extensions = [
 	}),
 	Placeholder.configure({
 		placeholder: ({ node }) => {
-			console.log(node.type.name)
 			if (node.type.name === 'title') {
 				return 'Untitled note'
 			}
