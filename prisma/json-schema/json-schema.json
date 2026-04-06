@@ -1,0 +1,58 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"definitions": {
+		"Tag": {
+			"type": "object",
+			"properties": {
+				"path": {
+					"type": "string"
+				},
+				"notes": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Note"
+					}
+				}
+			}
+		},
+		"Note": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "integer"
+				},
+				"completed": {
+					"type": "boolean",
+					"default": false
+				},
+				"due": {
+					"type": ["string", "null"],
+					"format": "date-time"
+				},
+				"created": {
+					"type": "string",
+					"format": "date-time"
+				},
+				"tags": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Tag"
+					}
+				},
+				"text": {
+					"type": ["number", "string", "boolean", "object", "array", "null"],
+					"description": "[TiptapJSONContent]"
+				}
+			}
+		}
+	},
+	"type": "object",
+	"properties": {
+		"tag": {
+			"$ref": "#/definitions/Tag"
+		},
+		"note": {
+			"$ref": "#/definitions/Note"
+		}
+	}
+}
