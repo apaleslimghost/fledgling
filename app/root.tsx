@@ -13,15 +13,30 @@ import {
 import { RxDatabaseProvider } from 'rxdb/plugins/react'
 
 import TagTree from '~/components/tag-tree'
-import rxdb from './lib/rxdb.client'
+import db from './lib/rxdb.client'
 
 import '@radix-ui/themes/styles.css'
 import 'tippy.js/dist/tippy.css'
 import '~/css/index.css'
 import type { RxDatabase } from 'rxdb'
 
-const MaybeRxProvider = ({ rxdb, children }: { rxdb?: RxDatabase; children: React.ReactNode }) => {
+const MaybeRxProvider = ({
+	rxdb,
+	children,
+}: {
+	rxdb?: RxDatabase<any>
+	children: React.ReactNode
+}) => {
 	return rxdb ? <RxDatabaseProvider database={rxdb}>{children}</RxDatabaseProvider> : children
+}
+
+export async function clientAction() {
+	const note = await db.notes.insert({
+		id: crypto.randomUUID(),
+		tags: [],
+	})
+
+	return redirect(`/note/${note.id}`)
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -41,7 +56,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 					scaling="105%"
 					appearance="light"
 				>
-					<MaybeRxProvider rxdb={rxdb}>
+					<MaybeRxProvider rxdb={db}>
 						<Flex align="stretch" height="100dvh">
 							<Theme appearance="dark" style={{ height: '100%' }}>
 								<Box flexBasis="16em" p="3" style={{ height: '100%' }}>

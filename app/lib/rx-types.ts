@@ -1,25 +1,22 @@
 import type { JSONContent } from '@tiptap/react'
-import type { RxJsonSchema } from 'rxdb'
+import type { RxCollection, RxDocument, RxJsonSchema } from 'rxdb'
 
 export type Tag = {
 	path: string
-	updated: Date
 }
 
 export type Note = {
 	id: string
 	tags: string[]
 	text: JSONContent
-	updated: Date
 }
 
 export const tagSchema: RxJsonSchema<Tag> = {
 	type: 'object',
 	properties: {
 		path: { type: 'string', maxLength: 100 },
-		updated: { type: 'string', format: 'date-time' },
 	},
-	required: ['path', 'updated'],
+	required: ['path'],
 	version: 0,
 	primaryKey: 'path',
 }
@@ -30,9 +27,15 @@ export const noteSchema: RxJsonSchema<Note> = {
 		id: { type: 'string', maxLength: 100 },
 		tags: { type: 'array', items: { type: 'string' } },
 		text: { type: 'object' },
-		updated: { type: 'string', format: 'date-time' },
 	},
-	required: ['id', 'tags', 'text'],
+	required: ['id', 'tags'],
 	version: 0,
 	primaryKey: 'id',
+}
+
+export type TagDocument = RxDocument<Tag>
+export type NoteDocument = RxDocument<Note>
+export type Collections = {
+	notes: RxCollection<Note>
+	tags: RxCollection<Tag>
 }

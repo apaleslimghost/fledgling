@@ -4,8 +4,11 @@ import type { EditorEvents, JSONContent } from '@tiptap/react'
 import debounce from 'lodash/debounce'
 import { useMemo } from 'react'
 import { useFetcher } from 'react-router'
+import { useLiveRxQuery, useRxQuery } from 'rxdb/plugins/react'
 import { z } from 'zod/v4'
 import Editor from '~/components/editor'
+import type { Note, NoteDocument } from '~/lib/rx-types'
+import database from '~/lib/rxdb.client'
 import type { Route } from './+types/note.$id'
 
 const ActionSchema = z.object({
@@ -39,7 +42,7 @@ function* collect<T extends JSONContent>(type: T['type'], tree: JSONContent): Ge
 	}
 }
 
-export async function action({ request, params }: Route.ActionArgs) {
+export async function clientAction({ request, params }: Route.ClientActionArgs) {
 	const { id } = QuerySchema.parse(params)
 
 	const result = await parseFormData(request, ActionSchema)
@@ -84,8 +87,19 @@ export async function action({ request, params }: Route.ActionArgs) {
 	return { ok: true }
 }
 
-export default function Note() {
-	const note = { text: {} }
+export default function NotePage(props: Route.ComponentProps) {
+	const {
+		results: [note],
+		loading,
+	} = useRxQuery({
+		collection: database.notes,
+		query: {
+			selector: {
+				id: props.params.id,
+			},
+		},
+	})
+
 	const fetcher = useFetcher()
 
 	const onChange = useMemo(
@@ -97,6 +111,12 @@ export default function Note() {
 			}, 200),
 		[fetcher],
 	)
+
+	// TODO: loading is never actually true
+	// https://github.com/pubkey/rxdb/pull/8292
+	if (loading || !note) {
+		return <span>loading...</span>
+	}
 
 	return <Editor onUpdate={onChange} content={note.text ?? undefined} autofocus={!note.text} />
 }
