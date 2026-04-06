@@ -10,34 +10,21 @@ import {
 	ScrollRestoration,
 	useRouteLoaderData,
 } from 'react-router'
+import { RxDatabaseProvider } from 'rxdb/plugins/react'
+
 import TagTree from '~/components/tag-tree'
-import dbServer from './lib/db.server'
+import rxdb from './lib/rxdb.client'
 
 import '@radix-ui/themes/styles.css'
 import 'tippy.js/dist/tippy.css'
 import '~/css/index.css'
+import type { RxDatabase } from 'rxdb'
 
-export async function loader() {
-	const tags = await dbServer.tag.findMany({
-		include: {
-			notes: true,
-		},
-	})
-
-	return {
-		tags,
-	}
-}
-
-export async function action() {
-	const note = await dbServer.note.create({})
-
-	throw redirect(`/note/${note.id}`)
+const MaybeRxProvider = ({ rxdb, children }: { rxdb?: RxDatabase; children: React.ReactNode }) => {
+	return rxdb ? <RxDatabaseProvider database={rxdb}>{children}</RxDatabaseProvider> : children
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
-	const { tags } = useRouteLoaderData<typeof loader>('root') ?? {}
-
 	return (
 		<html lang="en">
 			<head>
@@ -54,28 +41,28 @@ export function Layout({ children }: { children: React.ReactNode }) {
 					scaling="105%"
 					appearance="light"
 				>
-					<Flex align="stretch" height="100dvh">
-						<Theme appearance="dark" style={{ height: '100%' }}>
-							<Box flexBasis="16em" p="3" style={{ height: '100%' }}>
-								<ScrollArea scrollbars="vertical" type="hover">
-									<Form method="post">
-										<Button>
-											<FilePlusIcon />
-											Create
-										</Button>
-									</Form>
+					<MaybeRxProvider rxdb={rxdb}>
+						<Flex align="stretch" height="100dvh">
+							<Theme appearance="dark" style={{ height: '100%' }}>
+								<Box flexBasis="16em" p="3" style={{ height: '100%' }}>
+									<ScrollArea scrollbars="vertical" type="hover">
+										<Form method="post">
+											<Button>
+												<FilePlusIcon />
+												Create
+											</Button>
+										</Form>
+									</ScrollArea>
+								</Box>
+							</Theme>
 
-									{tags && <TagTree tags={tags} />}
+							<Box pl="3" flexGrow="1" style={{ height: '100%' }}>
+								<ScrollArea scrollbars="vertical" type="hover">
+									{children}
 								</ScrollArea>
 							</Box>
-						</Theme>
-
-						<Box pl="3" flexGrow="1" style={{ height: '100%' }}>
-							<ScrollArea scrollbars="vertical" type="hover">
-								{children}
-							</ScrollArea>
-						</Box>
-					</Flex>
+						</Flex>
+					</MaybeRxProvider>
 				</Theme>
 				<ScrollRestoration />
 				<Scripts />

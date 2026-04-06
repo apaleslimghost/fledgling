@@ -6,7 +6,6 @@ import { useMemo } from 'react'
 import { useFetcher } from 'react-router'
 import { z } from 'zod/v4'
 import Editor from '~/components/editor'
-import dbServer from '~/lib/db.server'
 import type { Route } from './+types/note.$id'
 
 const ActionSchema = z.object({
@@ -16,20 +15,6 @@ const ActionSchema = z.object({
 const QuerySchema = z.object({
 	id: z.coerce.number(),
 })
-
-export async function loader({ params }: Route.LoaderArgs) {
-	const { id } = QuerySchema.parse(params)
-
-	const note = await dbServer.note.findUniqueOrThrow({
-		where: {
-			id,
-		},
-		include: {
-			tags: true,
-		},
-	})
-	return { note }
-}
 
 interface MentionNode extends JSONContent {
 	type: 'mention'
@@ -68,39 +53,39 @@ export async function action({ request, params }: Route.ActionArgs) {
 		(node) => node.attrs.id,
 	).filter((tag) => tag !== null)
 
-	await dbServer.note.update({
-		where: { id },
-		data: {
-			...result.data,
-			tags: {
-				set: [],
-				connectOrCreate: tags.map((path) => ({
-					where: { path },
-					create: { path },
-				})),
-			},
-		},
-	})
+	// await dbServer.note.update({
+	// 	where: { id },
+	// 	data: {
+	// 		...result.data,
+	// 		tags: {
+	// 			set: [],
+	// 			connectOrCreate: tags.map((path) => ({
+	// 				where: { path },
+	// 				create: { path },
+	// 			})),
+	// 		},
+	// 	},
+	// })
 
-	await dbServer.tag.deleteMany({
-		where: {
-			NOT: {
-				notes: {
-					some: {
-						id: {
-							not: undefined,
-						},
-					},
-				},
-			},
-		},
-	})
+	// await dbServer.tag.deleteMany({
+	// 	where: {
+	// 		NOT: {
+	// 			notes: {
+	// 				some: {
+	// 					id: {
+	// 						not: undefined,
+	// 					},
+	// 				},
+	// 			},
+	// 		},
+	// 	},
+	// })
 
 	return { ok: true }
 }
 
-export default function Note({ loaderData }: Route.ComponentProps) {
-	const { note } = loaderData
+export default function Note() {
+	const note = { text: {} }
 	const fetcher = useFetcher()
 
 	const onChange = useMemo(

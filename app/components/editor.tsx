@@ -1,4 +1,3 @@
-import type { Tag } from '@prisma/client'
 import Document from '@tiptap/extension-document'
 import { Link as LinkExtension } from '@tiptap/extension-link'
 import { Mention } from '@tiptap/extension-mention'
@@ -12,6 +11,7 @@ import {
 import { StarterKit } from '@tiptap/starter-kit'
 import type { SuggestionOptions, SuggestionProps } from '@tiptap/suggestion'
 import tippy, { type GetReferenceClientRect, type Instance } from 'tippy.js'
+import type { Tag } from '~/lib/rx-types'
 import Link from './link'
 
 function TagSuggest({ items, command }: SuggestionProps<string>) {

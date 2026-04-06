@@ -1,4 +1,5 @@
 import { describe, it, type TestContext } from 'node:test'
+import type { Note } from './rx-types'
 import { TagTree } from './tag-tree'
 
 const placeholderTag = (path: string) => ({ path, notes: [] })
@@ -81,11 +82,11 @@ describe('TagTree', () => {
 		t.mock.timers.enable({ apis: ['Date'] })
 
 		const notes = [
-			{ id: 0, completed: false, created: new Date(), text: {}, due: null },
-			{ id: 1, completed: false, created: new Date(), text: {}, due: null },
-			{ id: 2, completed: false, created: new Date(), text: {}, due: null },
-			{ id: 3, completed: false, created: new Date(), text: {}, due: null },
-		]
+			{ id: '0', text: {} },
+			{ id: '1', text: {} },
+			{ id: '2', text: {} },
+			{ id: '3', text: {} },
+		] as Note[]
 
 		const tags = [
 			{ path: 'a/b/c', notes: [notes[0]] },

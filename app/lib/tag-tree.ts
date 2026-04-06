@@ -1,12 +1,10 @@
-import type { Note, Prisma } from '@prisma/client'
 import orderBy from 'lodash/orderBy'
 import uniqBy from 'lodash/uniqBy'
+import type { Note, Tag } from './rx-types'
 
-export type TagWithNotes = Prisma.TagGetPayload<{
-	include: {
-		notes: true
-	}
-}>
+export type TagWithNotes = Partial<Tag> & {
+	notes: Note[]
+}
 
 type TagTreeJSON = {
 	tag: TagWithNotes
@@ -46,7 +44,7 @@ export class TagTree {
 	}
 
 	addTag(tag: TagWithNotes) {
-		const remainingPath = tag.path.split('/').slice(this.path.length)
+		const remainingPath = (tag.path ?? '').split('/').slice(this.path.length)
 
 		if (remainingPath.length === 1) {
 			if (this.children[remainingPath[0]]) {
