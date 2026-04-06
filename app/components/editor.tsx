@@ -1,5 +1,4 @@
 import Document from '@tiptap/extension-document'
-import { Link as LinkExtension } from '@tiptap/extension-link'
 import { Mention } from '@tiptap/extension-mention'
 import {
 	EditorProvider,
@@ -11,7 +10,7 @@ import {
 import { StarterKit } from '@tiptap/starter-kit'
 import type { SuggestionOptions, SuggestionProps } from '@tiptap/suggestion'
 import tippy, { type GetReferenceClientRect, type Instance } from 'tippy.js'
-import type { Tag } from '~/lib/rx-types'
+// import type { Tag } from '~/lib/rx-types'
 import Link from './link'
 
 function TagSuggest({ items, command }: SuggestionProps<string>) {
@@ -37,12 +36,13 @@ function TagSuggest({ items, command }: SuggestionProps<string>) {
 const suggestion: Omit<SuggestionOptions<string>, 'editor'> = {
 	char: '#',
 	async items({ query }) {
-		const url = new URL('/tags/search', location.href)
-		url.searchParams.set('q', query)
-		const res = await fetch(url)
-		const { tags } = await res.json()
+		return query ? [query] : []
+		// const url = new URL('/tags/search', location.href)
+		// url.searchParams.set('q', query)
+		// const res = await fetch(url)
+		// const { tags } = await res.json()
 
-		return [...(query ? [query] : []), ...tags.map((tag: Tag) => tag.path)]
+		// return [...(query ? [query] : []), ...tags.map((tag: Tag) => tag.path)]
 	},
 	render() {
 		let component: ReactRenderer
@@ -123,7 +123,6 @@ export const extensions = [
 			]
 		},
 	}),
-	LinkExtension,
 ]
 
 export default function Editor(props: Omit<EditorProviderProps, 'extensions'>) {
