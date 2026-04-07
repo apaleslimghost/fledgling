@@ -1,24 +1,14 @@
-import { FilePlusIcon } from '@radix-ui/react-icons'
-import { Box, Button, Flex, ScrollArea, Theme } from '@radix-ui/themes'
-import {
-	Form,
-	Links,
-	Meta,
-	Outlet,
-	redirect,
-	Scripts,
-	ScrollRestoration,
-	useRouteLoaderData,
-} from 'react-router'
+import { Box, Flex, ScrollArea, Theme } from '@radix-ui/themes'
+import { Links, Meta, Outlet, redirect, Scripts, ScrollRestoration } from 'react-router'
 import { RxDatabaseProvider } from 'rxdb/plugins/react'
 
-import TagTree from '~/components/tag-tree'
 import db from './lib/rxdb.client'
 
 import '@radix-ui/themes/styles.css'
 import 'tippy.js/dist/tippy.css'
 import '~/css/index.css'
 import type { RxDatabase } from 'rxdb'
+import Sidebar from './components/sidebar'
 
 const MaybeRxProvider = ({
 	rxdb,
@@ -40,6 +30,7 @@ export async function clientAction() {
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
+	console.log(db)
 	return (
 		<html lang="en">
 			<head>
@@ -58,18 +49,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				>
 					<MaybeRxProvider rxdb={db}>
 						<Flex align="stretch" height="100dvh">
-							<Theme appearance="dark" style={{ height: '100%' }}>
-								<Box flexBasis="16em" p="3" style={{ height: '100%' }}>
-									<ScrollArea scrollbars="vertical" type="hover">
-										<Form method="post">
-											<Button>
-												<FilePlusIcon />
-												Create
-											</Button>
-										</Form>
-									</ScrollArea>
-								</Box>
-							</Theme>
+							{db && <Sidebar />}
 
 							<Box pl="3" flexGrow="1" style={{ height: '100%' }}>
 								<ScrollArea scrollbars="vertical" type="hover">
