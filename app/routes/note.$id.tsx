@@ -1,3 +1,4 @@
+import { Heading, Skeleton, Text } from '@radix-ui/themes'
 import { parseFormData, validationError } from '@rvf/react-router'
 import type { MentionNodeAttrs } from '@tiptap/extension-mention'
 import type { EditorEvents, JSONContent } from '@tiptap/react'
@@ -115,7 +116,20 @@ export default function NotePage(props: Route.ComponentProps) {
 	// TODO: loading is never actually true
 	// https://github.com/pubkey/rxdb/pull/8292
 	if (loading || !note) {
-		return <span>loading...</span>
+		return (
+			<>
+				<Heading>
+					<Skeleton>Untitled note</Skeleton>
+				</Heading>
+				<Text>
+					<Skeleton>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque felis tellus,
+						efficitur id convallis a, viverra eget libero. Nam magna erat, fringilla sed commodo
+						sed, aliquet nec magna.
+					</Skeleton>
+				</Text>
+			</>
+		)
 	}
 
 	return <Editor onUpdate={onChange} content={note.text ?? undefined} autofocus={!note.text} />
