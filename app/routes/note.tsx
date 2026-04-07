@@ -1,16 +1,16 @@
-import { Heading, Skeleton, Text } from '@radix-ui/themes'
+import { Skeleton, Surface } from '@heroui/react'
 import { parseFormData, validationError } from '@rvf/react-router'
 import type { MentionNodeAttrs } from '@tiptap/extension-mention'
 import type { EditorEvents, JSONContent } from '@tiptap/react'
 import debounce from 'lodash/debounce'
 import { useMemo } from 'react'
 import { useFetcher } from 'react-router'
-import { type UseRxQueryOptions, useLiveRxQuery, useRxQuery } from 'rxdb/plugins/react'
+import { type UseRxQueryOptions, useRxQuery } from 'rxdb/plugins/react'
 import { z } from 'zod/v4'
 import Editor from '~/components/editor'
-import type { Note, NoteDocument } from '~/lib/rx-types'
-import database from '~/lib/rxdb.client'
-import type { Route } from './+types/note.$id'
+import type { Note } from '~/lib/rx-types'
+import database from '~/lib/rxdb'
+import type { Route } from './+types/note'
 
 const ActionSchema = z.object({
 	text: z.string().transform((text) => JSON.parse(text) as JSONContent),
@@ -116,21 +116,12 @@ export default function NotePage(props: Route.ComponentProps) {
 	// TODO: loading is never actually true
 	// https://github.com/pubkey/rxdb/pull/8292
 	if (loading || !note) {
-		return (
-			<>
-				<Heading>
-					<Skeleton>Untitled note</Skeleton>
-				</Heading>
-				<Text>
-					<Skeleton>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque felis tellus,
-						efficitur id convallis a, viverra eget libero. Nam magna erat, fringilla sed commodo
-						sed, aliquet nec magna.
-					</Skeleton>
-				</Text>
-			</>
-		)
+		return null
 	}
 
-	return <Editor onUpdate={onChange} content={note.text ?? undefined} autofocus={!note.text} />
+	return (
+		<Surface className="rounded-xl shadow-surface p-4 h-full overflow-y-auto">
+			<Editor onUpdate={onChange} content={note.text ?? undefined} autofocus={!note.text} />
+		</Surface>
+	)
 }

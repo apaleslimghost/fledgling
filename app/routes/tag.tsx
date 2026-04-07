@@ -1,13 +1,12 @@
-import { Heading } from '@radix-ui/themes'
 import { useMemo } from 'react'
 import { redirect } from 'react-router'
 import { type UseRxQueryOptions, useRxQuery } from 'rxdb/plugins/react'
 import Link from '~/components/link'
 import NoteGrid from '~/components/note-grid'
 import type { Note, Tag } from '~/lib/rx-types'
-import database from '~/lib/rxdb.client'
+import database from '~/lib/rxdb'
 import tagsByPath from '~/queries/tags-by-path'
-import type { Route } from './+types/tag.$'
+import type { Route } from './+types/tag'
 
 export async function clientLoader({ params }: Route.LoaderArgs) {
 	const path = params['*']
@@ -56,7 +55,7 @@ export default function TagPage({ params }: Route.ComponentProps) {
 
 	return (
 		<>
-			<Heading>#{path}</Heading>
+			<h1 className="text-4xl font-bold">#{path}</h1>
 
 			<ul>
 				{tags.map((tag) => (

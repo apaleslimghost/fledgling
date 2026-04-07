@@ -1,0 +1,24 @@
+diff --git a/node_modules/rxdb/dist/esm/plugins/react/hooks/use-rx-query.js b/node_modules/rxdb/dist/esm/plugins/react/hooks/use-rx-query.js
+index 9e0a04d..1fb682d 100644
+--- a/node_modules/rxdb/dist/esm/plugins/react/hooks/use-rx-query.js
++++ b/node_modules/rxdb/dist/esm/plugins/react/hooks/use-rx-query.js
+@@ -31,7 +31,6 @@ export function useRxQueryBase({
+     }
+     dbCollection = collection;
+   }
+-  window.collection = dbCollection;
+   var emitResults = res => {
+     setResults(res);
+     if (loading) {
+diff --git a/node_modules/rxdb/src/plugins/react/hooks/use-rx-query.ts b/node_modules/rxdb/src/plugins/react/hooks/use-rx-query.ts
+index ad6490d..ab66f7a 100644
+--- a/node_modules/rxdb/src/plugins/react/hooks/use-rx-query.ts
++++ b/node_modules/rxdb/src/plugins/react/hooks/use-rx-query.ts
+@@ -90,7 +90,6 @@ export function useRxQueryBase<
+         }
+         dbCollection = collection;
+     }
+-    (window as any).collection = dbCollection;
+ 
+     const emitResults = (res: RxDocument<RxDocumentType, OrmMethods>[]) => {
+         setResults(res);

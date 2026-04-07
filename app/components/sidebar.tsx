@@ -1,5 +1,5 @@
-import { FilePlusIcon } from '@radix-ui/react-icons'
-import { Box, Button, ScrollArea, Theme } from '@radix-ui/themes'
+import { FilePlus } from '@gravity-ui/icons'
+import { Button, Surface } from '@heroui/react'
 import { Form } from 'react-router'
 import { useLiveRxQuery } from 'rxdb/plugins/react'
 import TagTree from '~/components/tag-tree'
@@ -26,19 +26,15 @@ export default function Sidebar() {
 	}))
 
 	return (
-		<Theme appearance="dark" style={{ height: '100%' }}>
-			<Box flexBasis="16em" p="3" style={{ height: '100%' }}>
-				<ScrollArea scrollbars="vertical" type="hover">
-					<Form method="post">
-						<Button>
-							<FilePlusIcon />
-							Create
-						</Button>
-					</Form>
+		<div className="overflow-y-auto w-1/6">
+			<Form method="post" className="mb-2">
+				<Button fullWidth variant="outline">
+					<FilePlus />
+					Create
+				</Button>
+			</Form>
 
-					{tags && <TagTree tags={tagsWithNotes} />}
-				</ScrollArea>
-			</Box>
-		</Theme>
+			{tags && <TagTree tags={tagsWithNotes} />}
+		</div>
 	)
 }

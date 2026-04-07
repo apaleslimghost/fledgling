@@ -1,24 +1,13 @@
-import { Box, Flex, ScrollArea, Theme } from '@radix-ui/themes'
 import { Links, Meta, Outlet, redirect, Scripts, ScrollRestoration } from 'react-router'
 import { RxDatabaseProvider } from 'rxdb/plugins/react'
 
-import db from './lib/rxdb.client'
+import db from './lib/rxdb'
 
-import '@radix-ui/themes/styles.css'
 import 'tippy.js/dist/tippy.css'
 import '~/css/index.css'
+import { Surface } from '@heroui/react'
 import type { RxDatabase } from 'rxdb'
 import Sidebar from './components/sidebar'
-
-const MaybeRxProvider = ({
-	rxdb,
-	children,
-}: {
-	rxdb?: RxDatabase<any>
-	children: React.ReactNode
-}) => {
-	return rxdb ? <RxDatabaseProvider database={rxdb}>{children}</RxDatabaseProvider> : children
-}
 
 export async function clientAction() {
 	const note = await db.notes.insert({
@@ -39,25 +28,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				<Links />
 			</head>
 			<body>
-				<Theme
-					accentColor="iris"
-					grayColor="mauve"
-					radius="large"
-					scaling="105%"
-					appearance="light"
-				>
-					<MaybeRxProvider rxdb={db}>
-						<Flex align="stretch" height="100dvh">
-							{db && <Sidebar />}
+				<RxDatabaseProvider database={db as unknown as RxDatabase}>
+					<div className="flex bg-gray-100 h-dvh p-4 gap-4">
+						<Sidebar />
 
-							<Box pl="3" flexGrow="1" style={{ height: '100%' }}>
-								<ScrollArea scrollbars="vertical" type="hover">
-									{children}
-								</ScrollArea>
-							</Box>
-						</Flex>
-					</MaybeRxProvider>
-				</Theme>
+						<div className="grow">{children}</div>
+					</div>
+				</RxDatabaseProvider>
 				<ScrollRestoration />
 				<Scripts />
 			</body>

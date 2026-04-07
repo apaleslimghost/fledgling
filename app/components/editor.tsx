@@ -1,3 +1,4 @@
+import { ListBox } from '@heroui/react'
 import Document from '@tiptap/extension-document'
 import { Mention } from '@tiptap/extension-mention'
 import { Placeholder } from '@tiptap/extensions'
@@ -13,7 +14,7 @@ import type { SuggestionOptions, SuggestionProps } from '@tiptap/suggestion'
 import Minisearch from 'minisearch'
 import tippy, { type GetReferenceClientRect, type Instance } from 'tippy.js'
 import type { Tag } from '~/lib/rx-types'
-import database from '~/lib/rxdb.client'
+import database from '~/lib/rxdb'
 import Link from './link'
 
 const search = new Minisearch<Tag>({
@@ -34,21 +35,19 @@ database.tags.find().$.subscribe((results) => {
 
 function TagSuggest({ items, command }: SuggestionProps<string>) {
 	return (
-		<ul>
+		<ListBox
+			selectionMode="single"
+			onSelectionChange={(value) => {
+				command({ id: Array.from(value)[0] })
+			}}
+		>
 			{items.map((item) => (
-				<li key={item}>
-					<Link
-						to="#"
-						onClick={(e) => {
-							e.preventDefault()
-							command({ id: item })
-						}}
-					>
-						{item}
-					</Link>
-				</li>
+				<ListBox.Item key={item} textValue={item} id={item}>
+					{item}
+					<ListBox.ItemIndicator />
+				</ListBox.Item>
 			))}
-		</ul>
+		</ListBox>
 	)
 }
 
@@ -101,7 +100,7 @@ const Title = Node.create({
 		return [
 			'h1',
 			mergeAttributes(HTMLAttributes, {
-				class: 'rt-Heading rt-r-size-12',
+				class: 'text-4xl font-bold',
 			}),
 			0,
 		]
@@ -129,7 +128,7 @@ export const extensions = [
 	Mention.configure({
 		suggestion,
 		HTMLAttributes: {
-			class: 'rt-reset rt-Badge rt-r-size-1 rt-variant-soft',
+			class: 'chip chip--accent chip--soft',
 		},
 		renderHTML({ options, node }) {
 			return [
