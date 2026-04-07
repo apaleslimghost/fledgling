@@ -10,9 +10,27 @@ import {
 } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 import type { SuggestionOptions, SuggestionProps } from '@tiptap/suggestion'
+import Minisearch from 'minisearch'
 import tippy, { type GetReferenceClientRect, type Instance } from 'tippy.js'
+import type { Tag } from '~/lib/rx-types'
 import database from '~/lib/rxdb.client'
 import Link from './link'
+
+const search = new Minisearch<Tag>({
+	fields: ['path'],
+	storeFields: ['path'],
+	idField: 'path',
+	tokenize: (text) => text.split('/'),
+	searchOptions: {
+		prefix: true,
+		fuzzy: 0.2,
+	},
+})
+
+database.tags.find().$.subscribe((results) => {
+	search.removeAll()
+	search.addAllAsync(results)
+})
 
 function TagSuggest({ items, command }: SuggestionProps<string>) {
 	return (
@@ -37,20 +55,12 @@ function TagSuggest({ items, command }: SuggestionProps<string>) {
 const suggestion: Omit<SuggestionOptions<string>, 'editor'> = {
 	char: '#',
 	async items({ query }) {
-		const tags =
-			query.length >= 3
-				? await database.tags
-						.find({
-							selector: {
-								path: {
-									$regex: new RegExp(query).source,
-								},
-							},
-						})
-						.exec()
-				: []
+		const tags = search.search(query)
 
-		return [...(query ? [query] : []), ...tags.map((tag) => tag.path)]
+		return [
+			...(query && !tags.some((t) => t.path === query) ? [query] : []),
+			...tags.map((tag) => tag.path),
+		]
 	},
 	render() {
 		let component: ReactRenderer
