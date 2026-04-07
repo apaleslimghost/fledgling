@@ -45,11 +45,13 @@ export async function clientAction({ request, params }: Route.ClientActionArgs) 
 		return validationError(result.error, result.submittedData)
 	}
 
-	// const tags = Array.from(
-	// 	collect<MentionNode>('mention', result.data.text),
-	// 	(node) => node.attrs.id,
-	// ).filter((tag) => tag !== null)
-	//
+	const tags = Array.from(
+		collect<MentionNode>('mention', result.data.text),
+		(node) => node.attrs.id,
+	).filter((tag) => tag !== null)
+
+	console.log(tags)
+
 	const note = await database.notes
 		.findOne({
 			selector: {
@@ -58,21 +60,26 @@ export async function clientAction({ request, params }: Route.ClientActionArgs) 
 		})
 		.exec(true)
 
-	await note.patch(result.data)
+	await note.patch({
+		...result.data,
+		tags,
+	})
 
-	// await dbServer.tag.deleteMany({
-	// 	where: {
-	// 		NOT: {
-	// 			notes: {
-	// 				some: {
-	// 					id: {
-	// 						not: undefined,
-	// 					},
-	// 				},
-	// 			},
-	// 		},
-	// 	},
-	// })
+	await database.tags.bulkUpsert(tags.map((tag) => ({ path: tag })))
+
+	const allNotes = await database.notes.find().exec()
+
+	const allTags = Array.from(new Set(allNotes.flatMap((note) => note.tags)))
+
+	await database.tags
+		.find({
+			selector: {
+				path: {
+					$nin: allTags,
+				},
+			},
+		})
+		.remove()
 
 	return { ok: true }
 }
