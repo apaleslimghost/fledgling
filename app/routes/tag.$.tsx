@@ -1,28 +1,58 @@
 import { Heading } from '@radix-ui/themes'
+import { useMemo } from 'react'
 import { redirect } from 'react-router'
+import { type UseRxQueryOptions, useRxQuery } from 'rxdb/plugins/react'
 import Link from '~/components/link'
 import NoteGrid from '~/components/note-grid'
+import type { Note, Tag } from '~/lib/rx-types'
+import database from '~/lib/rxdb.client'
 import tagsByPath from '~/queries/tags-by-path'
 import type { Route } from './+types/tag.$'
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function clientLoader({ params }: Route.LoaderArgs) {
 	const path = params['*']
 	if (!path) {
-		throw redirect('/tags')
+		return redirect('/tags')
 	}
 
 	if (path.endsWith('/')) {
-		throw redirect(`/tag/${path.slice(0, -1)}`)
-	}
-
-	return {
-		...(await tagsByPath([path])),
-		path,
+		return redirect(`/tag/${path.slice(0, -1)}`)
 	}
 }
 
-export default function Tag({ loaderData }: Route.ComponentProps) {
-	const { notes, path, tags, relatedTags } = loaderData
+export default function TagPage({ params }: Route.ComponentProps) {
+	const path = params['*']
+	const tagsQuery: UseRxQueryOptions<Tag> = useMemo(
+		() => ({
+			collection: database.tags,
+			query: {
+				selector: {
+					path: {
+						$regex: new RegExp(`^${path}`).source,
+					},
+				},
+			},
+		}),
+		[path],
+	)
+
+	const { results: tags } = useRxQuery(tagsQuery)
+
+	const notesQuery: UseRxQueryOptions<Note> = useMemo(
+		() => ({
+			collection: database.notes,
+			query: {
+				selector: {
+					tags: {
+						$regex: new RegExp(`^${path}`).source,
+					},
+				},
+			},
+		}),
+		[path],
+	)
+
+	const { results: notes } = useRxQuery(notesQuery)
 
 	return (
 		<>
@@ -38,13 +68,13 @@ export default function Tag({ loaderData }: Route.ComponentProps) {
 
 			<NoteGrid notes={notes} />
 
-			<ul>
+			{/*<ul>
 				{relatedTags.map((tag) => (
 					<li key={tag.path}>
 						<Link to={`/tag/${tag.path}`}>#{tag.path}</Link>
 					</li>
 				))}
-			</ul>
+			</ul>*/}
 		</>
 	)
 }

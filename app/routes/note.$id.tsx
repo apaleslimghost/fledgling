@@ -4,7 +4,7 @@ import type { EditorEvents, JSONContent } from '@tiptap/react'
 import debounce from 'lodash/debounce'
 import { useMemo } from 'react'
 import { useFetcher } from 'react-router'
-import { useLiveRxQuery, useRxQuery } from 'rxdb/plugins/react'
+import { type UseRxQueryOptions, useLiveRxQuery, useRxQuery } from 'rxdb/plugins/react'
 import { z } from 'zod/v4'
 import Editor from '~/components/editor'
 import type { Note, NoteDocument } from '~/lib/rx-types'
@@ -85,7 +85,7 @@ export async function clientAction({ request, params }: Route.ClientActionArgs) 
 }
 
 export default function NotePage(props: Route.ComponentProps) {
-	const query = useMemo(
+	const query: UseRxQueryOptions<Note> = useMemo(
 		() => ({
 			collection: database.notes,
 			query: {
