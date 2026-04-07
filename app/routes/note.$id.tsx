@@ -78,17 +78,22 @@ export async function clientAction({ request, params }: Route.ClientActionArgs) 
 }
 
 export default function NotePage(props: Route.ComponentProps) {
+	const query = useMemo(
+		() => ({
+			collection: database.notes,
+			query: {
+				selector: {
+					id: props.params.id,
+				},
+			},
+		}),
+		[props.params.id],
+	)
+
 	const {
 		results: [note],
 		loading,
-	} = useRxQuery({
-		collection: database.notes,
-		query: {
-			selector: {
-				id: props.params.id,
-			},
-		},
-	})
+	} = useRxQuery(query)
 
 	const fetcher = useFetcher()
 
