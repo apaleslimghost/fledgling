@@ -50,8 +50,6 @@ export async function clientAction({ request, params }: Route.ClientActionArgs) 
 		(node) => node.attrs.id,
 	).filter((tag) => tag !== null)
 
-	console.log(tags)
-
 	const note = await database.notes
 		.findOne({
 			selector: {

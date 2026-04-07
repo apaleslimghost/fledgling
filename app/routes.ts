@@ -4,5 +4,4 @@ export default [
 	index('./routes/_index.tsx'),
 	route('/note/:id', './routes/note.$id.tsx'),
 	route('/tag/*', './routes/tag.$.tsx'),
-	route('/tags/search', './routes/tags.search.ts'),
 ] satisfies RouteConfig

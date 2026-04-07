@@ -30,7 +30,6 @@ export async function clientAction() {
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
-	console.log(db)
 	return (
 		<html lang="en">
 			<head>

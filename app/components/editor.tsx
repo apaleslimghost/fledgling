@@ -11,7 +11,7 @@ import {
 import { StarterKit } from '@tiptap/starter-kit'
 import type { SuggestionOptions, SuggestionProps } from '@tiptap/suggestion'
 import tippy, { type GetReferenceClientRect, type Instance } from 'tippy.js'
-// import type { Tag } from '~/lib/rx-types'
+import database from '~/lib/rxdb.client'
 import Link from './link'
 
 function TagSuggest({ items, command }: SuggestionProps<string>) {
@@ -37,13 +37,20 @@ function TagSuggest({ items, command }: SuggestionProps<string>) {
 const suggestion: Omit<SuggestionOptions<string>, 'editor'> = {
 	char: '#',
 	async items({ query }) {
-		return query ? [query] : []
-		// const url = new URL('/tags/search', location.href)
-		// url.searchParams.set('q', query)
-		// const res = await fetch(url)
-		// const { tags } = await res.json()
+		const tags =
+			query.length >= 3
+				? await database.tags
+						.find({
+							selector: {
+								path: {
+									$regex: new RegExp(query).source,
+								},
+							},
+						})
+						.exec()
+				: []
 
-		// return [...(query ? [query] : []), ...tags.map((tag: Tag) => tag.path)]
+		return [...(query ? [query] : []), ...tags.map((tag) => tag.path)]
 	},
 	render() {
 		let component: ReactRenderer
@@ -65,13 +72,13 @@ const suggestion: Omit<SuggestionOptions<string>, 'editor'> = {
 			},
 			onUpdate(props) {
 				component.updateProps(props)
-				popup[0].setProps({
+				popup[0]!.setProps({
 					getReferenceClientRect: props.clientRect as GetReferenceClientRect,
 				})
 			},
 			onExit() {
 				component.destroy()
-				popup[0].destroy()
+				popup[0]!.destroy()
 			},
 		}
 	},
