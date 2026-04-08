@@ -1,8 +1,9 @@
-import { ListBox } from '@heroui/react'
+import { Chip, cn, ListBox, Surface } from '@heroui/react'
 import Document from '@tiptap/extension-document'
 import { Mention } from '@tiptap/extension-mention'
 import { Placeholder } from '@tiptap/extensions'
 import {
+	type Editor,
 	EditorProvider,
 	type EditorProviderProps,
 	mergeAttributes,
@@ -12,6 +13,7 @@ import {
 import { StarterKit } from '@tiptap/starter-kit'
 import type { SuggestionOptions, SuggestionProps } from '@tiptap/suggestion'
 import Minisearch from 'minisearch'
+import { type ComponentProps, forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 import tippy, { type GetReferenceClientRect, type Instance } from 'tippy.js'
 import type { Tag } from '~/lib/rx-types'
 import database from '~/lib/rxdb'
@@ -33,23 +35,78 @@ database.tags.find().$.subscribe((results) => {
 	search.addAllAsync(results)
 })
 
-function TagSuggest({ items, command }: SuggestionProps<string>) {
-	return (
-		<ListBox
-			selectionMode="single"
-			onSelectionChange={(value) => {
-				command({ id: Array.from(value)[0] })
-			}}
-		>
-			{items.map((item) => (
-				<ListBox.Item key={item} textValue={item} id={item}>
-					{item}
-					<ListBox.ItemIndicator />
-				</ListBox.Item>
-			))}
-		</ListBox>
-	)
+export type TagSuggestHandle = {
+	onKeyDown: (event: KeyboardEvent) => boolean
 }
+
+const TagSuggest = forwardRef<TagSuggestHandle, SuggestionProps<string>>(
+	({ items, command, clientRect }, ref) => {
+		const [selectedIndex, setSelectedIndex] = useState(0)
+
+		useEffect(() => {
+			setSelectedIndex((index) => (index >= items.length ? 0 : index))
+		}, [items.length])
+
+		useImperativeHandle(ref, () => ({
+			onKeyDown: (event: KeyboardEvent) => {
+				if (event.key === 'ArrowDown') {
+					setSelectedIndex((i) => (i + 1) % items.length)
+					return true
+				}
+
+				if (event.key === 'ArrowUp') {
+					setSelectedIndex((i) => (i - 1 + items.length) % items.length)
+					return true
+				}
+
+				if (event.key === 'Enter') {
+					command({ id: items[selectedIndex] })
+					return true
+				}
+
+				if (event.key === 'Escape') {
+					return true // tells Tiptap to close
+				}
+
+				return false
+			},
+		}))
+
+		if (!clientRect) return null
+
+		const rect = clientRect()
+		if (!rect) return null
+
+		if (!items.length) return null
+
+		return (
+			<Surface
+				style={{
+					top: rect.bottom + 4,
+					left: rect.left,
+				}}
+				className="fixed z-10 border shadow-lg rounded-lg min-w-[200px]"
+			>
+				<ListBox
+					selectionMode="single"
+					selectedKeys={[items[selectedIndex]!]}
+					onSelectionChange={(value) => {
+						command({ id: Array.from(value)[0] })
+					}}
+				>
+					{items.map((item, index) => (
+						<ListBox.Item key={item} textValue={item} id={item}>
+							<Chip color="accent" variant={selectedIndex === index ? 'soft' : 'tertiary'}>
+								#{item}
+							</Chip>
+							<ListBox.ItemIndicator />
+						</ListBox.Item>
+					))}
+				</ListBox>
+			</Surface>
+		)
+	},
+)
 
 const suggestion: Omit<SuggestionOptions<string>, 'editor'> = {
 	char: '#',
@@ -63,31 +120,33 @@ const suggestion: Omit<SuggestionOptions<string>, 'editor'> = {
 	},
 	render() {
 		let component: ReactRenderer
-		let popup: Instance[]
 
 		return {
 			onStart(props) {
-				component = new ReactRenderer(TagSuggest, { props, editor: props.editor })
+				component = new ReactRenderer(TagSuggest, {
+					props: {
+						...props,
+						clientRect: props.clientRect,
+					},
+					editor: props.editor,
+				} satisfies { props: ComponentProps<typeof TagSuggest>; editor: Editor })
 
-				popup = tippy('body', {
-					getReferenceClientRect: props.clientRect as GetReferenceClientRect,
-					appendTo: () => document.body,
-					content: component.element,
-					showOnCreate: true,
-					interactive: true,
-					trigger: 'manual',
-					placement: 'bottom-start',
-				})
+				document.body.appendChild(component.element)
 			},
+
 			onUpdate(props) {
-				component.updateProps(props)
-				popup[0]!.setProps({
-					getReferenceClientRect: props.clientRect as GetReferenceClientRect,
+				component.updateProps({
+					...props,
+					clientRect: props.clientRect,
 				})
 			},
+
+			onKeyDown(props) {
+				return (component.ref as TagSuggestHandle | undefined)?.onKeyDown(props.event) ?? false
+			},
+
 			onExit() {
 				component.destroy()
-				popup[0]!.destroy()
 			},
 		}
 	},
@@ -150,6 +209,8 @@ export const extensions = [
 	}),
 ]
 
-export default function Editor(props: Omit<EditorProviderProps, 'extensions'>) {
-	return <EditorProvider immediatelyRender={false} {...props} extensions={extensions} />
+export default function EditorComponent(props: Omit<EditorProviderProps, 'extensions'>) {
+	return (
+		<EditorProvider autofocus="end" immediatelyRender={false} {...props} extensions={extensions} />
+	)
 }
