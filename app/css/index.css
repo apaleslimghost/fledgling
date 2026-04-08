@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @import "@heroui/styles";
 
+@theme {
+	--accent: var(--color-indigo-500);
+}
+
 .tiptap .is-editor-empty:first-child::before {
 	color: #0003;
 	content: attr(data-placeholder);
