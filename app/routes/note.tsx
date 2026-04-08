@@ -1,4 +1,4 @@
-import { Skeleton, Surface } from '@heroui/react'
+import { ScrollShadow, Skeleton, Surface } from '@heroui/react'
 import { parseFormData, validationError } from '@rvf/react-router'
 import type { MentionNodeAttrs } from '@tiptap/extension-mention'
 import type { EditorEvents, JSONContent } from '@tiptap/react'
@@ -120,8 +120,10 @@ export default function NotePage(props: Route.ComponentProps) {
 	}
 
 	return (
-		<Surface className="rounded-xl shadow-surface p-4 h-full overflow-y-auto">
-			<Editor onUpdate={onChange} content={note.text ?? undefined} autofocus={!note.text} />
+		<Surface className="rounded-xl shadow-surface p-4 h-full">
+			<ScrollShadow className="h-full">
+				<Editor onUpdate={onChange} content={note.text ?? undefined} autofocus={!note.text} />
+			</ScrollShadow>
 		</Surface>
 	)
 }

@@ -5,6 +5,12 @@
 	--accent: var(--color-indigo-500);
 }
 
+/* where are the div come from */
+.tiptap,
+div:has(> .tiptap) {
+	height: 100%;
+}
+
 .tiptap .is-editor-empty:first-child::before {
 	color: #0003;
 	content: attr(data-placeholder);
