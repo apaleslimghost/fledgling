@@ -36,7 +36,8 @@
 		"rxdb": "^17.1.0",
 		"tailwindcss": "^4.2.2",
 		"tippy.js": "^6.3.7",
-		"zod": "^4.3.6"
+		"zod": "^4.3.6",
+		"isbot": "^5"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.10",
