@@ -1,4 +1,3 @@
-import { Chip, ListBox, Surface } from '@heroui/react'
 import Document from '@tiptap/extension-document'
 import { Mention } from '@tiptap/extension-mention'
 import { Placeholder } from '@tiptap/extensions'
@@ -12,11 +11,12 @@ import {
 	useEditor,
 } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
-import type { SuggestionOptions, SuggestionProps } from '@tiptap/suggestion'
+import type { SuggestionOptions } from '@tiptap/suggestion'
 import Minisearch from 'minisearch'
-import { type ComponentProps, forwardRef, useEffect, useImperativeHandle, useState } from 'react'
+import { type ComponentProps, useEffect } from 'react'
 import type { Tag } from '~/lib/rx-types'
 import database from '~/lib/rxdb'
+import { makeSuggester } from './suggestion'
 
 const tagSearch = new Minisearch<Tag>({
 	fields: ['path'],
@@ -34,87 +34,7 @@ database.tags.find().$.subscribe((results) => {
 	tagSearch.addAllAsync(results)
 })
 
-export type SuggestionListHandle = {
-	onKeyDown: (event: KeyboardEvent) => boolean
-}
-
-type Suggestion = {
-	id: string
-	label: string
-}
-
-const SuggestionList = forwardRef<
-	SuggestionListHandle,
-	SuggestionProps<Suggestion> & { char: string }
->(({ items, command, clientRect, char }, ref) => {
-	const [selectedIndex, setSelectedIndex] = useState(0)
-
-	useEffect(() => {
-		setSelectedIndex((index) => (index >= items.length ? 0 : index))
-	}, [items.length])
-
-	useImperativeHandle(ref, () => ({
-		onKeyDown: (event: KeyboardEvent) => {
-			if (event.key === 'ArrowDown') {
-				setSelectedIndex((i) => (i + 1) % items.length)
-				return true
-			}
-
-			if (event.key === 'ArrowUp') {
-				setSelectedIndex((i) => (i - 1 + items.length) % items.length)
-				return true
-			}
-
-			if (event.key === 'Enter') {
-				command({ id: items[selectedIndex]!.id })
-				return true
-			}
-
-			if (event.key === 'Escape') {
-				return true // tells Tiptap to close
-			}
-
-			return false
-		},
-	}))
-
-	if (!clientRect) return null
-
-	const rect = clientRect()
-	if (!rect) return null
-
-	if (!items.length) return null
-
-	return (
-		<Surface
-			style={{
-				top: rect.bottom + 4,
-				left: rect.left,
-			}}
-			className="fixed z-10 border shadow-lg rounded-lg min-w-[200px]"
-		>
-			<ListBox
-				selectionMode="single"
-				selectedKeys={[items[selectedIndex]!.id]}
-				onSelectionChange={(value) => {
-					command({ id: Array.from(value)[0] })
-				}}
-			>
-				{items.map((item, index) => (
-					<ListBox.Item key={item.id} textValue={item.label} id={item.id}>
-						<Chip color="accent" variant={selectedIndex === index ? 'soft' : 'tertiary'}>
-							{char}
-							{item.label}
-						</Chip>
-						<ListBox.ItemIndicator />
-					</ListBox.Item>
-				))}
-			</ListBox>
-		</Surface>
-	)
-})
-
-const tagSuggestion: Omit<SuggestionOptions<Suggestion>, 'editor'> = {
+const tagSuggestion = makeSuggester({
 	char: '#',
 	async items({ query }) {
 		const tags = tagSearch.search(query)
@@ -127,40 +47,7 @@ const tagSuggestion: Omit<SuggestionOptions<Suggestion>, 'editor'> = {
 			})),
 		]
 	},
-	render() {
-		let component: ReactRenderer
-
-		return {
-			onStart(props) {
-				component = new ReactRenderer(SuggestionList, {
-					props: {
-						...props,
-						clientRect: props.clientRect,
-						char: '#',
-					},
-					editor: props.editor,
-				} satisfies { props: ComponentProps<typeof SuggestionList>; editor: Editor })
-
-				document.body.appendChild(component.element)
-			},
-
-			onUpdate(props) {
-				component.updateProps({
-					...props,
-					clientRect: props.clientRect,
-				})
-			},
-
-			onKeyDown(props) {
-				return (component.ref as SuggestionListHandle | undefined)?.onKeyDown(props.event) ?? false
-			},
-
-			onExit() {
-				component.destroy()
-			},
-		}
-	},
-}
+})
 
 const Title = Node.create({
 	name: 'title',
