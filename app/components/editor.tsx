@@ -50,7 +50,10 @@ database.notes.find().$.subscribe((results) => {
 	noteSearch.removeAll()
 	noteSearch.addAllAsync(
 		results.flatMap((note) => {
-			const title = note.text?.content?.find((node) => node.type === 'title')?.content?.[0]?.text
+			const title = note.text?.content
+				?.find((node) => node.type === 'title')
+				?.content?.map((c) => c.text ?? '')
+				.join('')
 			if (!title) return []
 			return [{ id: note.id, title }]
 		}),
