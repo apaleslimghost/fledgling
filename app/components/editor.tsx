@@ -9,6 +9,8 @@ import {
 	mergeAttributes,
 	Node,
 	ReactRenderer,
+	Tiptap,
+	useEditor,
 } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 import type { SuggestionOptions, SuggestionProps } from '@tiptap/suggestion'
@@ -209,8 +211,30 @@ export const extensions = [
 	}),
 ]
 
-export default function EditorComponent(props: Omit<EditorProviderProps, 'extensions'>) {
+export default function EditorComponent(
+	props: Omit<EditorProviderProps, 'extensions'> & { id: string },
+) {
+	const editor = useEditor({
+		extensions,
+		immediatelyRender: false,
+		...props,
+	})
+
+	useEffect(() => {
+		editor?.commands.setMeta('noteId', props.id)
+
+		if (props.content) {
+			editor?.commands.setContent(props.content, { emitUpdate: false })
+		} else {
+			editor?.commands.clearContent(false)
+		}
+	}, [props.id, editor, props.content])
+
+	if (!editor) return null
+
 	return (
-		<EditorProvider autofocus="end" immediatelyRender={false} {...props} extensions={extensions} />
+		<Tiptap editor={editor}>
+			<Tiptap.Content />
+		</Tiptap>
 	)
 }

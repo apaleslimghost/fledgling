@@ -122,7 +122,7 @@ export default function NotePage(props: Route.ComponentProps) {
 	return (
 		<Surface className="rounded-xl shadow-surface p-4 h-full">
 			<ScrollShadow className="h-full">
-				<Editor onUpdate={onChange} content={note.text ?? undefined} autofocus={!note.text} />
+				<Editor id={note.id} onUpdate={onChange} content={note.text ?? undefined} />
 			</ScrollShadow>
 		</Surface>
 	)

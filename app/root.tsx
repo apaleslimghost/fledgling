@@ -15,8 +15,6 @@ export async function clientAction() {
 		tags: [],
 	})
 
-	console.log(note)
-
 	throw redirect(`/note/${note.id}`)
 }
 
