@@ -22,3 +22,7 @@ div:has(> .tiptap) {
 .tiptap:focus-visible {
 	outline: none;
 }
+
+.link.active[aria-current="page"] {
+	@apply text-accent;
+}
