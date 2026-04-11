@@ -27,8 +27,8 @@ export default function Sidebar() {
 
 	return (
 		<div className="overflow-y-auto w-1/6">
-			<Form method="post" className="mb-2">
-				<Button fullWidth variant="outline">
+			<Form action="/" method="post" className="mb-2">
+				<Button type="submit" fullWidth variant="outline">
 					<FilePlus />
 					Create
 				</Button>
