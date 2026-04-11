@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react'
 import type { Note } from '~/lib/rx-types'
-import NoteCard from './note'
+import NoteCard from './note-card'
 
 export default function NoteGrid({ notes, children }: PropsWithChildren<{ notes: Note[] }>) {
 	return (

@@ -1,5 +1,6 @@
 import { Card, Chip } from '@heroui/react'
 import { generateHTML } from '@tiptap/html'
+import { Link as RouterLink } from 'react-router'
 import type { Note } from '~/lib/rx-types'
 import { extensions } from './editor'
 import Link from './link'
@@ -31,9 +32,11 @@ export default function NoteCard({ note }: { note: Note }) {
 
 			<Card.Content>
 				{note.tags.map((tag) => (
-					<Link to={`/tag/${tag}`} key={tag}>
-						<Chip>#{tag}</Chip>
-					</Link>
+					<RouterLink to={`/tag/${tag}`} key={tag}>
+						<Chip color="accent" variant="soft">
+							#{tag}
+						</Chip>
+					</RouterLink>
 				))}
 			</Card.Content>
 		</Card>
