@@ -1,10 +1,9 @@
-import { Chip, cn, ListBox, Surface } from '@heroui/react'
+import { Chip, ListBox, Surface } from '@heroui/react'
 import Document from '@tiptap/extension-document'
 import { Mention } from '@tiptap/extension-mention'
 import { Placeholder } from '@tiptap/extensions'
 import {
 	type Editor,
-	EditorProvider,
 	type EditorProviderProps,
 	mergeAttributes,
 	Node,
@@ -16,12 +15,10 @@ import { StarterKit } from '@tiptap/starter-kit'
 import type { SuggestionOptions, SuggestionProps } from '@tiptap/suggestion'
 import Minisearch from 'minisearch'
 import { type ComponentProps, forwardRef, useEffect, useImperativeHandle, useState } from 'react'
-import tippy, { type GetReferenceClientRect, type Instance } from 'tippy.js'
 import type { Tag } from '~/lib/rx-types'
 import database from '~/lib/rxdb'
-import Link from './link'
 
-const search = new Minisearch<Tag>({
+const tagSearch = new Minisearch<Tag>({
 	fields: ['path'],
 	storeFields: ['path'],
 	idField: 'path',
@@ -33,91 +30,101 @@ const search = new Minisearch<Tag>({
 })
 
 database.tags.find().$.subscribe((results) => {
-	search.removeAll()
-	search.addAllAsync(results)
+	tagSearch.removeAll()
+	tagSearch.addAllAsync(results)
 })
 
-export type TagSuggestHandle = {
+export type SuggestionListHandle = {
 	onKeyDown: (event: KeyboardEvent) => boolean
 }
 
-const TagSuggest = forwardRef<TagSuggestHandle, SuggestionProps<string>>(
-	({ items, command, clientRect }, ref) => {
-		const [selectedIndex, setSelectedIndex] = useState(0)
+type Suggestion = {
+	id: string
+	label: string
+}
 
-		useEffect(() => {
-			setSelectedIndex((index) => (index >= items.length ? 0 : index))
-		}, [items.length])
+const SuggestionList = forwardRef<
+	SuggestionListHandle,
+	SuggestionProps<Suggestion> & { char: string }
+>(({ items, command, clientRect, char }, ref) => {
+	const [selectedIndex, setSelectedIndex] = useState(0)
 
-		useImperativeHandle(ref, () => ({
-			onKeyDown: (event: KeyboardEvent) => {
-				if (event.key === 'ArrowDown') {
-					setSelectedIndex((i) => (i + 1) % items.length)
-					return true
-				}
+	useEffect(() => {
+		setSelectedIndex((index) => (index >= items.length ? 0 : index))
+	}, [items.length])
 
-				if (event.key === 'ArrowUp') {
-					setSelectedIndex((i) => (i - 1 + items.length) % items.length)
-					return true
-				}
+	useImperativeHandle(ref, () => ({
+		onKeyDown: (event: KeyboardEvent) => {
+			if (event.key === 'ArrowDown') {
+				setSelectedIndex((i) => (i + 1) % items.length)
+				return true
+			}
 
-				if (event.key === 'Enter') {
-					command({ id: items[selectedIndex] })
-					return true
-				}
+			if (event.key === 'ArrowUp') {
+				setSelectedIndex((i) => (i - 1 + items.length) % items.length)
+				return true
+			}
 
-				if (event.key === 'Escape') {
-					return true // tells Tiptap to close
-				}
+			if (event.key === 'Enter') {
+				command({ id: items[selectedIndex]!.id })
+				return true
+			}
 
-				return false
-			},
-		}))
+			if (event.key === 'Escape') {
+				return true // tells Tiptap to close
+			}
 
-		if (!clientRect) return null
+			return false
+		},
+	}))
 
-		const rect = clientRect()
-		if (!rect) return null
+	if (!clientRect) return null
 
-		if (!items.length) return null
+	const rect = clientRect()
+	if (!rect) return null
 
-		return (
-			<Surface
-				style={{
-					top: rect.bottom + 4,
-					left: rect.left,
+	if (!items.length) return null
+
+	return (
+		<Surface
+			style={{
+				top: rect.bottom + 4,
+				left: rect.left,
+			}}
+			className="fixed z-10 border shadow-lg rounded-lg min-w-[200px]"
+		>
+			<ListBox
+				selectionMode="single"
+				selectedKeys={[items[selectedIndex]!.id]}
+				onSelectionChange={(value) => {
+					command({ id: Array.from(value)[0] })
 				}}
-				className="fixed z-10 border shadow-lg rounded-lg min-w-[200px]"
 			>
-				<ListBox
-					selectionMode="single"
-					selectedKeys={[items[selectedIndex]!]}
-					onSelectionChange={(value) => {
-						command({ id: Array.from(value)[0] })
-					}}
-				>
-					{items.map((item, index) => (
-						<ListBox.Item key={item} textValue={item} id={item}>
-							<Chip color="accent" variant={selectedIndex === index ? 'soft' : 'tertiary'}>
-								#{item}
-							</Chip>
-							<ListBox.ItemIndicator />
-						</ListBox.Item>
-					))}
-				</ListBox>
-			</Surface>
-		)
-	},
-)
+				{items.map((item, index) => (
+					<ListBox.Item key={item.id} textValue={item.label} id={item.id}>
+						<Chip color="accent" variant={selectedIndex === index ? 'soft' : 'tertiary'}>
+							{char}
+							{item.label}
+						</Chip>
+						<ListBox.ItemIndicator />
+					</ListBox.Item>
+				))}
+			</ListBox>
+		</Surface>
+	)
+})
 
-const suggestion: Omit<SuggestionOptions<string>, 'editor'> = {
+const tagSuggestion: Omit<SuggestionOptions<Suggestion>, 'editor'> = {
 	char: '#',
 	async items({ query }) {
-		const tags = search.search(query)
+		const tags = tagSearch.search(query)
 
 		return [
-			...(query && !tags.some((t) => t.path === query) ? [query] : []),
-			...tags.map((tag) => tag.path),
+			...(query && !tags.some((t) => t.path === query) ? [{ id: query, label: query }] : []),
+			...tags.map((tag) => ({
+				id: tag.path,
+				label: tag.path,
+			})),
 		]
 	},
 	render() {
@@ -125,13 +132,14 @@ const suggestion: Omit<SuggestionOptions<string>, 'editor'> = {
 
 		return {
 			onStart(props) {
-				component = new ReactRenderer(TagSuggest, {
+				component = new ReactRenderer(SuggestionList, {
 					props: {
 						...props,
 						clientRect: props.clientRect,
+						char: '#',
 					},
 					editor: props.editor,
-				} satisfies { props: ComponentProps<typeof TagSuggest>; editor: Editor })
+				} satisfies { props: ComponentProps<typeof SuggestionList>; editor: Editor })
 
 				document.body.appendChild(component.element)
 			},
@@ -144,7 +152,7 @@ const suggestion: Omit<SuggestionOptions<string>, 'editor'> = {
 			},
 
 			onKeyDown(props) {
-				return (component.ref as TagSuggestHandle | undefined)?.onKeyDown(props.event) ?? false
+				return (component.ref as SuggestionListHandle | undefined)?.onKeyDown(props.event) ?? false
 			},
 
 			onExit() {
@@ -187,7 +195,7 @@ export const extensions = [
 		},
 	}),
 	Mention.configure({
-		suggestion,
+		suggestion: tagSuggestion,
 		HTMLAttributes: {
 			class: 'chip chip--accent chip--soft',
 		},
