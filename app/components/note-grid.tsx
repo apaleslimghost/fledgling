@@ -1,15 +1,15 @@
-import type { PropsWithChildren } from 'react'
+import { ScrollShadow } from '@heroui/react'
 import type { Note } from '~/lib/rx-types'
 import NoteCard from './note-card'
 
-export default function NoteGrid({ notes, children }: PropsWithChildren<{ notes: Note[] }>) {
+export default function NoteGrid({ notes, className }: { notes: Note[]; className?: string }) {
 	return (
-		<div className="grid grid-cols-[repeat(auto-fill, minmax(20em, 1fr))] gap-1">
-			{notes.map((note) => (
-				<NoteCard note={note} key={note.id} />
-			))}
-
-			{children}
-		</div>
+		<ScrollShadow className={className}>
+			<div className="flex flex-col gap-4">
+				{notes.map((note) => (
+					<NoteCard note={note} key={note.id} />
+				))}
+			</div>
+		</ScrollShadow>
 	)
 }

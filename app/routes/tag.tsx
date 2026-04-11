@@ -1,3 +1,4 @@
+import { Breadcrumbs } from '@heroui/react'
 import { useMemo } from 'react'
 import { redirect } from 'react-router'
 import { type UseRxQueryOptions, useRxQuery } from 'rxdb/plugins/react'
@@ -5,7 +6,6 @@ import Link from '~/components/link'
 import NoteGrid from '~/components/note-grid'
 import type { Note, Tag } from '~/lib/rx-types'
 import database from '~/lib/rxdb'
-import tagsByPath from '~/queries/tags-by-path'
 import type { Route } from './+types/tag'
 
 export async function clientLoader({ params }: Route.LoaderArgs) {
@@ -21,21 +21,6 @@ export async function clientLoader({ params }: Route.LoaderArgs) {
 
 export default function TagPage({ params }: Route.ComponentProps) {
 	const path = params['*']
-	const tagsQuery: UseRxQueryOptions<Tag> = useMemo(
-		() => ({
-			collection: database.tags,
-			query: {
-				selector: {
-					path: {
-						$regex: new RegExp(`^${path}`).source,
-					},
-				},
-			},
-		}),
-		[path],
-	)
-
-	const { results: tags } = useRxQuery(tagsQuery)
 
 	const notesQuery: UseRxQueryOptions<Note> = useMemo(
 		() => ({
@@ -53,27 +38,32 @@ export default function TagPage({ params }: Route.ComponentProps) {
 
 	const { results: notes } = useRxQuery(notesQuery)
 
+	const tagParts = path.split('/')
+
 	return (
-		<>
-			<h1 className="text-4xl font-bold">#{path}</h1>
+		<div className="h-full flex flex-col">
+			<header>
+				{tagParts.length > 1 && (
+					<Breadcrumbs className="mb-4">
+						{tagParts.map((part, index) => (
+							<Breadcrumbs.Item key={tagParts.slice(0, index + 1).join('/')}>
+								{index === tagParts.length - 1 ? (
+									part
+								) : (
+									<Link to={`/tag/${tagParts.slice(0, index + 1).join('/')}`}>
+										{index === 0 ? '#' : ''}
+										{part}
+									</Link>
+								)}
+							</Breadcrumbs.Item>
+						))}
+					</Breadcrumbs>
+				)}
 
-			<ul>
-				{tags.map((tag) => (
-					<li key={tag.path}>
-						<Link to={`/tag/${tag.path}`}>#{tag.path}</Link>
-					</li>
-				))}
-			</ul>
+				<h1 className="text-4xl font-bold mb-6">{tagParts[tagParts.length - 1]}</h1>
+			</header>
 
-			<NoteGrid notes={notes} />
-
-			{/*<ul>
-				{relatedTags.map((tag) => (
-					<li key={tag.path}>
-						<Link to={`/tag/${tag.path}`}>#{tag.path}</Link>
-					</li>
-				))}
-			</ul>*/}
-		</>
+			<NoteGrid notes={notes} className="grow" />
+		</div>
 	)
 }

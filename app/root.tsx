@@ -15,7 +15,9 @@ export async function clientAction() {
 		tags: [],
 	})
 
-	return redirect(`/note/${note.id}`)
+	console.log(note)
+
+	throw redirect(`/note/${note.id}`)
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {

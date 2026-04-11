@@ -19,6 +19,23 @@ const NoteTitle = ({ note }: { note: Note }) => {
 	)
 }
 
+const NoteContent = ({ note }: { note: Note }) => {
+	const content = {
+		...(note.text ?? { type: 'doc' }),
+		content: note.text?.content?.slice(1),
+	}
+
+	return (
+		<article
+			// biome-ignore lint/security/noDangerouslySetInnerHtml: trust me bro
+			dangerouslySetInnerHTML={{
+				__html: content ? generateHTML(content, extensions) : '',
+			}}
+			className=""
+		/>
+	)
+}
+
 export default function NoteCard({ note }: { note: Note }) {
 	return (
 		<Card>
@@ -31,13 +48,7 @@ export default function NoteCard({ note }: { note: Note }) {
 			</Card.Header>
 
 			<Card.Content>
-				{note.tags.map((tag) => (
-					<RouterLink to={`/tag/${tag}`} key={tag}>
-						<Chip color="accent" variant="soft">
-							#{tag}
-						</Chip>
-					</RouterLink>
-				))}
+				<NoteContent note={note} />
 			</Card.Content>
 		</Card>
 	)
