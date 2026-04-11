@@ -2,18 +2,16 @@ import Document from '@tiptap/extension-document'
 import { Mention } from '@tiptap/extension-mention'
 import { Placeholder } from '@tiptap/extensions'
 import {
-	type Editor,
 	type EditorProviderProps,
+	generateText,
 	mergeAttributes,
 	Node,
-	ReactRenderer,
 	Tiptap,
 	useEditor,
 } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
-import type { SuggestionOptions } from '@tiptap/suggestion'
 import Minisearch from 'minisearch'
-import { type ComponentProps, useEffect } from 'react'
+import { useEffect } from 'react'
 import type { Tag } from '~/lib/rx-types'
 import database from '~/lib/rxdb'
 import { makeSuggester } from './suggestion'
@@ -34,19 +32,29 @@ database.tags.find().$.subscribe((results) => {
 	tagSearch.addAllAsync(results)
 })
 
-const tagSuggestion = makeSuggester({
-	char: '#',
-	async items({ query }) {
-		const tags = tagSearch.search(query)
+type NoteSuggestion = {
+	id: string
+	title: string
+}
 
-		return [
-			...(query && !tags.some((t) => t.path === query) ? [{ id: query, label: query }] : []),
-			...tags.map((tag) => ({
-				id: tag.path,
-				label: tag.path,
-			})),
-		]
+const noteSearch = new Minisearch<NoteSuggestion>({
+	fields: ['title'],
+	storeFields: ['id', 'title'],
+	idField: 'id',
+	searchOptions: {
+		fuzzy: 0.2,
 	},
+})
+
+database.notes.find().$.subscribe((results) => {
+	noteSearch.removeAll()
+	noteSearch.addAllAsync(
+		results.flatMap((note) => {
+			const title = note.text?.content?.find((node) => node.type === 'title')?.content?.[0]?.text
+			if (!title) return []
+			return [{ id: note.id, title }]
+		}),
+	)
 })
 
 const Title = Node.create({
@@ -82,17 +90,39 @@ export const extensions = [
 		},
 	}),
 	Mention.configure({
-		suggestion: tagSuggestion,
-		HTMLAttributes: {
-			class: 'chip chip--accent chip--soft',
-		},
+		suggestions: [
+			makeSuggester({
+				char: '#',
+				async items({ query }) {
+					const tags = tagSearch.search(query)
+
+					return [
+						...(query && !tags.some((t) => t.path === query) ? [{ id: query, label: query }] : []),
+						...tags.map((tag) => ({
+							id: tag.path,
+							label: tag.path,
+						})),
+					]
+				},
+			}),
+			makeSuggester({
+				char: '@',
+				async items({ query }) {
+					return noteSearch.search(query).map((result) => ({
+						id: result.id,
+						label: result.title,
+					}))
+				},
+			}),
+		],
 		renderHTML({ options, node }) {
 			return [
 				'a',
 				mergeAttributes(options.HTMLAttributes, {
-					href: `/tag/${node.attrs.id}`,
+					class: `chip chip--accent ${node.attrs.mentionSuggestionChar === '#' ? 'chip--soft' : 'chip--secondary'}`,
+					href: `/${node.attrs.mentionSuggestionChar === '#' ? 'tag' : 'note'}/${node.attrs.id}`,
 				}),
-				`${options.suggestion.char}${node.attrs.label ?? node.attrs.id}`,
+				`${node.attrs.mentionSuggestionChar}${node.attrs.label ?? node.attrs.id}`,
 			]
 		},
 	}),

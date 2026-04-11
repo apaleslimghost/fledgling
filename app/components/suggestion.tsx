@@ -35,7 +35,7 @@ const SuggestionList = forwardRef<
 			}
 
 			if (event.key === 'Enter') {
-				command({ id: items[selectedIndex]!.id })
+				command(items[selectedIndex])
 				return true
 			}
 
@@ -60,13 +60,13 @@ const SuggestionList = forwardRef<
 				top: rect.bottom + 4,
 				left: rect.left,
 			}}
-			className="fixed z-10 border shadow-lg rounded-lg min-w-[200px]"
+			className="fixed z-10 border shadow-lg rounded-lg min-w-50"
 		>
 			<ListBox
 				selectionMode="single"
 				selectedKeys={[items[selectedIndex]!.id]}
 				onSelectionChange={(value) => {
-					command({ id: Array.from(value)[0] })
+					command(items[selectedIndex])
 				}}
 			>
 				{items.map((item, index) => (

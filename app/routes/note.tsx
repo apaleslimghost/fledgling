@@ -46,10 +46,9 @@ export async function clientAction({ request, params }: Route.ClientActionArgs) 
 		return validationError(result.error, result.submittedData)
 	}
 
-	const tags = Array.from(
-		collect<MentionNode>('mention', result.data.text),
-		(node) => node.attrs.id,
-	).filter((tag) => tag !== null)
+	const tags = Array.from(collect<MentionNode>('mention', result.data.text)).flatMap((tag) =>
+		tag.attrs.id && tag.attrs.mentionSuggestionChar === '#' ? [tag.attrs.id] : [],
+	)
 
 	const note = await database.notes
 		.findOne({
