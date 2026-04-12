@@ -1,7 +1,8 @@
 import { FilePlus } from '@gravity-ui/icons'
 import { Button, Surface } from '@heroui/react'
-import { Form } from 'react-router'
+import { Form, Link } from 'react-router'
 import { useLiveRxQuery } from 'rxdb/plugins/react'
+import icon from '~/assets/icon.png'
 import TagTree from '~/components/tag-tree'
 import type { Note, Tag } from '~/lib/rx-types'
 
@@ -26,13 +27,19 @@ export default function Sidebar() {
 	}))
 
 	return (
-		<div className="overflow-y-auto w-1/6">
-			<Form action="/" method="post" className="mb-2">
-				<Button type="submit" fullWidth variant="outline">
-					<FilePlus />
-					Create
-				</Button>
-			</Form>
+		<div className="overflow-y-auto w-1/6 min-w-50">
+			<header className="flex mb-2 gap-2">
+				<Link to="/">
+					<img src={icon} alt="Fledgling" className="size-9" />
+				</Link>
+
+				<Form action="/" method="post" className="mb-2 grow">
+					<Button type="submit" fullWidth variant="outline">
+						<FilePlus />
+						Create
+					</Button>
+				</Form>
+			</header>
 
 			{tags && <TagTree tags={tagsWithNotes} />}
 		</div>

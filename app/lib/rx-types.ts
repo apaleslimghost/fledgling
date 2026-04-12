@@ -9,7 +9,9 @@ export type Tag = {
 export type Note = {
 	id: string
 	tags: string[]
-	text: JSONContent
+	title?: string
+	text?: JSONContent
+	propertyValues?: Record<string, Property['type']>
 }
 
 export type Property = {
@@ -34,10 +36,12 @@ export const noteSchema: RxJsonSchema<Note> = {
 	properties: {
 		id: { type: 'string', maxLength: 100 },
 		tags: { type: 'array', items: { type: 'string' } },
+		title: { type: 'string' },
 		text: { type: 'object' },
+		propertyValues: { type: 'object' },
 	},
 	required: ['id', 'tags'],
-	version: 0,
+	version: 1,
 	primaryKey: 'id',
 }
 

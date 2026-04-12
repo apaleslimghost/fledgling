@@ -1,13 +1,14 @@
-import { ScrollShadow, Skeleton, Surface } from '@heroui/react'
+import { Input, ScrollShadow, Surface } from '@heroui/react'
 import { parseFormData, validationError } from '@rvf/react-router'
 import type { MentionNodeAttrs } from '@tiptap/extension-mention'
-import type { EditorEvents, JSONContent } from '@tiptap/react'
+import type { EditorEvents, JSONContent, Editor as TiptapEditor } from '@tiptap/react'
 import debounce from 'lodash/debounce'
-import { useMemo } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useFetcher } from 'react-router'
-import { type UseRxQueryOptions, useRxQuery } from 'rxdb/plugins/react'
+import { type UseRxQueryOptions, useLiveRxQuery } from 'rxdb/plugins/react'
 import { z } from 'zod/v4'
 import Editor from '~/components/editor'
+import PageTitle from '~/components/page-title'
 import type { Note } from '~/lib/rx-types'
 import database from '~/lib/rxdb'
 import type { Route } from './+types/note'
@@ -100,11 +101,11 @@ export default function NotePage(props: Route.ComponentProps) {
 	const {
 		results: [note],
 		loading,
-	} = useRxQuery(query)
+	} = useLiveRxQuery(query)
 
 	const fetcher = useFetcher()
 
-	const onChange = useMemo(
+	const onTextChange = useMemo(
 		() =>
 			debounce(({ editor }: EditorEvents['update']) => {
 				const formData = new FormData()
@@ -114,6 +115,8 @@ export default function NotePage(props: Route.ComponentProps) {
 		[fetcher],
 	)
 
+	const editorRef = useRef<TiptapEditor>(null)
+
 	// TODO: loading is never actually true
 	// https://github.com/pubkey/rxdb/pull/8292
 	if (loading || !note) {
@@ -121,10 +124,36 @@ export default function NotePage(props: Route.ComponentProps) {
 	}
 
 	return (
-		<Surface className="rounded-xl shadow-surface p-4 h-full">
-			<ScrollShadow className="h-full">
-				<Editor id={note.id} onUpdate={onChange} content={note.text ?? undefined} />
-			</ScrollShadow>
-		</Surface>
+		<>
+			<PageTitle title={note?.title ?? 'Untitled note'} />
+			<Surface className="rounded-xl shadow-surface p-4 h-full">
+				<ScrollShadow className="h-full">
+					<h1 className="text-3xl font-bold">
+						<input
+							value={note.title}
+							placeholder="Untitled note"
+							className="w-full"
+							onKeyUp={(e) => {
+								if (e.key === 'Enter' || e.key === 'ArrowDown') {
+									e.preventDefault()
+									editorRef.current?.commands.focus()
+								}
+							}}
+							onChange={(e) => {
+								note?.patch({
+									title: e.target.value,
+								})
+							}}
+						/>
+					</h1>
+					<Editor
+						id={note.id}
+						onUpdate={onTextChange}
+						content={note.text ?? undefined}
+						ref={editorRef}
+					/>
+				</ScrollShadow>
+			</Surface>
+		</>
 	)
 }

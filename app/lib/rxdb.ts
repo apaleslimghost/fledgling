@@ -5,7 +5,14 @@ import { getRxStorageLocalstorage } from 'rxdb/plugins/storage-localstorage'
 import { getRxStorageMemory } from 'rxdb/plugins/storage-memory'
 import { RxDBUpdatePlugin } from 'rxdb/plugins/update'
 import { getAjv, wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv'
-import { type Collections, noteSchema, propertySchema, type Tag, tagSchema } from './rx-types'
+import {
+	type Collections,
+	type Note,
+	noteSchema,
+	propertySchema,
+	type Tag,
+	tagSchema,
+} from './rx-types'
 
 const ajv = getAjv()
 ajv.opts.allowUnionTypes = true
@@ -38,7 +45,16 @@ await database.addCollections({
 			},
 		},
 	},
-	notes: { schema: noteSchema },
+	notes: {
+		schema: noteSchema,
+		migrationStrategies: {
+			1: (note: Note) => {
+				const title = note.text?.content?.find((node) => node.type === 'title')
+				if (title) note.title = title.content?.map((c) => c.text).join('')
+				return note
+			},
+		},
+	},
 	properties: { schema: propertySchema },
 })
 

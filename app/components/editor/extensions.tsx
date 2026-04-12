@@ -51,34 +51,8 @@ database.notes.find().$.subscribe((results) => {
 	)
 })
 
-const Title = Node.create({
-	name: 'title',
-	content: 'text*',
-	renderHTML({ HTMLAttributes }) {
-		return [
-			'h1',
-			mergeAttributes(HTMLAttributes, {
-				class: 'text-3xl font-bold',
-			}),
-			0,
-		]
-	},
-	parseHTML() {
-		return [
-			{
-				tag: 'h1',
-			},
-		]
-	},
-})
-
 export const extensions = [
-	Title.configure(),
-	Document.extend({
-		content: 'title block*',
-	}),
 	StarterKit.configure({
-		document: false,
 		heading: {
 			levels: [2, 3, 4, 5, 6],
 		},
