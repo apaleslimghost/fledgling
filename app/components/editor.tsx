@@ -28,7 +28,7 @@ import {
 	useEditorState,
 } from '@tiptap/react'
 import { BubbleMenu, FloatingMenu } from '@tiptap/react/menus'
-import { forwardRef, type PropsWithChildren, useEffect, useImperativeHandle } from 'react'
+import { forwardRef, type PropsWithChildren, useEffect, useImperativeHandle, useRef } from 'react'
 import { extensions } from './editor/extensions'
 
 const MarkToggleButton = ({
@@ -68,15 +68,18 @@ export default forwardRef<Editor, Omit<EditorProviderProps, 'extensions'> & { id
 			...props,
 		})
 
+		const contentRef = useRef(props.content)
+		contentRef.current = props.content
+
 		useEffect(() => {
 			editor?.commands.setMeta('noteId', props.id)
 
-			if (props.content) {
-				editor?.commands.setContent(props.content, { emitUpdate: false })
+			if (contentRef.current) {
+				editor?.commands.setContent(contentRef.current, { emitUpdate: false })
 			} else {
 				editor?.commands.clearContent(false)
 			}
-		}, [props.id, editor, props.content])
+		}, [props.id, editor])
 
 		useImperativeHandle(ref, () => editor)
 
