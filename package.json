@@ -27,7 +27,9 @@
 		"@tiptap/pm": "^3.22.2",
 		"@tiptap/react": "^3.22.2",
 		"@tiptap/starter-kit": "^3.22.2",
+		"@tiptap/static-renderer": "^3.22.3",
 		"@tiptap/suggestion": "^3.22.2",
+		"isbot": "^5",
 		"lodash": "^4.17.21",
 		"minisearch": "^7.2.0",
 		"react": "^19.2.4",
@@ -36,8 +38,7 @@
 		"rxdb": "^17.1.0",
 		"tailwindcss": "^4.2.2",
 		"tippy.js": "^6.3.7",
-		"zod": "^4.3.6",
-		"isbot": "^5"
+		"zod": "^4.3.6"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.10",
