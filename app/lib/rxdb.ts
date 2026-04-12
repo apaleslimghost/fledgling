@@ -3,8 +3,9 @@ import { disableWarnings, RxDBDevModePlugin } from 'rxdb/plugins/dev-mode'
 import { RxDBMigrationSchemaPlugin } from 'rxdb/plugins/migration-schema'
 import { getRxStorageLocalstorage } from 'rxdb/plugins/storage-localstorage'
 import { getRxStorageMemory } from 'rxdb/plugins/storage-memory'
+import { RxDBUpdatePlugin } from 'rxdb/plugins/update'
 import { getAjv, wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv'
-import { type Collections, noteSchema, type Tag, tagSchema } from './rx-types'
+import { type Collections, noteSchema, propertySchema, type Tag, tagSchema } from './rx-types'
 
 const ajv = getAjv()
 ajv.opts.allowUnionTypes = true
@@ -18,6 +19,7 @@ RxDBDevModePlugin.init = () => {} // fuck you and the tracking iframe you rode i
 addRxPlugin(RxDBDevModePlugin)
 disableWarnings()
 
+addRxPlugin(RxDBUpdatePlugin)
 addRxPlugin(RxDBMigrationSchemaPlugin)
 
 const database = await createRxDatabase<Collections>({
@@ -37,6 +39,7 @@ await database.addCollections({
 		},
 	},
 	notes: { schema: noteSchema },
+	properties: { schema: propertySchema },
 })
 
 Object.assign(globalThis, { database })

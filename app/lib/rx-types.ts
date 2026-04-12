@@ -15,7 +15,7 @@ export type Note = {
 export type Property = {
 	id: string
 	name: string
-	type: 'string' | 'number' | 'boolean' | 'tag' | 'note'
+	type: 'text' | 'number' | 'boolean' | 'tag' | 'note'
 }
 
 export const tagSchema: RxJsonSchema<Tag> = {
@@ -46,7 +46,7 @@ export const propertySchema: RxJsonSchema<Property> = {
 	properties: {
 		id: { type: 'string', maxLength: 100 },
 		name: { type: 'string', maxLength: 100 },
-		type: { type: 'string', enum: ['string', 'number', 'boolean', 'tag', 'note'] },
+		type: { type: 'string', enum: ['text', 'number', 'boolean', 'tag', 'note'] },
 	},
 	required: ['id', 'name', 'type'],
 	version: 0,

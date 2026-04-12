@@ -63,7 +63,9 @@ export async function clientAction({ request, params }: Route.ClientActionArgs) 
 		tags,
 	})
 
-	await database.tags.bulkUpsert(Array.from(new Set(tags), (tag) => ({ path: tag })))
+	await database.tags.bulkUpsert(
+		Array.from(new Set(tags), (tag) => ({ path: tag, properties: [] })),
+	)
 
 	const allNotes = await database.notes.find().exec()
 
