@@ -20,7 +20,6 @@ import {
 	ToggleButtonGroup,
 	Toolbar,
 } from '@heroui/react'
-import type { FloatingMenuView } from '@tiptap/extension-floating-menu'
 import {
 	type Editor,
 	type EditorProviderProps,

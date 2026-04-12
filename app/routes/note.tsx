@@ -130,9 +130,10 @@ export default function NotePage(props: Route.ComponentProps) {
 				<ScrollShadow className="h-full">
 					<h1 className="text-3xl font-bold">
 						<input
-							value={note.title}
+							value={note.title ?? ''}
 							placeholder="Untitled note"
 							className="w-full outline-none"
+							autoComplete="none"
 							onKeyUp={(e) => {
 								if (e.key === 'Enter' || e.key === 'ArrowDown') {
 									e.preventDefault()

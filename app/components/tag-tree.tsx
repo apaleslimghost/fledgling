@@ -1,5 +1,5 @@
 import { ChevronRight } from '@gravity-ui/icons'
-import { Badge, Button, Chip, cn, Disclosure } from '@heroui/react'
+import { Button, Chip, cn, Disclosure } from '@heroui/react'
 import { useState } from 'react'
 import { TagTree, type TagWithNotes } from '~/lib/tag-tree'
 import { NavLink } from './link'
