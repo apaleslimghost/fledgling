@@ -29,7 +29,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 			</head>
 			<body>
 				<RxDatabaseProvider database={db as unknown as RxDatabase}>
-					<div className="flex bg-gray-100 h-dvh p-4 gap-4">
+					<div className="flex bg-mauve-100 h-dvh p-4 gap-4">
 						<Sidebar />
 
 						<div className="grow">{children}</div>

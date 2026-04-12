@@ -12,7 +12,7 @@ const NoteContent = ({ note }: { note: Note }) => {
 	}
 
 	return (
-		<article className="prose">
+		<article className="prose prose-mauve">
 			{renderToReactElement({
 				content,
 				extensions,
@@ -32,7 +32,7 @@ export default function NoteCard({ note }: { note: Note }) {
 			<Card.Header>
 				<Card.Title>
 					<Link to={`/note/${note.id}`}>
-						<h1 className={cn('text-2xl font-bold', { 'text-gray-500': !note.title })}>
+						<h1 className={cn('text-2xl font-bold', { 'text-mauve-500': !note.title })}>
 							{note.title ?? 'untitled note'}
 						</h1>
 					</Link>

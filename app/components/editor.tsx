@@ -87,7 +87,7 @@ export default forwardRef<Editor, Omit<EditorProviderProps, 'extensions'> & { id
 
 		return (
 			<Tiptap editor={editor}>
-				<Tiptap.Content className="prose" />
+				<Tiptap.Content className="prose prose-mauve" />
 				<FloatingMenu editor={editor}>
 					<Toolbar aria-label="Insert">
 						<ButtonGroup size="sm">
