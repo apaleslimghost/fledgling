@@ -1,3 +1,4 @@
+import { Chip } from '@heroui/react'
 import Document from '@tiptap/extension-document'
 import { Mention } from '@tiptap/extension-mention'
 import { Placeholder } from '@tiptap/extensions'
@@ -6,14 +7,25 @@ import {
 	generateText,
 	mergeAttributes,
 	Node,
+	NodeViewRendererProps,
+	NodeViewWrapper,
+	type ReactNodeViewProps,
+	ReactNodeViewRenderer,
 	Tiptap,
 	useEditor,
 } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 import Minisearch from 'minisearch'
-import { useEffect } from 'react'
-import type { Tag } from '~/lib/rx-types'
+import { useEffect, useMemo } from 'react'
+import {
+	type UseRxQueryOptions,
+	useLiveRxQuery,
+	useRxDatabase,
+	useRxQuery,
+} from 'rxdb/plugins/react'
+import type { Note, Tag } from '~/lib/rx-types'
 import database from '~/lib/rxdb'
+import Link from './link'
 import { makeSuggester } from './suggestion'
 
 const tagSearch = new Minisearch<Tag>({
@@ -46,14 +58,17 @@ const noteSearch = new Minisearch<NoteSuggestion>({
 	},
 })
 
+const getNoteTitle = (note?: Note) =>
+	note?.text?.content
+		?.find((node) => node.type === 'title')
+		?.content?.map((c) => c.text ?? '')
+		.join('')
+
 database.notes.find().$.subscribe((results) => {
 	noteSearch.removeAll()
 	noteSearch.addAllAsync(
 		results.flatMap((note) => {
-			const title = note.text?.content
-				?.find((node) => node.type === 'title')
-				?.content?.map((c) => c.text ?? '')
-				.join('')
+			const title = getNoteTitle(note)
 			if (!title) return []
 			return [{ id: note.id, title }]
 		}),
@@ -81,6 +96,77 @@ const Title = Node.create({
 	},
 })
 
+const NoteMentionView = (props: ReactNodeViewProps<HTMLAnchorElement>) => {
+	const mentionQuery: UseRxQueryOptions<Note> = useMemo(
+		() => ({
+			collection: database.notes,
+			query: {
+				selector: {
+					id: props.node.attrs.id,
+				},
+			},
+		}),
+		[props.node.attrs.id],
+	)
+
+	const {
+		results: [note],
+	} = useLiveRxQuery(mentionQuery)
+
+	const title = getNoteTitle(note)
+
+	return (
+		<MentionChip
+			href={`/note/${props.node.attrs.id}`}
+			char={props.node.attrs.mentionSuggestionChar}
+			label={title ?? props.node.attrs.label}
+			//@ts-expect-error what do you want me to do about this tiptap
+			ref={props.ref}
+			variant="secondary"
+		/>
+	)
+}
+
+const MentionChip = ({
+	href,
+	char,
+	label,
+	variant,
+	ref,
+}: {
+	href: string
+	char: string
+	label: string
+	variant?: 'primary' | 'secondary'
+	ref?: React.RefObject<HTMLAnchorElement>
+}) => {
+	return (
+		<NodeViewWrapper as="span">
+			<Link ref={ref} to={href}>
+				<Chip variant={variant} color="accent">
+					{char}
+					{label}
+				</Chip>
+			</Link>
+		</NodeViewWrapper>
+	)
+}
+
+const MentionView = (props: ReactNodeViewProps<HTMLAnchorElement>) => {
+	return props.node.attrs.mentionSuggestionChar === '#' ? (
+		<MentionChip
+			href={`/tag/${props.node.attrs.id}`}
+			char={props.node.attrs.mentionSuggestionChar}
+			label={props.node.attrs.id}
+			//@ts-expect-error what do you want me to do about this tiptap
+			ref={props.ref}
+			variant="primary"
+		/>
+	) : (
+		<NoteMentionView {...props} />
+	)
+}
+
 export const extensions = [
 	Title.configure(),
 	Document.extend({
@@ -92,7 +178,11 @@ export const extensions = [
 			levels: [2, 3, 4, 5, 6],
 		},
 	}),
-	Mention.configure({
+	Mention.extend({
+		addNodeView() {
+			return ReactNodeViewRenderer(MentionView)
+		},
+	}).configure({
 		suggestions: [
 			makeSuggester({
 				char: '#',
@@ -118,16 +208,6 @@ export const extensions = [
 				},
 			}),
 		],
-		renderHTML({ options, node }) {
-			return [
-				'a',
-				mergeAttributes(options.HTMLAttributes, {
-					class: `chip chip--accent ${node.attrs.mentionSuggestionChar === '#' ? 'chip--soft' : 'chip--secondary'}`,
-					href: `/${node.attrs.mentionSuggestionChar === '#' ? 'tag' : 'note'}/${node.attrs.id}`,
-				}),
-				`${node.attrs.mentionSuggestionChar}${node.attrs.label ?? node.attrs.id}`,
-			]
-		},
 	}),
 	Placeholder.configure({
 		placeholder: ({ node }) => {
