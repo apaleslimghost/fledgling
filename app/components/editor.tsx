@@ -3,7 +3,6 @@ import {
 	Bold,
 	Code,
 	Hashtag,
-	Heading,
 	Heading2,
 	Heading3,
 	Heading4,
@@ -21,6 +20,7 @@ import {
 	ToggleButtonGroup,
 	Toolbar,
 } from '@heroui/react'
+import type { FloatingMenuView } from '@tiptap/extension-floating-menu'
 import {
 	type Editor,
 	type EditorProviderProps,
@@ -85,7 +85,35 @@ export default function EditorComponent(
 	return (
 		<Tiptap editor={editor}>
 			<Tiptap.Content className="prose" />
-			<FloatingMenu editor={editor}>
+			<FloatingMenu
+				editor={editor}
+				shouldShow={function (this: FloatingMenuView, { state, view }) {
+					// logic copied from FloatingMenuView plus check for title
+					const { selection } = state
+					const { $anchor, empty } = selection
+					const isRootDepth = $anchor.depth === 1
+
+					const isEmptyTextBlock =
+						$anchor.parent.isTextblock &&
+						!$anchor.parent.type.spec.code &&
+						$anchor.parent.type.name !== 'title' &&
+						!$anchor.parent.textContent &&
+						$anchor.parent.childCount === 0 &&
+						!this['getTextContent']($anchor.parent)
+
+					if (
+						!view.hasFocus() ||
+						!empty ||
+						!isRootDepth ||
+						!isEmptyTextBlock ||
+						!this.editor.isEditable
+					) {
+						return false
+					}
+
+					return true
+				}}
+			>
 				<Toolbar aria-label="Insert">
 					<ButtonGroup size="sm">
 						<Button
