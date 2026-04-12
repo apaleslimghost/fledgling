@@ -25,7 +25,7 @@
 		"@tiptap/extensions": "^3.22.2",
 		"@tiptap/html": "^3.22.2",
 		"@tiptap/pm": "^3.22.2",
-		"@tiptap/react": "^3.22.2",
+		"@tiptap/react": "^3.22.3",
 		"@tiptap/starter-kit": "^3.22.2",
 		"@tiptap/static-renderer": "^3.22.3",
 		"@tiptap/suggestion": "^3.22.2",
