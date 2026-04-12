@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@heroui/styles";
+@plugin "@tailwindcss/typography";
 
 @theme {
 	--accent: var(--color-indigo-500);
@@ -25,4 +26,15 @@ div:has(> .tiptap) {
 
 .link.active[aria-current="page"] {
 	@apply text-accent;
+}
+
+@utility prose {
+	blockquote {
+		p {
+			&:first-of-type::before,
+			&:last-of-type::after {
+				content: none;
+			}
+		}
+	}
 }

@@ -58,7 +58,7 @@ const Title = Node.create({
 		return [
 			'h1',
 			mergeAttributes(HTMLAttributes, {
-				class: 'text-2xl font-bold',
+				class: 'text-3xl font-bold',
 			}),
 			0,
 		]
@@ -81,26 +81,6 @@ export const extensions = [
 		document: false,
 		heading: {
 			levels: [2, 3, 4, 5, 6],
-		},
-		orderedList: {
-			HTMLAttributes: {
-				class: 'list-decimal pl-7',
-			},
-		},
-		bulletList: {
-			HTMLAttributes: {
-				class: 'list-disc pl-7',
-			},
-		},
-		blockquote: {
-			HTMLAttributes: {
-				class: 'border-l-4 border-gray-300 pl-2',
-			},
-		},
-		horizontalRule: {
-			HTMLAttributes: {
-				class: 'mb-4',
-			},
 		},
 	}),
 	Mention.extend({

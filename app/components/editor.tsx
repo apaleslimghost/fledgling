@@ -84,7 +84,7 @@ export default function EditorComponent(
 
 	return (
 		<Tiptap editor={editor}>
-			<Tiptap.Content />
+			<Tiptap.Content className="prose" />
 			<FloatingMenu editor={editor}>
 				<Toolbar aria-label="Insert">
 					<ButtonGroup size="sm">
