@@ -60,7 +60,10 @@ export default function TagPage({ params }: Route.ComponentProps) {
 					</Breadcrumbs>
 				)}
 
-				<h1 className="text-4xl font-bold mb-6">{tagParts[tagParts.length - 1]}</h1>
+				<h1 className="text-4xl font-bold mb-6">
+					{tagParts.length === 1 ? '#' : ''}
+					{tagParts[tagParts.length - 1]}
+				</h1>
 			</header>
 
 			<NoteGrid notes={notes} className="grow" />
