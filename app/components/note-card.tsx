@@ -22,7 +22,7 @@ const NoteContent = ({ note }: { note: Note }) => {
 	}
 
 	return (
-		<article>
+		<article className="prose">
 			{renderToReactElement({
 				content,
 				extensions,
