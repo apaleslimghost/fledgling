@@ -10,7 +10,7 @@ import {
 import { Breadcrumbs, Button, Chip, Input, type Key, ListBox, Select, Table } from '@heroui/react'
 import { type ElementType, useMemo, useState } from 'react'
 import { redirect } from 'react-router'
-import { type UseRxQueryOptions, useLiveRxQuery, useRxQuery } from 'rxdb/plugins/react'
+import { type UseRxQueryOptions, useLiveRxQuery } from 'rxdb/plugins/react'
 import Link from '~/components/link'
 import NoteGrid from '~/components/note-grid'
 import type { Note, Property, Tag } from '~/lib/rx-types'
@@ -72,8 +72,6 @@ export default function TagPage({ params }: Route.ComponentProps) {
 	const {
 		results: [tag],
 	} = useLiveRxQuery(tagQuery)
-
-	console.log(tag)
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: array key list
 	const propertiesQuery: UseRxQueryOptions<Property> = useMemo(
@@ -168,11 +166,12 @@ export default function TagPage({ params }: Route.ComponentProps) {
 										aria-label="Property name"
 										value={newPropertyName}
 										onChange={(e) => setNewPropertyName(e.target.value)}
+										onKeyDown={(e) => e.stopPropagation()}
 									/>
 								</Table.Cell>
 								<Table.Cell>
 									<Select value={newPropertyType} onChange={setNewPropertyType}>
-										<Select.Trigger>
+										<Select.Trigger onKeyDown={(e) => e.stopPropagation()}>
 											<Select.Value />
 											<Select.Indicator />
 										</Select.Trigger>
@@ -204,6 +203,8 @@ export default function TagPage({ params }: Route.ComponentProps) {
 												type: types[newPropertyType]!.type,
 											})
 
+											// TODO the tag might not exist here since it could be a virtual
+											// tag page from a descendent, do an upsert i guess???
 											await tag?.modify((tag) => {
 												tag.properties = Array.from(new Set([...tag.properties, propertyId]))
 												return tag

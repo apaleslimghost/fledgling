@@ -11,8 +11,10 @@ export type Note = {
 	tags: string[]
 	title?: string
 	text?: JSONContent
-	propertyValues?: Record<string, Property['type']>
+	propertyValues?: Record<string, PropertyValue>
 }
+
+export type PropertyValue = string | number | boolean
 
 export type Property = {
 	id: string
