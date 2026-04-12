@@ -132,7 +132,7 @@ export default function NotePage(props: Route.ComponentProps) {
 						<input
 							value={note.title}
 							placeholder="Untitled note"
-							className="w-full"
+							className="w-full outline-none"
 							onKeyUp={(e) => {
 								if (e.key === 'Enter' || e.key === 'ArrowDown') {
 									e.preventDefault()

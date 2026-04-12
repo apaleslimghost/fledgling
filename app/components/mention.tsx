@@ -3,7 +3,6 @@ import type { Node } from '@tiptap/pm/model'
 import { type NodeType, NodeViewWrapper, type ReactNodeViewProps } from '@tiptap/react'
 import { useMemo } from 'react'
 import { type UseRxQueryOptions, useLiveRxQuery } from 'rxdb/plugins/react'
-import { getNoteTitle } from '~/lib/note'
 import type { Note } from '~/lib/rx-types'
 import database from '~/lib/rxdb'
 import Link from './link'
@@ -28,13 +27,11 @@ const NoteMentionView = (props: {
 		results: [note],
 	} = useLiveRxQuery(mentionQuery)
 
-	const title = getNoteTitle(note)
-
 	return (
 		<MentionChip
 			href={`/note/${props.node.attrs.id}`}
 			char={props.node.attrs.mentionSuggestionChar}
-			label={title ?? props.node.attrs.label}
+			label={note?.title ?? props.node.attrs.label}
 			//@ts-expect-error what do you want me to do about this tiptap
 			ref={props.ref}
 			variant="secondary"

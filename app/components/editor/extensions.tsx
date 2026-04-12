@@ -44,9 +44,8 @@ database.notes.find().$.subscribe((results) => {
 	noteSearch.removeAll()
 	noteSearch.addAllAsync(
 		results.flatMap((note) => {
-			const title = getNoteTitle(note)
-			if (!title) return []
-			return [{ id: note.id, title }]
+			if (!note.title) return []
+			return [{ id: note.id, title: note.title }]
 		}),
 	)
 })
