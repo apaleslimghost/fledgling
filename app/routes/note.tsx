@@ -77,7 +77,10 @@ function PropertyValueInput({
 					setValue(checked)
 					saveValue(checked)
 				}}
-				onKeyDown={(e) => e.stopPropagation()}
+				onKeyDown={(e) => {
+					e.nativeEvent.stopImmediatePropagation()
+					e.stopPropagation()
+				}}
 			>
 				<Checkbox.Control>
 					<Checkbox.Indicator />
@@ -98,7 +101,12 @@ function PropertyValueInput({
 			>
 				<NumberField.Group>
 					<NumberField.DecrementButton />
-					<NumberField.Input onKeyDown={(e) => e.stopPropagation()} />
+					<NumberField.Input
+						onKeyDown={(e) => {
+							e.nativeEvent.stopImmediatePropagation()
+							e.stopPropagation()
+						}}
+					/>
 					<NumberField.IncrementButton />
 				</NumberField.Group>
 			</NumberField>
@@ -117,7 +125,10 @@ function PropertyValueInput({
 				setValue(e.target.value)
 				saveValue(e.target.value)
 			}}
-			onKeyDown={(e) => e.stopPropagation()}
+			onKeyDown={(e) => {
+				e.stopPropagation()
+				e.nativeEvent.stopImmediatePropagation()
+			}}
 		/>
 	)
 }
