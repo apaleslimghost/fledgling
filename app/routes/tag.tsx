@@ -7,7 +7,8 @@ import {
 	SquareDashedText,
 	TrashBin,
 } from '@gravity-ui/icons'
-import { Breadcrumbs, Button, Chip, Input, type Key, ListBox, Select, Table } from '@heroui/react'
+import { Breadcrumbs, Button, Chip, Input, type Key, ListBox, Select } from '@heroui/react'
+import { tableVariants } from '@heroui/styles'
 import { type ElementType, useMemo, useState } from 'react'
 import { redirect } from 'react-router'
 import { type UseRxQueryOptions, useLiveRxQuery } from 'rxdb/plugins/react'
@@ -27,6 +28,8 @@ export async function clientLoader({ params }: Route.LoaderArgs) {
 		return redirect(`/tag/${path.slice(0, -1)}`)
 	}
 }
+
+const table = tableVariants({ variant: 'secondary' })
 
 const types: {
 	type: Property['type']
@@ -121,26 +124,28 @@ export default function TagPage({ params }: Route.ComponentProps) {
 					{tagParts[tagParts.length - 1]}
 				</h1>
 
-				<Table variant="secondary">
-					<Table.Content>
-						<Table.Header>
-							<Table.Column isRowHeader>Property</Table.Column>
-							<Table.Column>Type</Table.Column>
-							<Table.Column />
-						</Table.Header>
-						<Table.Body>
+				<div className={table.base()}>
+					<table className={table.content()}>
+						<thead className={table.header()}>
+							<tr>
+								<th className={table.column()}>Property</th>
+								<th className={table.column()}>Type</th>
+								<th className={table.column()} />
+							</tr>
+						</thead>
+						<tbody className={table.body()}>
 							{properties.map((property) => {
 								const type = types.find((t) => t.type === property.type)!
 								return (
-									<Table.Row key={property.id}>
-										<Table.Cell>{property.name}</Table.Cell>
-										<Table.Cell>
+									<tr key={property.id} className={table.row()}>
+										<td className={table.cell()}>{property.name}</td>
+										<td className={table.cell()}>
 											<Chip variant="secondary">
 												<type.icon />
 												{type.name}
 											</Chip>
-										</Table.Cell>
-										<Table.Cell>
+										</td>
+										<td className={table.cell()}>
 											<Button
 												isIconOnly
 												variant="danger-soft"
@@ -155,23 +160,22 @@ export default function TagPage({ params }: Route.ComponentProps) {
 											>
 												<TrashBin />
 											</Button>
-										</Table.Cell>
-									</Table.Row>
+										</td>
+									</tr>
 								)
 							})}
-							<Table.Row>
-								<Table.Cell>
+							<tr className={table.row()}>
+								<td className={table.cell()}>
 									<Input
 										placeholder="Name..."
 										aria-label="Property name"
 										value={newPropertyName}
 										onChange={(e) => setNewPropertyName(e.target.value)}
-										onKeyDown={(e) => e.stopPropagation()}
 									/>
-								</Table.Cell>
-								<Table.Cell>
+								</td>
+								<td className={table.cell()}>
 									<Select value={newPropertyType} onChange={setNewPropertyType}>
-										<Select.Trigger onKeyDown={(e) => e.stopPropagation()}>
+										<Select.Trigger>
 											<Select.Value />
 											<Select.Indicator />
 										</Select.Trigger>
@@ -187,8 +191,8 @@ export default function TagPage({ params }: Route.ComponentProps) {
 											</ListBox>
 										</Select.Popover>
 									</Select>
-								</Table.Cell>
-								<Table.Cell>
+								</td>
+								<td className={table.cell()}>
 									<Button
 										isIconOnly
 										variant="tertiary"
@@ -216,11 +220,11 @@ export default function TagPage({ params }: Route.ComponentProps) {
 									>
 										<Plus />
 									</Button>
-								</Table.Cell>
-							</Table.Row>
-						</Table.Body>
-					</Table.Content>
-				</Table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</header>
 
 			<NoteGrid notes={notes} className="grow" />

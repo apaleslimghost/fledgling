@@ -1,4 +1,5 @@
-import { Checkbox, Input, NumberField, ScrollShadow, Surface, Table } from '@heroui/react'
+import { Checkbox, Input, NumberField, ScrollShadow, Surface } from '@heroui/react'
+import { tableVariants } from '@heroui/styles'
 import { parseFormData, validationError } from '@rvf/react-router'
 import type { MentionNodeAttrs } from '@tiptap/extension-mention'
 import type { EditorEvents, JSONContent, Editor as TiptapEditor } from '@tiptap/react'
@@ -13,6 +14,8 @@ import PageTitle from '~/components/page-title'
 import type { Note, NoteDocument, Property } from '~/lib/rx-types'
 import database from '~/lib/rxdb'
 import type { Route } from './+types/note'
+
+const table = tableVariants({ variant: 'secondary' })
 
 const ActionSchema = z.object({
 	text: z.string().transform((text) => JSON.parse(text) as JSONContent),
@@ -77,10 +80,6 @@ function PropertyValueInput({
 					setValue(checked)
 					saveValue(checked)
 				}}
-				onKeyDown={(e) => {
-					e.nativeEvent.stopImmediatePropagation()
-					e.stopPropagation()
-				}}
 			>
 				<Checkbox.Control>
 					<Checkbox.Indicator />
@@ -101,12 +100,7 @@ function PropertyValueInput({
 			>
 				<NumberField.Group>
 					<NumberField.DecrementButton />
-					<NumberField.Input
-						onKeyDown={(e) => {
-							e.nativeEvent.stopImmediatePropagation()
-							e.stopPropagation()
-						}}
-					/>
+					<NumberField.Input />
 					<NumberField.IncrementButton />
 				</NumberField.Group>
 			</NumberField>
@@ -124,10 +118,6 @@ function PropertyValueInput({
 			onChange={(e) => {
 				setValue(e.target.value)
 				saveValue(e.target.value)
-			}}
-			onKeyDown={(e) => {
-				e.stopPropagation()
-				e.nativeEvent.stopImmediatePropagation()
 			}}
 		/>
 	)
@@ -291,24 +281,26 @@ export default function NotePage(props: Route.ComponentProps) {
 						/>
 					</h1>
 					{properties.length > 0 && (
-						<Table variant="secondary" className="my-4">
-							<Table.Content>
-								<Table.Header>
-									<Table.Column isRowHeader>Property</Table.Column>
-									<Table.Column>Value</Table.Column>
-								</Table.Header>
-								<Table.Body>
+						<div className={table.base({ class: 'my-4' })}>
+							<table className={table.content()}>
+								<thead className={table.header()}>
+									<tr>
+										<th className={table.column()}>Property</th>
+										<th className={table.column()}>Value</th>
+									</tr>
+								</thead>
+								<tbody className={table.body()}>
 									{properties.map((property) => (
-										<Table.Row key={property.id}>
-											<Table.Cell>{property.name}</Table.Cell>
-											<Table.Cell>
+										<tr key={property.id} className={table.row()}>
+											<td className={table.cell()}>{property.name}</td>
+											<td className={table.cell()}>
 												<PropertyValueInput note={note} property={property} />
-											</Table.Cell>
-										</Table.Row>
+											</td>
+										</tr>
 									))}
-								</Table.Body>
-							</Table.Content>
-						</Table>
+								</tbody>
+							</table>
+						</div>
 					)}
 					<Editor
 						id={note.id}
