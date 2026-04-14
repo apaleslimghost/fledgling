@@ -180,7 +180,7 @@ export default function TagPage({ params }: Route.ComponentProps) {
 										aria-label="Property type"
 									>
 										<Select.Trigger>
-											<Select.Value />
+											<Select.Value className="flex gap-2 items-center" />
 											<Select.Indicator />
 										</Select.Trigger>
 										<Select.Popover>
@@ -211,12 +211,17 @@ export default function TagPage({ params }: Route.ComponentProps) {
 												type: types[newPropertyType]!.type,
 											})
 
-											// TODO the tag might not exist here since it could be a virtual
-											// tag page from a descendent, do an upsert i guess???
-											await tag?.modify((tag) => {
-												tag.properties = Array.from(new Set([...tag.properties, propertyId]))
-												return tag
-											})
+											if (tag) {
+												await tag.modify((tag) => {
+													tag.properties = Array.from(new Set([...tag.properties, propertyId]))
+													return tag
+												})
+											} else {
+												await database.tags.insertIfNotExists({
+													path,
+													properties: [propertyId],
+												})
+											}
 
 											setNewPropertyName('')
 											setNewPropertyType(null)
