@@ -174,7 +174,11 @@ export default function TagPage({ params }: Route.ComponentProps) {
 									/>
 								</td>
 								<td className={table.cell()}>
-									<Select value={newPropertyType} onChange={setNewPropertyType}>
+									<Select
+										value={newPropertyType}
+										onChange={setNewPropertyType}
+										aria-label="Property type"
+									>
 										<Select.Trigger>
 											<Select.Value />
 											<Select.Indicator />
