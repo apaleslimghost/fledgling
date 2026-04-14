@@ -131,7 +131,7 @@ export async function clientAction({ request, params }: Route.ClientActionArgs) 
 	}
 
 	const tags = Array.from(collect<MentionNode>('mention', result.data.text)).flatMap((tag) =>
-		tag.attrs.id && tag.attrs.mentionSuggestionChar === '#' ? [tag.attrs.id] : [],
+		tag.attrs.mentionSuggestionChar === '#' && tag.attrs.label ? [tag.attrs.label as string] : [],
 	)
 
 	const note = await database.notes
@@ -147,9 +147,16 @@ export async function clientAction({ request, params }: Route.ClientActionArgs) 
 		tags,
 	})
 
+	const tagMentions = Array.from(collect<MentionNode>('mention', result.data.text)).filter(
+		(node) => node.attrs.mentionSuggestionChar === '#' && node.attrs.id && node.attrs.label,
+	)
 	await Promise.all(
-		Array.from(new Set(tags), (tag) =>
-			database.tags.insertIfNotExists({ path: tag, properties: [] }),
+		tagMentions.map((mention) =>
+			database.tags.insertIfNotExists({
+				id: mention.attrs.id as string,
+				path: mention.attrs.label as string,
+				properties: [],
+			}),
 		),
 	)
 
@@ -189,7 +196,7 @@ export default function NotePage(props: Route.ComponentProps) {
 	} = useLiveRxQuery(query)
 
 	const tags = Array.from(collect<MentionNode>('mention', note?.text ?? [])).flatMap((tag) =>
-		tag.attrs.id && tag.attrs.mentionSuggestionChar === '#' ? [tag.attrs.id] : [],
+		tag.attrs.mentionSuggestionChar === '#' && tag.attrs.label ? [tag.attrs.label as string] : [],
 	)
 
 	const tagsWithAncestors = tags.flatMap((tag) =>

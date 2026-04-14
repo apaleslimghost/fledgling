@@ -2,6 +2,7 @@ import type { JSONContent } from '@tiptap/react'
 import type { RxCollection, RxDocument, RxJsonSchema } from 'rxdb'
 
 export type Tag = {
+	id: string
 	path: string
 	properties: string[]
 }
@@ -25,12 +26,13 @@ export type Property = {
 export const tagSchema: RxJsonSchema<Tag> = {
 	type: 'object',
 	properties: {
+		id: { type: 'string', maxLength: 36 },
 		path: { type: 'string', maxLength: 100 },
 		properties: { type: 'array', items: { type: 'string' } },
 	},
-	required: ['path'],
-	version: 1,
-	primaryKey: 'path',
+	required: ['id', 'path'],
+	version: 2,
+	primaryKey: 'id',
 }
 
 export const noteSchema: RxJsonSchema<Note> = {

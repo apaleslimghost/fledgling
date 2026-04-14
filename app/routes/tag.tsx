@@ -217,7 +217,8 @@ export default function TagPage({ params }: Route.ComponentProps) {
 													return tag
 												})
 											} else {
-												await database.tags.insertIfNotExists({
+												await database.tags.insert({
+													id: crypto.randomUUID(),
 													path,
 													properties: [propertyId],
 												})

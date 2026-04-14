@@ -3,7 +3,7 @@ import type { Node } from '@tiptap/pm/model'
 import { type NodeType, NodeViewWrapper, type ReactNodeViewProps } from '@tiptap/react'
 import { useMemo } from 'react'
 import { type UseRxQueryOptions, useLiveRxQuery } from 'rxdb/plugins/react'
-import type { Note } from '~/lib/rx-types'
+import type { Note, Tag } from '~/lib/rx-types'
 import database from '~/lib/rxdb'
 import Link from './link'
 
@@ -39,6 +39,35 @@ const NoteMentionView = (props: {
 	)
 }
 
+const TagMentionView = (props: { node: Node; ref?: React.RefObject<HTMLAnchorElement | null> }) => {
+	const mentionQuery: UseRxQueryOptions<Tag> = useMemo(
+		() => ({
+			collection: database.tags,
+			query: {
+				selector: {
+					id: props.node.attrs.id,
+				},
+			},
+		}),
+		[props.node.attrs.id],
+	)
+
+	const {
+		results: [tag],
+	} = useLiveRxQuery(mentionQuery)
+
+	return (
+		<MentionChip
+			href={`/tag/${tag?.path ?? props.node.attrs.id}`}
+			char="#"
+			label={tag?.path ?? props.node.attrs.label}
+			//@ts-expect-error what do you want me to do about this tiptap
+			ref={props.ref}
+			variant="primary"
+		/>
+	)
+}
+
 const MentionChip = ({
 	href,
 	char,
@@ -69,14 +98,7 @@ export const MentionView = (props: {
 	ref?: React.RefObject<HTMLAnchorElement | null>
 }) => {
 	return props.node.attrs.mentionSuggestionChar === '#' ? (
-		<MentionChip
-			href={`/tag/${props.node.attrs.id}`}
-			char={props.node.attrs.mentionSuggestionChar}
-			label={props.node.attrs.id}
-			//@ts-expect-error what do you want me to do about this tiptap
-			ref={props.ref}
-			variant="primary"
-		/>
+		<TagMentionView {...props} />
 	) : (
 		<NoteMentionView {...props} />
 	)

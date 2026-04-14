@@ -1,10 +1,8 @@
-import Document from '@tiptap/extension-document'
 import { Mention } from '@tiptap/extension-mention'
 import { Placeholder } from '@tiptap/extensions'
-import { mergeAttributes, Node, ReactNodeViewRenderer } from '@tiptap/react'
+import { ReactNodeViewRenderer } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 import Minisearch from 'minisearch'
-import { getNoteTitle } from '~/lib/note'
 import type { Tag } from '~/lib/rx-types'
 import database from '~/lib/rxdb'
 import { MentionView } from '../mention'
@@ -12,7 +10,7 @@ import { makeSuggester } from '../suggestion'
 
 const tagSearch = new Minisearch<Tag>({
 	fields: ['path'],
-	storeFields: ['path'],
+	storeFields: ['path', 'id'],
 	idField: 'path',
 	tokenize: (text) => text.split('/'),
 	searchOptions: {
@@ -68,9 +66,11 @@ export const extensions = [
 					const tags = tagSearch.search(query)
 
 					return [
-						...(query && !tags.some((t) => t.path === query) ? [{ id: query, label: query }] : []),
+						...(query && !tags.some((t) => t.path === query)
+							? [{ id: crypto.randomUUID(), label: query }]
+							: []),
 						...tags.map((tag) => ({
-							id: tag.path,
+							id: tag.id,
 							label: tag.path,
 						})),
 					]

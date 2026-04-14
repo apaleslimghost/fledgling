@@ -43,6 +43,10 @@ await database.addCollections({
 				oldDoc.properties = []
 				return oldDoc
 			},
+			2: (oldDoc: Tag) => {
+				oldDoc.id = crypto.randomUUID()
+				return oldDoc
+			},
 		},
 	},
 	notes: {
