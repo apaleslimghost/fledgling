@@ -1,6 +1,6 @@
 import { Chip } from '@heroui/react'
 import type { Node } from '@tiptap/pm/model'
-import { type NodeType, NodeViewWrapper, type ReactNodeViewProps } from '@tiptap/react'
+import { NodeViewWrapper } from '@tiptap/react'
 import { useMemo } from 'react'
 import { type UseRxQueryOptions, useLiveRxQuery } from 'rxdb/plugins/react'
 import type { Note, Tag } from '~/lib/rx-types'
@@ -68,7 +68,7 @@ const TagMentionView = (props: { node: Node; ref?: React.RefObject<HTMLAnchorEle
 	)
 }
 
-const MentionChip = ({
+export const MentionChip = ({
 	href,
 	char,
 	label,

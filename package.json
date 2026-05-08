@@ -13,8 +13,8 @@
 	},
 	"dependencies": {
 		"@gravity-ui/icons": "^2.18.0",
-		"@heroui/react": "^3.0.2",
-		"@heroui/styles": "^3.0.2",
+		"@heroui/react": "^3.0.3",
+		"@heroui/styles": "^3.0.3",
 		"@react-router/node": "^7.0.0",
 		"@react-router/serve": "^7.0.0",
 		"@rvf/react": "^8.1.1",

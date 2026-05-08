@@ -1,15 +1,15 @@
 {
 	"include": ["**/*", "**/.server/**/*", "**/.client/**/*", ".react-router/types/**/*"],
 	"compilerOptions": {
-		"lib": ["DOM", "DOM.Iterable", "ES2022"],
+		"lib": ["DOM", "DOM.Iterable", "ES2023"],
 		"types": ["node", "vite/client"],
 		"rootDirs": [".", "./.react-router/types"],
 		"esModuleInterop": true,
 		"jsx": "react-jsx",
-		"module": "ES2022",
+		"module": "ES2023",
 		"moduleResolution": "Bundler",
 		"resolveJsonModule": true,
-		"target": "ES2022",
+		"target": "ES2023",
 		"strict": true,
 		"noUncheckedIndexedAccess": true,
 		"allowJs": true,

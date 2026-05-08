@@ -9,6 +9,7 @@ import {
 	Italic,
 	ListOl,
 	ListUl,
+	Magnifier,
 	Minus,
 	Underline,
 } from '@gravity-ui/icons'
@@ -106,6 +107,16 @@ export default forwardRef<Editor, Omit<EditorProviderProps, 'extensions'> & { id
 								onClick={() => editor.chain().focus().insertContent('#').run()}
 							>
 								<Hashtag />
+							</Button>
+							<Button
+								isIconOnly
+								variant="tertiary"
+								aria-label="Search view"
+								onClick={() => {
+									editor.chain().focus().insertSearch().run()
+								}}
+							>
+								<Magnifier />
 							</Button>
 						</ButtonGroup>
 						<Separator />

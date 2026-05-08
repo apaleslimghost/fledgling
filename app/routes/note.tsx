@@ -107,8 +107,12 @@ function PropertyValueInput({
 		)
 	}
 
-	if (property.type === 'tag' || property.type === 'note') {
-		// TODO: implement tag and note property inputs
+	if (property.type === 'note') {
+		return null
+	}
+
+	if (property.type === 'tag') {
+		// TODO: implement tag property input
 		return null
 	}
 

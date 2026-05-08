@@ -1,11 +1,11 @@
 import { Mention } from '@tiptap/extension-mention'
-import { Placeholder } from '@tiptap/extensions'
-import { ReactNodeViewRenderer } from '@tiptap/react'
+import { Node, ReactNodeViewRenderer } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 import Minisearch from 'minisearch'
 import type { Tag } from '~/lib/rx-types'
 import database from '~/lib/rxdb'
 import { MentionView } from '../mention'
+import SearchView from '../search-view'
 import { makeSuggester } from '../suggestion'
 
 const tagSearch = new Minisearch<Tag>({
@@ -48,6 +48,55 @@ database.notes.find().$.subscribe((results) => {
 	)
 })
 
+declare module '@tiptap/core' {
+	interface Commands<ReturnType> {
+		search: {
+			insertSearch: () => ReturnType
+		}
+	}
+}
+
+const SearchViewNode = Node.create({
+	name: 'search',
+	group: 'block',
+	atom: true,
+	selectable: false,
+	draggable: true,
+	isolating: true,
+	parseHTML() {
+		return [{ tag: 'div[data-type="search"]' }]
+	},
+	renderHTML({ HTMLAttributes }) {
+		return ['div', { 'data-type': 'search', ...HTMLAttributes }]
+	},
+	addNodeView() {
+		return ReactNodeViewRenderer(SearchView, {
+			stopEvent: () => {
+				return true
+			},
+		})
+	},
+	addCommands() {
+		return {
+			insertSearch:
+				() =>
+				({ commands }) => {
+					return commands.insertContent({ type: 'search' })
+				},
+		}
+	},
+	addAttributes() {
+		return {
+			query: {
+				default: null,
+			},
+			confirmed: {
+				default: false,
+			},
+		}
+	},
+})
+
 export const extensions = [
 	StarterKit.configure({
 		heading: {
@@ -87,12 +136,5 @@ export const extensions = [
 			}),
 		],
 	}),
-	Placeholder.configure({
-		placeholder: ({ node }) => {
-			if (node.type.name === 'title') {
-				return 'Untitled note'
-			}
-			return ''
-		},
-	}),
+	SearchViewNode,
 ]
