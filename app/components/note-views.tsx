@@ -1,5 +1,28 @@
-import { Circles3Plus, FileText, Gear, ListUl, Plus, Xmark } from '@gravity-ui/icons'
-import { Button, ButtonGroup, EmptyState, Tabs, ToggleButton, Toolbar } from '@heroui/react'
+import {
+	BarsAscendingAlignLeftArrowDown,
+	Circles3Plus,
+	Circles4Square,
+	FileText,
+	Funnel,
+	Gear,
+	LayoutCells,
+	LayoutColumns3,
+	LayoutHeaderCells,
+	ListUl,
+	Plus,
+	Xmark,
+} from '@gravity-ui/icons'
+import {
+	Button,
+	ButtonGroup,
+	Dropdown,
+	EmptyState,
+	Header,
+	Input,
+	Tabs,
+	ToggleButton,
+	Toolbar,
+} from '@heroui/react'
 import { Component, type ReactElement, useState } from 'react'
 import type { Note, View } from '~/lib/rx-types'
 import database from '~/lib/rxdb'
@@ -27,32 +50,118 @@ const ViewControls = ({
 	controls,
 	className,
 	onAddView,
+	onToggleSettings,
 }: {
 	controls?: ReactElement
 	className?: string
 	onAddView: (view: View) => void
+	onToggleSettings?: (state: boolean) => void
 }) => (
-	<ButtonGroup className={className}>
-		<Button
-			isIconOnly
-			size="sm"
-			variant="tertiary"
-			onClick={async () => {
-				const view = await database.collections.views.insert({
-					id: crypto.randomUUID(),
-					type: 'list',
-					name: '',
-				})
+	<div className={`flex gap-2 ${className}`}>
+		<ButtonGroup>
+			{onToggleSettings && (
+				<ToggleButton className="button" isIconOnly size="sm" onChange={onToggleSettings}>
+					<Gear />
+				</ToggleButton>
+			)}
 
-				onAddView(view)
-			}}
-		>
-			<Circles3Plus />
-		</Button>
+			<Button
+				isIconOnly={!!onToggleSettings}
+				size="sm"
+				variant="tertiary"
+				onClick={async () => {
+					const view = await database.collections.views.insert({
+						id: crypto.randomUUID(),
+						type: 'list',
+						name: '',
+					})
 
-		{controls}
-	</ButtonGroup>
+					onAddView(view)
+				}}
+			>
+				<Circles3Plus />
+				{!onToggleSettings && 'Add view'}
+			</Button>
+		</ButtonGroup>
+
+		{controls && <ButtonGroup>{controls}</ButtonGroup>}
+	</div>
 )
+
+const ViewSettings = ({ view }: { view: View }) => {
+	const [name, setName] = useState(view.name)
+	return (
+		<Toolbar isAttached className="shadow-sm mb-4">
+			<Input
+				className="rounded-full"
+				variant="secondary"
+				value={name}
+				onChange={(event) => {
+					setName(event.target.value)
+				}}
+				onBlur={() => {
+					database.collections.views.findOne({ selector: { id: view.id } }).patch({ name })
+				}}
+				placeholder="Untitled view"
+			/>
+			<ButtonGroup>
+				<Dropdown>
+					<Button variant="ghost">
+						<Circles4Square />
+						Type
+					</Button>
+					<Dropdown.Popover>
+						<Dropdown.Menu>
+							<Dropdown.Item>
+								<ListUl />
+								List
+							</Dropdown.Item>
+							<Dropdown.Section>
+								<Header>TODO</Header>
+								<Dropdown.Item isDisabled>
+									<LayoutCells />
+									Grid
+								</Dropdown.Item>
+								<Dropdown.Item isDisabled>
+									<LayoutHeaderCells />
+									Table
+								</Dropdown.Item>
+								<Dropdown.Item isDisabled>
+									<LayoutColumns3 />
+									Board
+								</Dropdown.Item>
+							</Dropdown.Section>
+						</Dropdown.Menu>
+					</Dropdown.Popover>
+				</Dropdown>
+
+				<Dropdown>
+					<Button variant="ghost">
+						<Funnel />
+						Filter
+					</Button>
+					<Dropdown.Popover>
+						<Dropdown.Menu>
+							<Dropdown.Item>TODO</Dropdown.Item>
+						</Dropdown.Menu>
+					</Dropdown.Popover>
+				</Dropdown>
+
+				<Dropdown>
+					<Button variant="ghost">
+						<BarsAscendingAlignLeftArrowDown />
+						Sort
+					</Button>
+					<Dropdown.Popover>
+						<Dropdown.Menu>
+							<Dropdown.Item>TODO</Dropdown.Item>
+						</Dropdown.Menu>
+					</Dropdown.Popover>
+				</Dropdown>
+			</ButtonGroup>
+		</Toolbar>
+	)
+}
 
 const viewTypes: Record<View['type'], ViewComponent> = {
 	list: ListView,
@@ -73,6 +182,8 @@ export default function NoteViews({
 	onAddView: (view: View) => void
 	onRemoveView: (view: View) => void
 }) {
+	const [showSettings, setShowSettings] = useState(false)
+
 	return views.length > 0 ? (
 		<Tabs className={className} variant="secondary">
 			<Tabs.ListContainer
@@ -80,7 +191,11 @@ export default function NoteViews({
 					<div {...props} className={`flex gap-4 ${props.className}`}>
 						{children}
 
-						<ViewControls controls={controls} onAddView={onAddView} />
+						<ViewControls
+							controls={controls}
+							onAddView={onAddView}
+							onToggleSettings={setShowSettings}
+						/>
 					</div>
 				)}
 			>
@@ -118,6 +233,7 @@ export default function NoteViews({
 				const ViewType = viewTypes[view.type]
 				return (
 					<Tabs.Panel key={view.id} id={view.id}>
+						{showSettings && <ViewSettings view={view} />}
 						<ViewType notes={notes} />
 					</Tabs.Panel>
 				)
@@ -125,7 +241,7 @@ export default function NoteViews({
 		</Tabs>
 	) : (
 		<>
-			<ViewControls controls={controls} onAddView={onAddView} />
+			<ViewControls controls={controls} onAddView={onAddView} className="float-end" />
 			<ListView notes={notes} />
 		</>
 	)

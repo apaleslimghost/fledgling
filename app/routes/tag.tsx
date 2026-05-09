@@ -116,7 +116,7 @@ export default function TagPage({ params }: Route.ComponentProps) {
 	const tagParts = path.split('/')
 
 	return (
-		<div className="h-full flex flex-col">
+		<div className="h-full">
 			<header>
 				{tagParts.length > 1 && (
 					<Breadcrumbs className="mb-4">
@@ -140,7 +140,7 @@ export default function TagPage({ params }: Route.ComponentProps) {
 					{tagParts[tagParts.length - 1]}
 				</h1>
 
-				<div className={table.base()}>
+				<div className={`${table.base()} mb-4`}>
 					<table className={table.content()}>
 						<thead className={table.header()}>
 							<tr>
