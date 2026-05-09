@@ -45,6 +45,16 @@ const types: {
 
 export default function TagPage({ params }: Route.ComponentProps) {
 	const path = params['*']
+	const pathParts = path.split('/')
+	const ancestorPaths = pathParts
+		.slice(0, -1)
+		.reduce(
+			(ancestors: string[], part) =>
+				ancestors.concat(
+					ancestors.length > 0 ? `${ancestors[ancestors.length - 1]}/${part}` : part,
+				),
+			[],
+		)
 
 	const notesQuery: UseRxQueryOptions<Note> = useMemo(
 		() => ({
@@ -77,18 +87,36 @@ export default function TagPage({ params }: Route.ComponentProps) {
 	} = useLiveRxQuery(tagQuery)
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: array key list
+	const ancestorsQuery: UseRxQueryOptions<Tag> = useMemo(
+		() => ({
+			collection: database.tags,
+			query: {
+				selector: {
+					path: { $in: ancestorPaths },
+				},
+			},
+		}),
+		[ancestorPaths.join(',')],
+	)
+	const { results: ancestors } = useLiveRxQuery(ancestorsQuery)
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: array key list
 	const propertiesQuery: UseRxQueryOptions<Property> = useMemo(
 		() => ({
 			collection: database.properties,
 			query: {
 				selector: {
 					id: {
-						$in: tag?.properties ?? [],
+						$in: tag?.properties,
 					},
 				},
 			},
 		}),
 		[tag?.properties.join(',')],
+	)
+
+	const ancestorViews = Array.from(
+		new Set([...(ancestors?.flatMap((a) => a.views) ?? []), ...(tag?.views ?? [])]),
 	)
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: array key list
@@ -98,12 +126,12 @@ export default function TagPage({ params }: Route.ComponentProps) {
 			query: {
 				selector: {
 					id: {
-						$in: tag?.views ?? [],
+						$in: ancestorViews ?? [],
 					},
 				},
 			},
 		}),
-		[tag?.views.join(',')],
+		[ancestorViews.join(',')],
 	)
 
 	const { results: notes } = useLiveRxQuery(notesQuery)
@@ -257,11 +285,20 @@ export default function TagPage({ params }: Route.ComponentProps) {
 			<NoteViews
 				notes={notes}
 				views={views}
-				onAddView={(view) => {
-					tag?.modify((t) => {
-						t.views.push(view.id)
-						return t
-					})
+				onAddView={async (view) => {
+					if (tag) {
+						await tag.modify((t) => {
+							t.views.push(view.id)
+							return tag
+						})
+					} else {
+						await database.tags.insert({
+							id: crypto.randomUUID(),
+							path,
+							properties: [],
+							views: [view.id],
+						})
+					}
 				}}
 				onRemoveView={(view) => {
 					tag?.modify((t) => {
