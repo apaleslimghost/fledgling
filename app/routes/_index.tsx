@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useRxQuery } from 'rxdb/plugins/react'
-import NoteGrid from '~/components/note-grid'
+import { ListView } from '~/components/note-views'
 import database from '~/lib/rxdb'
 
 export default function Index() {
@@ -14,5 +14,5 @@ export default function Index() {
 
 	const { results: notes } = useRxQuery(notesQuery)
 
-	return <NoteGrid notes={notes} className="h-full" />
+	return <ListView notes={notes} />
 }

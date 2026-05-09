@@ -12,6 +12,7 @@ import {
 	propertySchema,
 	type Tag,
 	tagSchema,
+	viewSchema,
 } from './rx-types'
 
 const ajv = getAjv()
@@ -47,6 +48,10 @@ await database.addCollections({
 				oldDoc.id = crypto.randomUUID()
 				return oldDoc
 			},
+			3: (oldDoc: Tag) => {
+				oldDoc.views = []
+				return oldDoc
+			},
 		},
 	},
 	notes: {
@@ -60,6 +65,7 @@ await database.addCollections({
 		},
 	},
 	properties: { schema: propertySchema },
+	views: { schema: viewSchema },
 })
 
 Object.assign(globalThis, { database })

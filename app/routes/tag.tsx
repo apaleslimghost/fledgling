@@ -13,8 +13,8 @@ import { type ElementType, useMemo, useState } from 'react'
 import { redirect } from 'react-router'
 import { type UseRxQueryOptions, useLiveRxQuery } from 'rxdb/plugins/react'
 import Link from '~/components/link'
-import NoteGrid from '~/components/note-grid'
-import type { Note, Property, Tag } from '~/lib/rx-types'
+import NoteViews from '~/components/note-views'
+import type { Note, Property, Tag, View } from '~/lib/rx-types'
 import database from '~/lib/rxdb'
 import type { Route } from './+types/tag'
 
@@ -91,8 +91,24 @@ export default function TagPage({ params }: Route.ComponentProps) {
 		[tag?.properties.join(',')],
 	)
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: array key list
+	const viewsQuery: UseRxQueryOptions<View> = useMemo(
+		() => ({
+			collection: database.views,
+			query: {
+				selector: {
+					id: {
+						$in: tag?.views ?? [],
+					},
+				},
+			},
+		}),
+		[tag?.views.join(',')],
+	)
+
 	const { results: notes } = useLiveRxQuery(notesQuery)
 	const { results: properties } = useLiveRxQuery(propertiesQuery)
+	const { results: views } = useLiveRxQuery(viewsQuery)
 
 	const [newPropertyName, setNewPropertyName] = useState('')
 	const [newPropertyType, setNewPropertyType] = useState<Key | null>(0)
@@ -221,6 +237,7 @@ export default function TagPage({ params }: Route.ComponentProps) {
 													id: crypto.randomUUID(),
 													path,
 													properties: [propertyId],
+													views: [],
 												})
 											}
 
@@ -237,7 +254,23 @@ export default function TagPage({ params }: Route.ComponentProps) {
 				</div>
 			</header>
 
-			<NoteGrid notes={notes} className="grow" />
+			<NoteViews
+				notes={notes}
+				views={views}
+				onAddView={(view) => {
+					tag?.modify((t) => {
+						t.views.push(view.id)
+						return t
+					})
+				}}
+				onRemoveView={(view) => {
+					tag?.modify((t) => {
+						t.views = t.views.filter((id) => id !== view.id)
+						return t
+					})
+				}}
+				className="grow p-4"
+			/>
 		</div>
 	)
 }

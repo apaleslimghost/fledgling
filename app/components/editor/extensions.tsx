@@ -93,6 +93,9 @@ const SearchViewNode = Node.create({
 			confirmed: {
 				default: false,
 			},
+			views: {
+				default: [],
+			},
 		}
 	},
 })

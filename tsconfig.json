@@ -6,7 +6,7 @@
 		"rootDirs": [".", "./.react-router/types"],
 		"esModuleInterop": true,
 		"jsx": "react-jsx",
-		"module": "ES2023",
+		"module": "esnext",
 		"moduleResolution": "Bundler",
 		"resolveJsonModule": true,
 		"target": "ES2023",

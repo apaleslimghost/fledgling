@@ -5,6 +5,7 @@ export type Tag = {
 	id: string
 	path: string
 	properties: string[]
+	views: string[]
 }
 
 export type Note = {
@@ -13,6 +14,12 @@ export type Note = {
 	title?: string
 	text?: JSONContent
 	propertyValues?: Record<string, PropertyValue>
+}
+
+export type View = {
+	id: string
+	type: 'list'
+	name: string
 }
 
 export type PropertyValue = string | number | boolean
@@ -29,9 +36,10 @@ export const tagSchema: RxJsonSchema<Tag> = {
 		id: { type: 'string', maxLength: 36 },
 		path: { type: 'string', maxLength: 100 },
 		properties: { type: 'array', items: { type: 'string' } },
+		views: { type: 'array', items: { type: 'string' } },
 	},
 	required: ['id', 'path'],
-	version: 2,
+	version: 3,
 	primaryKey: 'id',
 }
 
@@ -61,10 +69,23 @@ export const propertySchema: RxJsonSchema<Property> = {
 	primaryKey: 'id',
 }
 
+export const viewSchema: RxJsonSchema<View> = {
+	type: 'object',
+	properties: {
+		id: { type: 'string', maxLength: 100 },
+		name: { type: 'string', maxLength: 100 },
+		type: { type: 'string', enum: ['list'] },
+	},
+	required: ['id', 'type', 'name'],
+	version: 0,
+	primaryKey: 'id',
+}
+
 export type TagDocument = RxDocument<Tag>
 export type NoteDocument = RxDocument<Note>
 export type Collections = {
 	notes: RxCollection<Note>
 	tags: RxCollection<Tag>
 	properties: RxCollection<Property>
+	views: RxCollection<View>
 }

@@ -160,6 +160,7 @@ export async function clientAction({ request, params }: Route.ClientActionArgs) 
 				id: mention.attrs.id as string,
 				path: mention.attrs.label as string,
 				properties: [],
+				views: [],
 			}),
 		),
 	)
@@ -270,55 +271,57 @@ export default function NotePage(props: Route.ComponentProps) {
 	return (
 		<>
 			<PageTitle title={note?.title ?? 'Untitled note'} />
-			<Surface className="rounded-xl shadow-surface p-4 h-full">
+			<Surface className="rounded-xl shadow-surface p-8 h-full">
 				<ScrollShadow className="h-full">
-					<h1 className="text-3xl font-bold text-mauve-800">
-						<input
-							value={note.title ?? ''}
-							placeholder="Untitled note"
-							className="w-full outline-none"
-							autoComplete="none"
-							onKeyUp={(e) => {
-								if (e.key === 'Enter' || e.key === 'ArrowDown') {
-									e.preventDefault()
-									editorRef.current?.commands.focus()
-								}
-							}}
-							onChange={(e) => {
-								note?.patch({
-									title: e.target.value,
-								})
-							}}
-						/>
-					</h1>
-					{properties.length > 0 && (
-						<div className={table.base({ class: 'my-4' })}>
-							<table className={table.content()}>
-								<thead className={table.header()}>
-									<tr>
-										<th className={table.column()}>Property</th>
-										<th className={table.column()}>Value</th>
-									</tr>
-								</thead>
-								<tbody className={table.body()}>
-									{properties.map((property) => (
-										<tr key={property.id} className={table.row()}>
-											<td className={table.cell()}>{property.name}</td>
-											<td className={table.cell()}>
-												<PropertyValueInput note={note} property={property} />
-											</td>
+					<article className="max-w-[50em] mx-auto">
+						<h1 className="text-3xl font-bold text-mauve-800">
+							<input
+								value={note.title ?? ''}
+								placeholder="Untitled note"
+								className="w-full outline-none"
+								autoComplete="none"
+								onKeyUp={(e) => {
+									if (e.key === 'Enter' || e.key === 'ArrowDown') {
+										e.preventDefault()
+										editorRef.current?.commands.focus()
+									}
+								}}
+								onChange={(e) => {
+									note?.patch({
+										title: e.target.value,
+									})
+								}}
+							/>
+						</h1>
+						{properties.length > 0 && (
+							<div className={table.base({ class: 'my-4' })}>
+								<table className={table.content()}>
+									<thead className={table.header()}>
+										<tr>
+											<th className={table.column()}>Property</th>
+											<th className={table.column()}>Value</th>
 										</tr>
-									))}
-								</tbody>
-							</table>
-						</div>
-					)}
-					<Editor
-						id={note.id}
-						onUpdate={onTextChange}
-						content={note.text ?? undefined}
-						ref={editorRef}
-					/>
+									</thead>
+									<tbody className={table.body()}>
+										{properties.map((property) => (
+											<tr key={property.id} className={table.row()}>
+												<td className={table.cell()}>{property.name}</td>
+												<td className={table.cell()}>
+													<PropertyValueInput note={note} property={property} />
+												</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							</div>
+						)}
+						<Editor
+							id={note.id}
+							onUpdate={onTextChange}
+							content={note.text ?? undefined}
+							ref={editorRef}
+						/>
+					</article>
 				</ScrollShadow>
 			</Surface>
 		</>

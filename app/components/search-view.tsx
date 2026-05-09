@@ -19,8 +19,9 @@ import { NodeViewWrapper, type ReactNodeViewProps } from '@tiptap/react'
 import { useMemo, useState } from 'react'
 import type { MangoQuerySelector } from 'rxdb'
 import { useLiveRxQuery } from 'rxdb/plugins/react'
-import type { Note, Tag as TagRecord } from '~/lib/rx-types'
+import type { Note, Tag as TagRecord, View } from '~/lib/rx-types'
 import Link from './link'
+import NoteViews from './note-views'
 
 type Field = 'title' | 'text' | 'tags'
 type Operator = 'eq' | 'ne' | 'contains' | 'notContains' | 'startsWith' | 'notStartsWith'
@@ -167,7 +168,7 @@ export default function SearchView(props: ReactNodeViewProps) {
 	)
 
 	const selector = useMemo(() => buildSelector(rows), [rows])
-	const query = useMemo(
+	const notesQuery = useMemo(
 		() => ({
 			collection: 'notes',
 			query: {
@@ -177,8 +178,23 @@ export default function SearchView(props: ReactNodeViewProps) {
 		[selector],
 	)
 
+	const viewsQuery = useMemo(
+		() => ({
+			collection: 'views',
+			query: {
+				selector: {
+					id: {
+						$in: props.node.attrs.views ?? [],
+					},
+				},
+			},
+		}),
+		[props.node.attrs.views],
+	)
+
 	// TODO why does this keep switching back to the previous results?
-	const { results: notes } = useLiveRxQuery<Note>(query)
+	const { results: notes } = useLiveRxQuery<Note>(notesQuery)
+	const { results: views } = useLiveRxQuery<View>(viewsQuery)
 
 	function updateRow(index: number, updates: Partial<QueryRow>) {
 		setRows((prev) => prev.map((row, i) => (index === i ? { ...row, ...updates } : row)))
@@ -206,30 +222,31 @@ export default function SearchView(props: ReactNodeViewProps) {
 				contentEditable={false}
 			>
 				{props.node.attrs.confirmed ? (
-					<>
-						<Button
-							className="float-end"
-							variant="ghost"
-							isIconOnly
-							onClick={() => props.updateAttributes({ confirmed: false })}
-						>
-							<DatabaseMagnifier />
-						</Button>
-						{notes.length === 0 ? (
-							<EmptyState></EmptyState>
-						) : (
-							<ul>
-								{notes.map((note) => (
-									<li key={note.id}>
-										<Link to={`/note/${note.id}`}>
-											<FileText className="mr-1" />
-											{note.title}
-										</Link>
-									</li>
-								))}
-							</ul>
-						)}
-					</>
+					<NoteViews
+						notes={notes}
+						views={views}
+						onAddView={(view) =>
+							props.updateAttributes({
+								views: (props.node.attrs.views ?? []).concat(view.id),
+							})
+						}
+						onRemoveView={(view) => {
+							props.updateAttributes({
+								views: (props.node.attrs.views ?? []).filter((id: string) => id !== view.id),
+							})
+						}}
+						controls={
+							<Button
+								className="float-end"
+								variant="tertiary"
+								size="sm"
+								isIconOnly
+								onClick={() => props.updateAttributes({ confirmed: false })}
+							>
+								<DatabaseMagnifier />
+							</Button>
+						}
+					/>
 				) : (
 					<div className="flex flex-col gap-3">
 						{rows.map((row, index) => (
