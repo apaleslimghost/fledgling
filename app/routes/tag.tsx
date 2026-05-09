@@ -301,6 +301,7 @@ export default function TagPage({ params }: Route.ComponentProps) {
 					}
 				}}
 				onRemoveView={(view) => {
+					// TODO remove me from the tag that actually has it :/
 					tag?.modify((t) => {
 						t.views = t.views.filter((id) => id !== view.id)
 						return t
