@@ -65,7 +65,12 @@ await database.addCollections({
 		},
 	},
 	properties: { schema: propertySchema },
-	views: { schema: viewSchema },
+	views: {
+		schema: viewSchema,
+		migrationStrategies: {
+			1: (v) => v,
+		},
+	},
 })
 
 Object.assign(globalThis, { database })

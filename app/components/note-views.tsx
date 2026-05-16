@@ -10,6 +10,7 @@ import {
 	LayoutHeaderCells,
 	ListUl,
 	Plus,
+	Rectangles4,
 	Xmark,
 } from '@gravity-ui/icons'
 import {
@@ -88,8 +89,37 @@ const ViewControls = ({
 	</div>
 )
 
+const viewTypeLabels: Record<View['type'], React.FC<{ iconOnly?: boolean; className?: string }>> = {
+	list: ({ iconOnly, className }) => (
+		<>
+			<ListUl className={className} />
+			{!iconOnly && ' List'}
+		</>
+	),
+	grid: ({ iconOnly, className }) => (
+		<>
+			<Rectangles4 className={className} />
+			{!iconOnly && ' Grid'}
+		</>
+	),
+	table: ({ iconOnly, className }) => (
+		<>
+			<LayoutHeaderCells className={className} />
+			{!iconOnly && ' Table'}
+		</>
+	),
+	board: ({ iconOnly, className }) => (
+		<>
+			<LayoutColumns3 className={className} />
+			{!iconOnly && ' Board'}
+		</>
+	),
+}
+
 const ViewSettings = ({ view }: { view: View }) => {
 	const [name, setName] = useState(view.name)
+	const [type, setType] = useState(view.type)
+	const TypeLabelComponent = viewTypeLabels[type]
 	return (
 		<Toolbar isAttached className="shadow-sm mb-4">
 			<Input
@@ -107,30 +137,26 @@ const ViewSettings = ({ view }: { view: View }) => {
 			<ButtonGroup>
 				<Dropdown>
 					<Button variant="ghost">
-						<Circles4Square />
-						Type
+						<TypeLabelComponent />
 					</Button>
 					<Dropdown.Popover>
-						<Dropdown.Menu>
-							<Dropdown.Item>
-								<ListUl />
-								List
-							</Dropdown.Item>
-							<Dropdown.Section>
-								<Header>TODO</Header>
-								<Dropdown.Item isDisabled>
-									<LayoutCells />
-									Grid
-								</Dropdown.Item>
-								<Dropdown.Item isDisabled>
-									<LayoutHeaderCells />
-									Table
-								</Dropdown.Item>
-								<Dropdown.Item isDisabled>
-									<LayoutColumns3 />
-									Board
-								</Dropdown.Item>
-							</Dropdown.Section>
+						<Dropdown.Menu
+							onAction={(key) => {
+								const type = key as View['type']
+								setType(type)
+								database.collections.views.findOne({ selector: { id: view.id } }).patch({ type })
+							}}
+							selectedKeys={new Set([type])}
+						>
+							{(Object.keys(viewTypeLabels) as View['type'][]).map((type) => {
+								const TypeLabel = viewTypeLabels[type]
+								return (
+									<Dropdown.Item id={type} key={type}>
+										<TypeLabel />
+										<Dropdown.ItemIndicator />
+									</Dropdown.Item>
+								)
+							})}
 						</Dropdown.Menu>
 					</Dropdown.Popover>
 				</Dropdown>
@@ -165,6 +191,9 @@ const ViewSettings = ({ view }: { view: View }) => {
 
 const viewTypes: Record<View['type'], ViewComponent> = {
 	list: ListView,
+	grid: ListView,
+	table: ListView,
+	board: ListView,
 }
 
 export default function NoteViews({
@@ -200,32 +229,35 @@ export default function NoteViews({
 				)}
 			>
 				<Tabs.List>
-					{views.map((view) => (
-						<Tabs.Tab key={view.id} id={view.id} className="flex">
-							<ListUl className="mr-1" />
-							{view.name || 'Untitled view'}
-							<ToggleButton
-								isIconOnly
-								size="sm"
-								variant="ghost"
-								className="ml-auto"
-								onClick={async () => {
-									await database.collections.views
-										.findOne({
-											selector: {
-												id: view.id,
-											},
-										})
-										.remove()
+					{views.map((view) => {
+						const TypeIcon = viewTypeLabels[view.type]
+						return (
+							<Tabs.Tab key={view.id} id={view.id} className="flex">
+								<TypeIcon iconOnly className="mr-1" />
+								{view.name || 'Untitled view'}
+								<ToggleButton
+									isIconOnly
+									size="sm"
+									variant="ghost"
+									className="ml-auto"
+									onClick={async () => {
+										await database.collections.views
+											.findOne({
+												selector: {
+													id: view.id,
+												},
+											})
+											.remove()
 
-									onRemoveView(view)
-								}}
-							>
-								<Xmark />
-							</ToggleButton>
-							<Tabs.Indicator />
-						</Tabs.Tab>
-					))}
+										onRemoveView(view)
+									}}
+								>
+									<Xmark />
+								</ToggleButton>
+								<Tabs.Indicator />
+							</Tabs.Tab>
+						)
+					})}
 				</Tabs.List>
 			</Tabs.ListContainer>
 

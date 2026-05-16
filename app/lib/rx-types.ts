@@ -18,7 +18,7 @@ export type Note = {
 
 export type View = {
 	id: string
-	type: 'list'
+	type: 'list' | 'grid' | 'table' | 'board'
 	name: string
 }
 
@@ -74,10 +74,10 @@ export const viewSchema: RxJsonSchema<View> = {
 	properties: {
 		id: { type: 'string', maxLength: 100 },
 		name: { type: 'string', maxLength: 100 },
-		type: { type: 'string', enum: ['list'] },
+		type: { type: 'string', enum: ['list', 'grid', 'table', 'board'] },
 	},
 	required: ['id', 'type', 'name'],
-	version: 0,
+	version: 1,
 	primaryKey: 'id',
 }
 
