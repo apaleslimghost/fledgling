@@ -1,24 +1,21 @@
 import {
 	BarsAscendingAlignLeftArrowDown,
 	Circles3Plus,
-	Circles4Square,
 	FileText,
 	Funnel,
 	Gear,
-	LayoutCells,
 	LayoutColumns3,
 	LayoutHeaderCells,
 	ListUl,
-	Plus,
 	Rectangles4,
 	Xmark,
 } from '@gravity-ui/icons'
 import {
 	Button,
 	ButtonGroup,
+	Card,
 	Dropdown,
 	EmptyState,
-	Header,
 	Input,
 	Tabs,
 	ToggleButton,
@@ -28,8 +25,9 @@ import { Component, type ReactElement, useState } from 'react'
 import type { Note, View } from '~/lib/rx-types'
 import database from '~/lib/rxdb'
 import Link from './link'
+import NoteCard from './note-card'
 
-type ViewComponent = React.FC<{ notes: Note[] }>
+type ViewComponent = React.FC<{ notes: Note[]; inSurface?: boolean }>
 
 export const ListView: ViewComponent = ({ notes }) =>
 	notes.length === 0 ? (
@@ -46,6 +44,20 @@ export const ListView: ViewComponent = ({ notes }) =>
 			))}
 		</ul>
 	)
+
+const GridView: ViewComponent = ({ notes, inSurface }) => (
+	<div className="grid auto-fill-[16rem] gap-4">
+		{notes.length === 0 && (
+			<Card className={inSurface ? 'border shadow-xs' : undefined}>
+				<EmptyState />
+			</Card>
+		)}
+
+		{notes.map((note) => (
+			<NoteCard note={note} key={note.id} className={inSurface ? 'border shadow-xs' : undefined} />
+		))}
+	</div>
+)
 
 const ViewControls = ({
 	controls,
@@ -191,7 +203,7 @@ const ViewSettings = ({ view }: { view: View }) => {
 
 const viewTypes: Record<View['type'], ViewComponent> = {
 	list: ListView,
-	grid: ListView,
+	grid: GridView,
 	table: ListView,
 	board: ListView,
 }
@@ -201,6 +213,7 @@ export default function NoteViews({
 	views,
 	controls,
 	className,
+	inSurface,
 	onAddView,
 	onRemoveView,
 }: {
@@ -208,6 +221,7 @@ export default function NoteViews({
 	views: View[]
 	controls?: ReactElement
 	className?: string
+	inSurface?: boolean
 	onAddView: (view: View) => void
 	onRemoveView: (view: View) => void
 }) {
@@ -266,7 +280,7 @@ export default function NoteViews({
 				return (
 					<Tabs.Panel key={view.id} id={view.id}>
 						{showSettings && <ViewSettings view={view} />}
-						<ViewType notes={notes} />
+						<ViewType notes={notes} inSurface={inSurface} />
 					</Tabs.Panel>
 				)
 			})}

@@ -1,5 +1,6 @@
 import { Card, cn } from '@heroui/react'
 import { renderToReactElement } from '@tiptap/static-renderer'
+import type { ComponentProps } from 'react'
 import type { Note } from '~/lib/rx-types'
 import { extensions } from './editor/extensions'
 import Link from './link'
@@ -26,9 +27,12 @@ const NoteContent = ({ note }: { note: Note }) => {
 	)
 }
 
-export default function NoteCard({ note }: { note: Note }) {
+export default function NoteCard({
+	note,
+	...cardProps
+}: { note: Note } & Omit<ComponentProps<typeof Card>, 'children'>) {
 	return (
-		<Card>
+		<Card {...cardProps}>
 			<Card.Header>
 				<Card.Title>
 					<Link to={`/note/${note.id}`}>

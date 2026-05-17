@@ -20,7 +20,6 @@ import { useMemo, useState } from 'react'
 import type { MangoQuerySelector } from 'rxdb'
 import { useLiveRxQuery } from 'rxdb/plugins/react'
 import type { Note, Tag as TagRecord, View } from '~/lib/rx-types'
-import Link from './link'
 import NoteViews from './note-views'
 
 type Field = 'title' | 'text' | 'tags'
@@ -225,6 +224,7 @@ export default function SearchView(props: ReactNodeViewProps) {
 					<NoteViews
 						notes={notes}
 						views={views}
+						inSurface
 						onAddView={(view) =>
 							props.updateAttributes({
 								views: (props.node.attrs.views ?? []).concat(view.id),
