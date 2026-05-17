@@ -83,6 +83,8 @@ export const viewSchema: RxJsonSchema<View> = {
 
 export type TagDocument = RxDocument<Tag>
 export type NoteDocument = RxDocument<Note>
+export type ViewDocument = RxDocument<View>
+
 export type Collections = {
 	notes: RxCollection<Note>
 	tags: RxCollection<Tag>

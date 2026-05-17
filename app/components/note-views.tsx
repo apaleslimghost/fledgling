@@ -22,7 +22,7 @@ import {
 	Toolbar,
 } from '@heroui/react'
 import { Component, type ReactElement, useState } from 'react'
-import type { Note, View } from '~/lib/rx-types'
+import type { Note, View, ViewDocument } from '~/lib/rx-types'
 import database from '~/lib/rxdb'
 import Link from './link'
 import NoteCard from './note-card'
@@ -128,7 +128,7 @@ const viewTypeLabels: Record<View['type'], React.FC<{ iconOnly?: boolean; classN
 	),
 }
 
-const ViewSettings = ({ view }: { view: View }) => {
+const ViewSettings = ({ view }: { view: ViewDocument }) => {
 	const [name, setName] = useState(view.name)
 	const [type, setType] = useState(view.type)
 	const TypeLabelComponent = viewTypeLabels[type]
@@ -142,7 +142,7 @@ const ViewSettings = ({ view }: { view: View }) => {
 					setName(event.target.value)
 				}}
 				onBlur={() => {
-					database.collections.views.findOne({ selector: { id: view.id } }).patch({ name })
+					view.patch({ name })
 				}}
 				placeholder="Untitled view"
 			/>
@@ -156,7 +156,7 @@ const ViewSettings = ({ view }: { view: View }) => {
 							onAction={(key) => {
 								const type = key as View['type']
 								setType(type)
-								database.collections.views.findOne({ selector: { id: view.id } }).patch({ type })
+								view.patch({ type })
 							}}
 							selectedKeys={new Set([type])}
 						>
@@ -218,7 +218,7 @@ export default function NoteViews({
 	onRemoveView,
 }: {
 	notes: Note[]
-	views: View[]
+	views: ViewDocument[]
 	controls?: ReactElement
 	className?: string
 	inSurface?: boolean
@@ -255,14 +255,7 @@ export default function NoteViews({
 									variant="ghost"
 									className="ml-auto"
 									onClick={async () => {
-										await database.collections.views
-											.findOne({
-												selector: {
-													id: view.id,
-												},
-											})
-											.remove()
-
+										await view.remove()
 										onRemoveView(view)
 									}}
 								>
