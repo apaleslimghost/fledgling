@@ -5,6 +5,7 @@ import {
 	Button,
 	ButtonGroup,
 	Chip,
+	cn,
 	EmptyState,
 	Input,
 	Label,
@@ -217,14 +218,20 @@ export default function SearchView(props: ReactNodeViewProps) {
 		<NodeViewWrapper>
 			<Surface
 				variant="transparent"
-				className="p-4 rounded-xl border not-prose"
+				className={cn(
+					{
+						'p-4 rounded-xl border': !props.node.attrs.confirmed,
+						'border-l-2 pl-6': props.node.attrs.confirmed,
+					},
+					'not-prose',
+				)}
 				contentEditable={false}
 			>
 				{props.node.attrs.confirmed ? (
 					<NoteViews
 						notes={notes}
 						views={views}
-						inSurface
+						inEditor
 						onAddView={(view) =>
 							props.updateAttributes({
 								views: (props.node.attrs.views ?? []).concat(view.id),
@@ -237,9 +244,8 @@ export default function SearchView(props: ReactNodeViewProps) {
 						}}
 						controls={
 							<Button
-								className="float-end"
 								variant="tertiary"
-								size="sm"
+								className="button--xs"
 								isIconOnly
 								onClick={() => props.updateAttributes({ confirmed: false })}
 							>

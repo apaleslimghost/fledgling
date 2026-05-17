@@ -3,17 +3,18 @@ import {
 	Circles3Plus,
 	FileText,
 	Funnel,
-	Gear,
 	LayoutColumns3,
 	LayoutHeaderCells,
 	ListUl,
 	Rectangles4,
+	Sliders,
 	Xmark,
 } from '@gravity-ui/icons'
 import {
 	Button,
 	ButtonGroup,
 	Card,
+	cn,
 	Dropdown,
 	EmptyState,
 	Input,
@@ -21,13 +22,13 @@ import {
 	ToggleButton,
 	Toolbar,
 } from '@heroui/react'
-import { Component, type ReactElement, useState } from 'react'
+import React, { type ReactElement, useState } from 'react'
 import type { Note, View, ViewDocument } from '~/lib/rx-types'
 import database from '~/lib/rxdb'
 import Link from './link'
 import NoteCard from './note-card'
 
-type ViewComponent = React.FC<{ notes: Note[]; inSurface?: boolean }>
+type ViewComponent = React.FC<{ notes: Note[]; inEditor?: boolean }>
 
 export const ListView: ViewComponent = ({ notes }) =>
 	notes.length === 0 ? (
@@ -45,59 +46,70 @@ export const ListView: ViewComponent = ({ notes }) =>
 		</ul>
 	)
 
-const GridView: ViewComponent = ({ notes, inSurface }) => (
+const GridView: ViewComponent = ({ notes, inEditor }) => (
 	<div className="grid auto-fill-[16rem] gap-4">
 		{notes.length === 0 && (
-			<Card className={inSurface ? 'border shadow-xs' : undefined}>
+			<Card className={inEditor ? 'border shadow-xs' : undefined}>
 				<EmptyState />
 			</Card>
 		)}
 
 		{notes.map((note) => (
-			<NoteCard note={note} key={note.id} className={inSurface ? 'border shadow-xs' : undefined} />
+			<NoteCard note={note} key={note.id} className={inEditor ? 'border shadow-xs' : undefined} />
 		))}
 	</div>
 )
 
+const insertView = (onAddView: (view: ViewDocument) => void) => async () => {
+	const view = await database.collections.views.insert({
+		id: crypto.randomUUID(),
+		type: 'list',
+		name: '',
+	})
+
+	onAddView(view)
+}
+
 const ViewControls = ({
 	controls,
 	className,
+	inEditor,
 	onAddView,
 	onToggleSettings,
+	settingsShown,
 }: {
 	controls?: ReactElement
 	className?: string
+	inEditor?: boolean
+	settingsShown?: boolean
 	onAddView: (view: View) => void
-	onToggleSettings?: (state: boolean) => void
+	onToggleSettings: (state: boolean) => void
 }) => (
-	<div className={`flex gap-2 ${className}`}>
-		<ButtonGroup>
-			{onToggleSettings && (
-				<ToggleButton className="button" isIconOnly size="sm" onChange={onToggleSettings}>
-					<Gear />
-				</ToggleButton>
-			)}
+	<div className={`flex gap-2 ${inEditor ? 'flex-col' : 'flex-row'} ${className}`}>
+		{controls && (
+			<ButtonGroup orientation={inEditor ? 'vertical' : 'horizontal'}>{controls}</ButtonGroup>
+		)}
 
-			<Button
-				isIconOnly={!!onToggleSettings}
-				size="sm"
-				variant="tertiary"
-				onClick={async () => {
-					const view = await database.collections.views.insert({
-						id: crypto.randomUUID(),
-						type: 'list',
-						name: '',
-					})
-
-					onAddView(view)
-				}}
+		<ButtonGroup orientation={inEditor ? 'vertical' : 'horizontal'}>
+			<ToggleButton
+				className={cn('button', inEditor ? 'toggle-button--xs' : 'toggle-button--sm')}
+				isIconOnly
+				onChange={onToggleSettings}
+				isSelected={settingsShown}
 			>
-				<Circles3Plus />
-				{!onToggleSettings && 'Add view'}
-			</Button>
-		</ButtonGroup>
+				<Sliders />
+			</ToggleButton>
 
-		{controls && <ButtonGroup>{controls}</ButtonGroup>}
+			{!inEditor && (
+				<Button
+					className={cn('button', inEditor ? 'button--xs' : 'button--sm')}
+					variant="tertiary"
+					onClick={insertView(onAddView)}
+				>
+					<Circles3Plus />
+				</Button>
+			)}
+		</ButtonGroup>
 	</div>
 )
 
@@ -128,27 +140,29 @@ const viewTypeLabels: Record<View['type'], React.FC<{ iconOnly?: boolean; classN
 	),
 }
 
-const ViewSettings = ({ view }: { view: ViewDocument }) => {
+const ViewSettings = ({ view, inEditor }: { view: ViewDocument; inEditor?: boolean }) => {
 	const [name, setName] = useState(view.name)
 	const [type, setType] = useState(view.type)
 	const TypeLabelComponent = viewTypeLabels[type]
 	return (
 		<Toolbar isAttached className="shadow-sm mb-4">
-			<Input
-				className="rounded-full"
-				variant="secondary"
-				value={name}
-				onChange={(event) => {
-					setName(event.target.value)
-				}}
-				onBlur={() => {
-					view.patch({ name })
-				}}
-				placeholder="Untitled view"
-			/>
+			{!inEditor && (
+				<Input
+					className="rounded-full"
+					variant="secondary"
+					value={name}
+					onChange={(event) => {
+						setName(event.target.value)
+					}}
+					onBlur={() => {
+						view.patch({ name })
+					}}
+					placeholder="Untitled view"
+				/>
+			)}
 			<ButtonGroup>
 				<Dropdown>
-					<Button variant="ghost">
+					<Button variant="ghost" size={inEditor ? 'sm' : 'md'}>
 						<TypeLabelComponent />
 					</Button>
 					<Dropdown.Popover>
@@ -174,7 +188,7 @@ const ViewSettings = ({ view }: { view: ViewDocument }) => {
 				</Dropdown>
 
 				<Dropdown>
-					<Button variant="ghost">
+					<Button variant="ghost" size={inEditor ? 'sm' : 'md'}>
 						<Funnel />
 						Filter
 					</Button>
@@ -186,7 +200,7 @@ const ViewSettings = ({ view }: { view: ViewDocument }) => {
 				</Dropdown>
 
 				<Dropdown>
-					<Button variant="ghost">
+					<Button variant="ghost" size={inEditor ? 'sm' : 'md'}>
 						<BarsAscendingAlignLeftArrowDown />
 						Sort
 					</Button>
@@ -213,7 +227,7 @@ export default function NoteViews({
 	views,
 	controls,
 	className,
-	inSurface,
+	inEditor,
 	onAddView,
 	onRemoveView,
 }: {
@@ -221,66 +235,104 @@ export default function NoteViews({
 	views: ViewDocument[]
 	controls?: ReactElement
 	className?: string
-	inSurface?: boolean
+	inEditor?: boolean
 	onAddView: (view: View) => void
 	onRemoveView: (view: View) => void
 }) {
 	const [showSettings, setShowSettings] = useState(false)
 
 	return views.length > 0 ? (
-		<Tabs className={className} variant="secondary">
-			<Tabs.ListContainer
-				render={({ children, ...props }) => (
-					<div {...props} className={`flex gap-4 ${props.className}`}>
-						{children}
-
+		inEditor ? (
+			views.map((view) => {
+				const ViewType = viewTypes[view.type]
+				return (
+					<React.Fragment key={view.id}>
 						<ViewControls
 							controls={controls}
 							onAddView={onAddView}
+							inEditor={inEditor}
+							settingsShown={showSettings}
 							onToggleSettings={setShowSettings}
+							className="float-start -ml-9.25 bg-white pb-2"
 						/>
-					</div>
-				)}
-			>
-				<Tabs.List>
-					{views.map((view) => {
-						const TypeIcon = viewTypeLabels[view.type]
-						return (
-							<Tabs.Tab key={view.id} id={view.id} className="flex">
-								<TypeIcon iconOnly className="mr-1" />
-								{view.name || 'Untitled view'}
-								<ToggleButton
-									isIconOnly
-									size="sm"
-									variant="ghost"
-									className="ml-auto"
-									onClick={async () => {
-										await view.remove()
-										onRemoveView(view)
-									}}
-								>
-									<Xmark />
-								</ToggleButton>
-								<Tabs.Indicator />
-							</Tabs.Tab>
-						)
-					})}
-				</Tabs.List>
-			</Tabs.ListContainer>
 
-			{views.map((view) => {
-				const ViewType = viewTypes[view.type]
-				return (
-					<Tabs.Panel key={view.id} id={view.id}>
-						{showSettings && <ViewSettings view={view} />}
-						<ViewType notes={notes} inSurface={inSurface} />
-					</Tabs.Panel>
+						{showSettings && <ViewSettings view={view} inEditor={inEditor} />}
+						<ViewType notes={notes} inEditor={inEditor} />
+					</React.Fragment>
 				)
-			})}
-		</Tabs>
+			})
+		) : (
+			<Tabs className={className} variant="secondary">
+				<Tabs.ListContainer
+					render={({ children, ...props }) => (
+						<div {...props} className={`flex gap-4 ${props.className}`}>
+							{children}
+
+							<ViewControls
+								controls={controls}
+								inEditor={inEditor}
+								settingsShown={showSettings}
+								onAddView={onAddView}
+								onToggleSettings={setShowSettings}
+							/>
+						</div>
+					)}
+				>
+					<Tabs.List>
+						{views.map((view) => {
+							const TypeIcon = viewTypeLabels[view.type]
+							return (
+								<Tabs.Tab key={view.id} id={view.id} className="flex">
+									<TypeIcon iconOnly className="mr-1" />
+									{view.name || 'Untitled view'}
+									<ToggleButton
+										isIconOnly
+										size="sm"
+										variant="ghost"
+										className="ml-auto"
+										onClick={async () => {
+											await view.remove()
+											onRemoveView(view)
+											setShowSettings(false)
+										}}
+									>
+										<Xmark />
+									</ToggleButton>
+									<Tabs.Indicator />
+								</Tabs.Tab>
+							)
+						})}
+					</Tabs.List>
+				</Tabs.ListContainer>
+
+				{views.map((view) => {
+					const ViewType = viewTypes[view.type]
+					return (
+						<Tabs.Panel key={view.id} id={view.id}>
+							{showSettings && <ViewSettings view={view} inEditor={inEditor} />}
+							<ViewType notes={notes} inEditor={inEditor} />
+						</Tabs.Panel>
+					)
+				})}
+			</Tabs>
+		)
 	) : (
 		<>
-			<ViewControls controls={controls} onAddView={onAddView} className="float-end" />
+			<Toolbar className="shadow-sm mb-4" isAttached>
+				<ViewControls
+					controls={controls}
+					onAddView={onAddView}
+					inEditor={inEditor}
+					settingsShown={showSettings}
+					onToggleSettings={async (show) => {
+						if (show) {
+							await insertView(onAddView)()
+						}
+
+						setShowSettings(show)
+					}}
+				/>
+			</Toolbar>
 			<ListView notes={notes} />
 		</>
 	)
