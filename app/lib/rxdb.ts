@@ -12,6 +12,7 @@ import {
 	propertySchema,
 	type Tag,
 	tagSchema,
+	type View,
 	viewSchema,
 } from './rx-types'
 
@@ -69,6 +70,14 @@ await database.addCollections({
 		schema: viewSchema,
 		migrationStrategies: {
 			1: (v) => v,
+			2: (v: View) => {
+				v.display = []
+				return v
+			},
+			3: (v: View) => {
+				v.display = []
+				return v
+			},
 		},
 	},
 })

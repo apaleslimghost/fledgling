@@ -20,6 +20,7 @@ export type View = {
 	id: string
 	type: 'list' | 'grid' | 'table' | 'board'
 	name: string
+	display: string[]
 }
 
 export type PropertyValue = string | number | boolean
@@ -75,9 +76,10 @@ export const viewSchema: RxJsonSchema<View> = {
 		id: { type: 'string', maxLength: 100 },
 		name: { type: 'string', maxLength: 100 },
 		type: { type: 'string', enum: ['list', 'grid', 'table', 'board'] },
+		display: { type: 'array', items: { type: 'string' } },
 	},
-	required: ['id', 'type', 'name'],
-	version: 1,
+	required: ['id', 'type', 'name', 'display'],
+	version: 3,
 	primaryKey: 'id',
 }
 

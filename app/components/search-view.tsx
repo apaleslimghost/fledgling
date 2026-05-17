@@ -220,10 +220,10 @@ export default function SearchView(props: ReactNodeViewProps) {
 				variant="transparent"
 				className={cn(
 					{
-						'p-4 rounded-xl border': !props.node.attrs.confirmed,
-						'border-l-2 pl-6': props.node.attrs.confirmed,
+						'pl-4': !props.node.attrs.confirmed,
+						'pl-6': props.node.attrs.confirmed,
 					},
-					'not-prose',
+					'not-prose border-l-2',
 				)}
 				contentEditable={false}
 			>

@@ -1,19 +1,13 @@
-import {
-	At,
-	CopyCheckXmark,
-	FontCursor,
-	Hashtag,
-	Plus,
-	SquareDashedText,
-	TrashBin,
-} from '@gravity-ui/icons'
+import { Plus, TrashBin } from '@gravity-ui/icons'
 import { Breadcrumbs, Button, Chip, Input, type Key, ListBox, Select } from '@heroui/react'
 import { tableVariants } from '@heroui/styles'
-import { type ElementType, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { redirect } from 'react-router'
 import { type UseRxQueryOptions, useLiveRxQuery } from 'rxdb/plugins/react'
+import { property } from 'zod/v4'
 import Link from '~/components/link'
 import NoteViews from '~/components/note-views'
+import { propertyTypes } from '~/components/properties'
 import type { Note, Property, Tag, View } from '~/lib/rx-types'
 import database from '~/lib/rxdb'
 import type { Route } from './+types/tag'
@@ -30,18 +24,6 @@ export async function clientLoader({ params }: Route.LoaderArgs) {
 }
 
 const table = tableVariants({ variant: 'secondary' })
-
-const types: {
-	type: Property['type']
-	name: string
-	icon: ElementType
-}[] = [
-	{ type: 'text', name: 'Text', icon: SquareDashedText },
-	{ type: 'number', name: 'Number', icon: FontCursor },
-	{ type: 'boolean', name: 'Boolean', icon: CopyCheckXmark },
-	{ type: 'tag', name: 'Tag', icon: Hashtag },
-	{ type: 'note', name: 'Note', icon: At },
-]
 
 export default function TagPage({ params }: Route.ComponentProps) {
 	const path = params['*']
@@ -110,6 +92,7 @@ export default function TagPage({ params }: Route.ComponentProps) {
 						$in: tag?.properties,
 					},
 				},
+				sort: [{ name: 'asc' }],
 			},
 		}),
 		[tag?.properties.join(',')],
@@ -179,7 +162,7 @@ export default function TagPage({ params }: Route.ComponentProps) {
 						</thead>
 						<tbody className={table.body()}>
 							{properties.map((property) => {
-								const type = types.find((t) => t.type === property.type)!
+								const type = propertyTypes.find((t) => t.type === property.type)!
 								return (
 									<tr key={property.id} className={table.row()}>
 										<td className={table.cell()}>{property.name}</td>
@@ -229,7 +212,7 @@ export default function TagPage({ params }: Route.ComponentProps) {
 										</Select.Trigger>
 										<Select.Popover>
 											<ListBox>
-												{types.map((type, index) => (
+												{propertyTypes.map((type, index) => (
 													<ListBox.Item key={type.type} textValue={type.type} id={index}>
 														<type.icon />
 														{type.name}
@@ -252,7 +235,7 @@ export default function TagPage({ params }: Route.ComponentProps) {
 											await database.properties.insert({
 												id: propertyId,
 												name: newPropertyName,
-												type: types[newPropertyType]!.type,
+												type: propertyTypes[newPropertyType]!.type,
 											})
 
 											if (tag) {

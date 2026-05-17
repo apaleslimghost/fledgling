@@ -2,52 +2,85 @@ import {
 	BarsAscendingAlignLeftArrowDown,
 	Circles3Plus,
 	FileText,
-	Funnel,
+	Hashtag,
 	LayoutColumns3,
 	LayoutHeaderCells,
 	ListUl,
 	Rectangles4,
+	Shapes4,
 	Sliders,
+	SquareDashedLetterT,
 	Xmark,
 } from '@gravity-ui/icons'
 import {
 	Button,
 	ButtonGroup,
 	Card,
+	Chip,
 	cn,
 	Dropdown,
 	EmptyState,
+	Header,
 	Input,
+	Separator,
 	Tabs,
 	ToggleButton,
 	Toolbar,
+	tableVariants,
 } from '@heroui/react'
-import React, { type ReactElement, useState } from 'react'
-import type { Note, View, ViewDocument } from '~/lib/rx-types'
+import React, { type ReactElement, useMemo, useState } from 'react'
+import { type UseRxQueryOptions, useLiveRxQuery } from 'rxdb/plugins/react'
+import type { Note, Property, Tag, View, ViewDocument } from '~/lib/rx-types'
 import database from '~/lib/rxdb'
 import Link from './link'
 import NoteCard from './note-card'
+import { propertyTypes } from './properties'
 
-type ViewComponent = React.FC<{ notes: Note[]; inEditor?: boolean }>
+type ViewComponent = React.FC<{
+	notes: Note[]
+	view?: View
+	inEditor?: boolean
+}>
 
-export const ListView: ViewComponent = ({ notes }) =>
+export const ListView: ViewComponent = ({ notes, view }) =>
 	notes.length === 0 ? (
 		<EmptyState />
 	) : (
 		<ul>
 			{notes.map((note) => (
-				<li key={note.id}>
+				<li key={note.id} className="flex gap-1 my-1">
 					<Link to={`/note/${note.id}`}>
 						<FileText className="mr-1" />
 						{note.title}
 					</Link>
+
+					{view?.display && view.display.length > 0 && (
+						<div className="ml-auto text-sm flex gap-1">
+							{view.display.map((field, index) => {
+								const value =
+									field === 'tags' ? (
+										<Chip key="tags">TODO tags</Chip>
+									) : (
+										note.propertyValues?.[field]
+									)
+								return (
+									<>
+										{value}
+										{value && index !== view.display.length - 1 && (
+											<Separator orientation="vertical" />
+										)}
+									</>
+								)
+							})}
+						</div>
+					)}
 				</li>
 			))}
 		</ul>
 	)
 
 const GridView: ViewComponent = ({ notes, inEditor }) => (
-	<div className="grid auto-fill-[16rem] gap-4">
+	<div className="grid auto-fit-[16rem] gap-4">
 		{notes.length === 0 && (
 			<Card className={inEditor ? 'border shadow-xs' : undefined}>
 				<EmptyState />
@@ -60,11 +93,103 @@ const GridView: ViewComponent = ({ notes, inEditor }) => (
 	</div>
 )
 
+const table = tableVariants({ variant: 'secondary' })
+
+const PropertyHeader = ({ field }: { field: string }) => {
+	const propertyQuery: UseRxQueryOptions<Property> = useMemo(
+		() => ({
+			collection: database.properties,
+			query: {
+				selector: {
+					id: field,
+				},
+			},
+		}),
+		[field],
+	)
+	const {
+		results: [property],
+	} = useLiveRxQuery(propertyQuery)
+	const type = propertyTypes.find((t) => t.type === property?.type)
+
+	return (
+		<th key={field} className={table.column()}>
+			{field === 'title' ? (
+				'Title'
+			) : field === 'tags' ? (
+				<span className="flex gap-1">
+					<Hashtag />
+					Tags
+				</span>
+			) : field === 'content' ? (
+				<span className="flex gap-1">
+					<FileText />
+					Content
+				</span>
+			) : property ? (
+				<span className="flex gap-1">
+					{type && <type.icon />}
+					{property.name}
+				</span>
+			) : null}
+		</th>
+	)
+}
+
+const PropertyCell = ({ field, note }: { field: string; note: Note }) => {
+	return (
+		<td className={table.cell()}>
+			{field === 'title' ? (
+				<Link to={`/note/${note.id}`}>
+					<FileText className="mr-1" />
+					{note.title}
+				</Link>
+			) : field === 'tags' ? (
+				<>TODO tags</>
+			) : field === 'content' ? (
+				<>TODO content</>
+			) : note.propertyValues && field in note.propertyValues ? (
+				note.propertyValues[field]
+			) : (
+				<EmptyState className="p-0 italic">No value</EmptyState>
+			)}
+		</td>
+	)
+}
+
+const TableView: ViewComponent = ({ notes, view }) => {
+	return (
+		<div className={table.base({ class: 'my-4' })}>
+			<table className={table.content()}>
+				<thead className={table.header()}>
+					<tr>
+						<PropertyHeader field="title" />
+						{view?.display?.map((field) => (
+							<PropertyHeader field={field} key={field} />
+						))}
+					</tr>
+				</thead>
+				<tbody className={table.body()}>
+					{notes.map((note) => (
+						<tr key={note.id} className={table.row()}>
+							<PropertyCell field="title" note={note} />
+							{view?.display?.map((field) => (
+								<PropertyCell field={field} note={note} key={field} />
+							))}
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</div>
+	)
+}
+
 const insertView = (onAddView: (view: ViewDocument) => void) => async () => {
 	const view = await database.collections.views.insert({
 		id: crypto.randomUUID(),
 		type: 'list',
 		name: '',
+		display: [],
 	})
 
 	onAddView(view)
@@ -143,7 +268,24 @@ const viewTypeLabels: Record<View['type'], React.FC<{ iconOnly?: boolean; classN
 const ViewSettings = ({ view, inEditor }: { view: ViewDocument; inEditor?: boolean }) => {
 	const [name, setName] = useState(view.name)
 	const [type, setType] = useState(view.type)
+	const [display, setDisplay] = useState(new Set(['title', ...view.display]))
+
+	// TODO only query properties that notes actually have
+	const propertyQuery: UseRxQueryOptions<Property> = useMemo(
+		() => ({
+			collection: database.properties,
+			query: {
+				selector: {},
+				sort: [{ name: 'asc' }],
+			},
+		}),
+		[],
+	)
+
+	const { results: properties } = useLiveRxQuery(propertyQuery)
+
 	const TypeLabelComponent = viewTypeLabels[type]
+
 	return (
 		<Toolbar isAttached className="shadow-sm mb-4">
 			{!inEditor && (
@@ -189,12 +331,59 @@ const ViewSettings = ({ view, inEditor }: { view: ViewDocument; inEditor?: boole
 
 				<Dropdown>
 					<Button variant="ghost" size={inEditor ? 'sm' : 'md'}>
-						<Funnel />
-						Filter
+						<Shapes4 />
+						Display
 					</Button>
 					<Dropdown.Popover>
-						<Dropdown.Menu>
-							<Dropdown.Item>TODO</Dropdown.Item>
+						<Dropdown.Menu
+							selectionMode="multiple"
+							selectedKeys={display}
+							onAction={(key) => {
+								const property = key as string
+								if (display.has(property)) {
+									display.delete(property)
+								} else {
+									display.add(property)
+								}
+
+								setDisplay(new Set(display))
+								view.patch({
+									display: [...display].slice(1),
+								})
+							}}
+						>
+							<Dropdown.Item isDisabled id="title">
+								<SquareDashedLetterT />
+								Title
+								<Dropdown.ItemIndicator />
+							</Dropdown.Item>
+							<Dropdown.Item id="tags">
+								<Hashtag />
+								Tags
+								<Dropdown.ItemIndicator />
+							</Dropdown.Item>
+							<Dropdown.Item id="content">
+								<FileText />
+								Content
+								<Dropdown.ItemIndicator />
+							</Dropdown.Item>
+
+							{properties.length > 0 && (
+								<Dropdown.Section>
+									<Header>Properties</Header>
+
+									{properties.map((property) => {
+										const type = propertyTypes.find((t) => t.type === property.type)!
+										return (
+											<Dropdown.Item key={property.id} id={property.id}>
+												<type.icon />
+												{property.name}
+												<Dropdown.ItemIndicator />
+											</Dropdown.Item>
+										)
+									})}
+								</Dropdown.Section>
+							)}
 						</Dropdown.Menu>
 					</Dropdown.Popover>
 				</Dropdown>
@@ -218,7 +407,7 @@ const ViewSettings = ({ view, inEditor }: { view: ViewDocument; inEditor?: boole
 const viewTypes: Record<View['type'], ViewComponent> = {
 	list: ListView,
 	grid: GridView,
-	table: ListView,
+	table: TableView,
 	board: ListView,
 }
 
@@ -257,7 +446,7 @@ export default function NoteViews({
 						/>
 
 						{showSettings && <ViewSettings view={view} inEditor={inEditor} />}
-						<ViewType notes={notes} inEditor={inEditor} />
+						<ViewType notes={notes} inEditor={inEditor} view={view} />
 					</React.Fragment>
 				)
 			})
