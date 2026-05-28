@@ -33,6 +33,7 @@ import { type UseRxQueryOptions, useLiveRxQuery } from 'rxdb/plugins/react'
 import type { Note, Property, Tag, View, ViewDocument } from '~/lib/rx-types'
 import database from '~/lib/rxdb'
 import Link from './link'
+import { MentionChip, MentionView } from './mention'
 import NoteCard from './note-card'
 import { propertyTypes } from './properties'
 
@@ -49,26 +50,31 @@ export const ListView: ViewComponent = ({ notes, view }) =>
 		<ul>
 			{notes.map((note) => (
 				<li key={note.id} className="flex gap-1 my-1">
-					<Link to={`/note/${note.id}`}>
+					<Link to={`/note/${note.id}`} className="whitespace-nowrap">
 						<FileText className="mr-1" />
 						{note.title}
 					</Link>
 
 					{view?.display && view.display.length > 0 && (
-						<div className="ml-auto text-sm flex gap-1">
+						<div className="ml-auto text-sm flex flex-wrap gap-x-4 justify-end">
 							{view.display.map((field, index) => {
 								const value =
-									field === 'tags' ? (
-										<Chip key="tags">TODO tags</Chip>
-									) : (
-										note.propertyValues?.[field]
-									)
-								return (
-									<>
-										{value && index !== 0 && <Separator orientation="vertical" />}
+									field === 'tags'
+										? note.tags.map((tag) => (
+												<MentionChip
+													key={tag}
+													href={`/tag/${tag}`}
+													char="#"
+													label={tag}
+													variant="secondary"
+												/>
+											))
+										: note.propertyValues?.[field]
+								return value ? (
+									<div className="flex gap-x-1" key={field}>
 										{value}
-									</>
-								)
+									</div>
+								) : null
 							})}
 						</div>
 					)}

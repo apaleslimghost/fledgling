@@ -28,14 +28,16 @@ const NoteMentionView = (props: {
 	} = useLiveRxQuery(mentionQuery)
 
 	return (
-		<MentionChip
-			href={`/note/${props.node.attrs.id}`}
-			char={props.node.attrs.mentionSuggestionChar}
-			label={note?.title ?? props.node.attrs.label}
-			//@ts-expect-error what do you want me to do about this tiptap
-			ref={props.ref}
-			variant="secondary"
-		/>
+		<NodeViewWrapper as="span">
+			<MentionChip
+				href={`/note/${props.node.attrs.id}`}
+				char={props.node.attrs.mentionSuggestionChar}
+				label={note?.title ?? props.node.attrs.label}
+				//@ts-expect-error what do you want me to do about this tiptap
+				ref={props.ref}
+				variant="secondary"
+			/>
+		</NodeViewWrapper>
 	)
 }
 
@@ -57,14 +59,16 @@ const TagMentionView = (props: { node: Node; ref?: React.RefObject<HTMLAnchorEle
 	} = useLiveRxQuery(mentionQuery)
 
 	return (
-		<MentionChip
-			href={`/tag/${tag?.path ?? props.node.attrs.id}`}
-			char="#"
-			label={tag?.path ?? props.node.attrs.label}
-			//@ts-expect-error what do you want me to do about this tiptap
-			ref={props.ref}
-			variant="primary"
-		/>
+		<NodeViewWrapper as="span">
+			<MentionChip
+				href={`/tag/${tag?.path ?? props.node.attrs.id}`}
+				char="#"
+				label={tag?.path ?? props.node.attrs.label}
+				//@ts-expect-error what do you want me to do about this tiptap
+				ref={props.ref}
+				variant="primary"
+			/>
+		</NodeViewWrapper>
 	)
 }
 
@@ -82,14 +86,12 @@ export const MentionChip = ({
 	ref?: React.RefObject<HTMLAnchorElement>
 }) => {
 	return (
-		<NodeViewWrapper as="span">
-			<Link ref={ref} to={href}>
-				<Chip variant={variant} color="accent">
-					{char}
-					{label}
-				</Chip>
-			</Link>
-		</NodeViewWrapper>
+		<Link ref={ref} to={href}>
+			<Chip variant={variant} color="accent">
+				{char}
+				{label}
+			</Chip>
+		</Link>
 	)
 }
 
