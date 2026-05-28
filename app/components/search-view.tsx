@@ -6,7 +6,6 @@ import {
 	ButtonGroup,
 	Chip,
 	cn,
-	EmptyState,
 	Input,
 	Label,
 	ListBox,

@@ -65,10 +65,8 @@ export const ListView: ViewComponent = ({ notes, view }) =>
 									)
 								return (
 									<>
+										{value && index !== 0 && <Separator orientation="vertical" />}
 										{value}
-										{value && index !== view.display.length - 1 && (
-											<Separator orientation="vertical" />
-										)}
 									</>
 								)
 							})}
