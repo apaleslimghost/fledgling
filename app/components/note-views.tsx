@@ -57,7 +57,7 @@ export const ListView: ViewComponent = ({ notes, view }) =>
 
 					{view?.display && view.display.length > 0 && (
 						<div className="ml-auto text-sm flex flex-wrap gap-x-4 justify-end">
-							{view.display.map((field, index) => {
+							{view.display.map((field) => {
 								const value =
 									field === 'tags'
 										? note.tags.map((tag) => (
@@ -83,7 +83,7 @@ export const ListView: ViewComponent = ({ notes, view }) =>
 		</ul>
 	)
 
-const GridView: ViewComponent = ({ notes, inEditor }) => (
+const GridView: ViewComponent = ({ notes, view, inEditor }) => (
 	<div className="grid auto-fit-[16rem] gap-4">
 		{notes.length === 0 && (
 			<Card className={inEditor ? 'border shadow-xs' : undefined}>
@@ -92,7 +92,12 @@ const GridView: ViewComponent = ({ notes, inEditor }) => (
 		)}
 
 		{notes.map((note) => (
-			<NoteCard note={note} key={note.id} className={inEditor ? 'border shadow-xs' : undefined} />
+			<NoteCard
+				note={note}
+				view={view}
+				key={note.id}
+				className={inEditor ? 'border shadow-xs' : undefined}
+			/>
 		))}
 	</div>
 )
