@@ -48,17 +48,21 @@ export default function NoteCard({
 				<div className="flex flex-col gap-2">
 					{view?.display.map((field) => {
 						const value =
-							field === 'tags'
-								? note.tags.map((tag) => (
-										<MentionChip
-											key={tag}
-											href={`/tag/${tag}`}
-											char="#"
-											label={tag}
-											variant="secondary"
-										/>
-									))
-								: note.propertyValues?.[field]
+							field === 'content' ? (
+								<NoteContent key="content" note={note} />
+							) : field === 'tags' ? (
+								note.tags.map((tag) => (
+									<MentionChip
+										key={tag}
+										href={`/tag/${tag}`}
+										char="#"
+										label={tag}
+										variant="secondary"
+									/>
+								))
+							) : (
+								note.propertyValues?.[field]
+							)
 
 						return value ? (
 							<div className="flex flex-wrap gap-1" key={field}>
