@@ -222,7 +222,7 @@ export default function SearchView(props: ReactNodeViewProps) {
 						'pl-4': !props.node.attrs.confirmed,
 						'pl-6': props.node.attrs.confirmed,
 					},
-					'not-prose border-l-2',
+					'not-prose border-l-2 full-bleed',
 				)}
 				contentEditable={false}
 			>

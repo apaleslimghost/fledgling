@@ -271,9 +271,9 @@ export default function NotePage(props: Route.ComponentProps) {
 	return (
 		<>
 			<PageTitle title={note?.title ?? 'Untitled note'} />
-			<Surface className="rounded-xl shadow-surface p-8 h-full">
-				<ScrollShadow className="h-full">
-					<article className="max-w-[50em] mx-auto">
+			<Surface className="rounded-xl shadow-surface h-full">
+				<ScrollShadow className="h-full p-6 m-2 note">
+					<article className="note-content">
 						<h1 className="text-3xl font-bold text-mauve-800">
 							<input
 								value={note.title ?? ''}

@@ -28,6 +28,19 @@ div:has(> .tiptap) {
 	@apply text-accent;
 }
 
+.note {
+	container-type: inline-size;
+	--content-width: 50rem;
+}
+
+.note-content {
+	margin-inline: max(0px, 50cqw - var(--content-width) / 2);
+}
+
+.full-bleed {
+	margin-inline: min(0px, var(--content-width) / 2 - 50cqw);
+}
+
 @utility prose {
 	blockquote {
 		p {

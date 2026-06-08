@@ -16,13 +16,11 @@ import {
 	Button,
 	ButtonGroup,
 	Card,
-	Chip,
 	cn,
 	Dropdown,
 	EmptyState,
 	Header,
 	Input,
-	Separator,
 	Tabs,
 	ToggleButton,
 	Toolbar,
@@ -444,7 +442,7 @@ export default function NoteViews({
 			views.map((view) => {
 				const ViewType = viewTypes[view.type]
 				return (
-					<React.Fragment key={view.id}>
+					<div className={className} key={view.id}>
 						<ViewControls
 							controls={controls}
 							onAddView={onAddView}
@@ -456,7 +454,7 @@ export default function NoteViews({
 
 						{showSettings && <ViewSettings view={view} inEditor={inEditor} />}
 						<ViewType notes={notes} inEditor={inEditor} view={view} />
-					</React.Fragment>
+					</div>
 				)
 			})
 		) : (
@@ -515,7 +513,7 @@ export default function NoteViews({
 			</Tabs>
 		)
 	) : (
-		<>
+		<div className={className}>
 			<Toolbar className="shadow-sm mb-4" isAttached>
 				<ViewControls
 					controls={controls}
@@ -532,6 +530,6 @@ export default function NoteViews({
 				/>
 			</Toolbar>
 			<ListView notes={notes} />
-		</>
+		</div>
 	)
 }
