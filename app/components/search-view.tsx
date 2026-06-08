@@ -221,8 +221,9 @@ export default function SearchView(props: ReactNodeViewProps) {
 					{
 						'pl-4': !props.node.attrs.confirmed,
 						'pl-6': props.node.attrs.confirmed,
+						'full-bleed': props.node.attrs.fullWidth,
 					},
-					'not-prose border-l-2 full-bleed',
+					'not-prose border-l-2',
 				)}
 				contentEditable={false}
 			>
@@ -241,6 +242,11 @@ export default function SearchView(props: ReactNodeViewProps) {
 								views: (props.node.attrs.views ?? []).filter((id: string) => id !== view.id),
 							})
 						}}
+						onToggleFullWidth={(fullWidth) => {
+							props.updateAttributes({
+								fullWidth,
+							})
+						}}
 						controls={
 							<Button
 								variant="tertiary"
@@ -251,6 +257,7 @@ export default function SearchView(props: ReactNodeViewProps) {
 								<DatabaseMagnifier />
 							</Button>
 						}
+						fullWidth={props.node.attrs.fullWidth}
 					/>
 				) : (
 					<div className="flex flex-col gap-3">

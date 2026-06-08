@@ -96,6 +96,9 @@ const SearchViewNode = Node.create({
 			views: {
 				default: [],
 			},
+			fullWidth: {
+				default: false,
+			},
 		}
 	},
 })

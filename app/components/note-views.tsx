@@ -1,5 +1,6 @@
 import {
 	BarsAscendingAlignLeftArrowDown,
+	ChevronsExpandToLines,
 	Circles3Plus,
 	FileText,
 	Hashtag,
@@ -209,6 +210,8 @@ const ViewControls = ({
 	onAddView,
 	onToggleSettings,
 	settingsShown,
+	onToggleFullWidth,
+	fullWidth,
 }: {
 	controls?: ReactElement
 	className?: string
@@ -216,6 +219,8 @@ const ViewControls = ({
 	settingsShown?: boolean
 	onAddView: (view: View) => void
 	onToggleSettings: (state: boolean) => void
+	onToggleFullWidth: (fullWidth: boolean) => void
+	fullWidth: boolean
 }) => (
 	<div className={`flex gap-2 ${inEditor ? 'flex-col' : 'flex-row'} ${className}`}>
 		{controls && (
@@ -242,6 +247,19 @@ const ViewControls = ({
 				</Button>
 			)}
 		</ButtonGroup>
+
+		{inEditor && (
+			<ButtonGroup orientation="vertical">
+				<ToggleButton
+					className={cn('button', inEditor ? 'toggle-button--xs' : 'toggle-button--sm')}
+					isIconOnly
+					onChange={onToggleFullWidth}
+					isSelected={fullWidth}
+				>
+					<ChevronsExpandToLines />
+				</ToggleButton>
+			</ButtonGroup>
+		)}
 	</div>
 )
 
@@ -426,6 +444,8 @@ export default function NoteViews({
 	inEditor,
 	onAddView,
 	onRemoveView,
+	onToggleFullWidth,
+	fullWidth,
 }: {
 	notes: Note[]
 	views: ViewDocument[]
@@ -434,6 +454,8 @@ export default function NoteViews({
 	inEditor?: boolean
 	onAddView: (view: View) => void
 	onRemoveView: (view: View) => void
+	onToggleFullWidth: (fullWidth: boolean) => void
+	fullWidth: boolean
 }) {
 	const [showSettings, setShowSettings] = useState(false)
 
@@ -449,6 +471,8 @@ export default function NoteViews({
 							inEditor={inEditor}
 							settingsShown={showSettings}
 							onToggleSettings={setShowSettings}
+							onToggleFullWidth={onToggleFullWidth}
+							fullWidth={fullWidth}
 							className="float-start -ml-9.25 bg-white pb-2"
 						/>
 
@@ -470,6 +494,8 @@ export default function NoteViews({
 								settingsShown={showSettings}
 								onAddView={onAddView}
 								onToggleSettings={setShowSettings}
+								onToggleFullWidth={onToggleFullWidth}
+								fullWidth={fullWidth}
 							/>
 						</div>
 					)}
@@ -527,6 +553,8 @@ export default function NoteViews({
 
 						setShowSettings(show)
 					}}
+					onToggleFullWidth={onToggleFullWidth}
+					fullWidth={fullWidth}
 				/>
 			</Toolbar>
 			<ListView notes={notes} />
