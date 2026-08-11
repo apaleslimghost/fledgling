@@ -1,0 +1,80 @@
+@import "@fontsource/iosevka-aile/300.css";
+@import "@fontsource/iosevka-aile/300-italic.css";
+@import "@fontsource/iosevka-aile/900.css";
+@import "@fontsource/iosevka-aile/900-italic.css";
+@import "@fontsource/iosevka-curly";
+
+:root {
+	--lighter-salmon: color-mix(in oklab, lightsalmon, white);
+	--shadow: 0.375rem 0.5rem 0 rgb(from var(--shadow-colour, teal) r g b / 0.25);
+	--pressed-shadow: 0.25rem 0.25rem 0 rgb(from var(--shadow-colour, teal) r g b / 0.25);
+	--wonky-radius: 1% 99% 99% 1% / 95% 5% 10% 90%;
+}
+
+body {
+	font-family: "Iosevka Aile", sans-serif;
+	letter-spacing: -0.05em;
+	margin: 0;
+
+	background-image: radial-gradient(teal 1px, var(--lighter-salmon) 0);
+	background-size: 1rem 1rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: 900;
+	letter-spacing: -0.075em;
+}
+
+.card,
+button {
+	background: rgb(from var(--background) r g b / 0.8);
+	backdrop-filter: blur(0.1rem);
+	box-shadow: var(--shadow);
+	border-radius: var(--wonky-radius);
+}
+
+.card {
+	--background: lavenderblush;
+	padding: 1rem;
+}
+
+button {
+	transition: background 0.1s ease-in-out;
+	--background: darkslateblue;
+	color: var(--lighter-salmon);
+	font-weight: 900;
+	cursor: pointer;
+	border: 0 none;
+	padding: 0.5rem;
+}
+
+button:hover {
+	--background: slateblue;
+}
+
+button:active {
+	--background: slateblue;
+	box-shadow: var(--pressed-shadow);
+	margin-top: 0.25rem;
+	margin-left: 0.125rem;
+}
+
+
+.panels {
+	display: flex;
+	gap: 1rem;
+	padding: 1rem;
+}
+
+.panels>* {
+	flex: 1;
+}
+
+aside {
+	max-width: 20rem;
+}

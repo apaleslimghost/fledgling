@@ -6,10 +6,9 @@ export default function Note({ params }: Route.ComponentProps) {
 	const [note] = useAll(app.notes.where({ id: params.id })) ?? []
 
 	return (
-		<div>
-			<h1>Note</h1>
-			<p>{note?.title}</p>
+		<article className="card">
+			<h1>{note?.title}</h1>
 			<p>{JSON.stringify(note?.content)}</p>
-		</div>
+		</article>
 	);
 }
