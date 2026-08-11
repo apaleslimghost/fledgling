@@ -12,6 +12,7 @@ import {
 import type { Route } from "./+types/root";
 
 import "./app.css";
+import { Sidebar } from "./components/sidebar";
 
 export const links: Route.LinksFunction = () => [
 	{ rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -36,12 +37,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				<Links />
 			</head>
 			<body>
-				<main className="panels">
-					<aside>
-						<button>+ new note</button>
-					</aside>
-					{children}
-				</main>
+				<JazzProvider config={{
+					appId: 'f5f7f66a-49c7-402a-8c73-05fed46801bb',
+					serverUrl: 'https://v2.sync.jazz.tools/'
+				}}>
+					<main className="panels">
+						<Sidebar />
+						{children}
+					</main>
+				</JazzProvider>
 				<ScrollRestoration />
 				<Scripts />
 			</body>
@@ -50,12 +54,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-	return <JazzProvider config={{
-		appId: 'f5f7f66a-49c7-402a-8c73-05fed46801bb',
-		serverUrl: 'https://v2.sync.jazz.tools/'
-	}}>
-		<Outlet />
-	</JazzProvider>;
+	return <Outlet />
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
