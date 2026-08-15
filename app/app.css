@@ -33,7 +33,7 @@ h4,
 h5,
 h6 {
 	font-weight: 900;
-	letter-spacing: -0.075em;
+	letter-spacing: -0.05em;
 }
 
 .card,
@@ -110,12 +110,17 @@ h1>input {
 	color: inherit;
 	font: inherit;
 	border: 0 none;
+	letter-spacing: inherit;
 }
 
 h1>input:focus-visible {
 	outline: 0 none;
 	border-bottom: 0.125em dotted currentColor;
 	margin-bottom: -0.125em;
+}
+
+.tiptap:focus-visible {
+	outline: 0 none;
 }
 
 @scope (article) to (.unstyled) {
