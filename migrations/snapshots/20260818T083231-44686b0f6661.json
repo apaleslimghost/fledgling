@@ -1,0 +1,42 @@
+{
+  "notes": {
+    "columns": [
+      {
+        "name": "title",
+        "column_type": {
+          "type": "Text"
+        },
+        "nullable": false
+      },
+      {
+        "name": "content",
+        "column_type": {
+          "type": "Json"
+        },
+        "nullable": false
+      },
+      {
+        "name": "tagIds",
+        "column_type": {
+          "type": "Array",
+          "element": {
+            "type": "Uuid"
+          }
+        },
+        "nullable": false,
+        "references": "tags"
+      }
+    ]
+  },
+  "tags": {
+    "columns": [
+      {
+        "name": "path",
+        "column_type": {
+          "type": "Text"
+        },
+        "nullable": false
+      }
+    ]
+  }
+}
