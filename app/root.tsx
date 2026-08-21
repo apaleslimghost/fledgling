@@ -1,4 +1,4 @@
-import { JazzProvider } from "jazz-tools/react";
+import { JazzProvider, useDb } from "jazz-tools/react";
 
 import {
 	isRouteErrorResponse,
@@ -13,6 +13,9 @@ import type { Route } from "./+types/root";
 
 import "./app.css";
 import { Sidebar } from "./components/sidebar";
+import { app } from "../schema";
+import { tagSearch } from "./data/search";
+import { useEffect } from "react";
 
 export const links: Route.LinksFunction = () => [
 	{ rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -54,6 +57,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+	const db = useDb()
+
+	Object.assign(window, { db, app })
+
+	useEffect(() =>
+		db.subscribeAll(app.tags, (tags) => {
+			tagSearch.removeAll()
+			tagSearch.addAll(tags.all)
+		}),
+		[db]
+	)
+
 	return <Outlet />
 }
 

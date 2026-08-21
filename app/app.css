@@ -37,7 +37,8 @@ h6 {
 }
 
 .card,
-button {
+button,
+.selection-menu {
 	background: rgb(from var(--background) r g b / 0.8);
 	box-shadow: var(--shadow);
 	border-radius: var(--wonky-radius);
@@ -46,7 +47,8 @@ button {
 }
 
 :is(.card,
-	button):after {
+	button,
+	.selection-menu):after {
 	content: "";
 	position: absolute;
 	z-index: -1;
@@ -111,6 +113,7 @@ h1>input {
 	font: inherit;
 	border: 0 none;
 	letter-spacing: inherit;
+	padding: 0;
 }
 
 h1>input:focus-visible {
@@ -134,4 +137,32 @@ h1>input:focus-visible {
 	p {
 		margin-block: 0 0.5em;
 	}
+}
+
+.selection-menu {
+	position: absolute;
+	--background: lavenderblush;
+	padding: 0.5rem;
+	z-index: 10;
+	list-style: none;
+}
+
+.selection-menu li.selected {
+	background: var(--highlight);
+}
+
+.label {
+	background: slateblue;
+	color: lavenderblush;
+	transition-duration: 0.1s;
+	transition-timing-function: ease-in-out;
+	transition-property: background, color;
+	padding: 0.125em 0.25em;
+	border-radius: var(--wonky-radius);
+	text-decoration: none;
+}
+
+a.label:hover {
+	background: darkslateblue;
+	color: var(--lighter-salmon);
 }
