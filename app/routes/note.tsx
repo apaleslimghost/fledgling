@@ -30,11 +30,11 @@ function* collect<T extends JSONContent>(type: T['type'], tree: JSONContent): Ge
 }
 
 export default function Note({ params }: Route.ComponentProps) {
-	const [note] = useAll(app.notes.where({ id: params.id })) ?? []
+	const [note] = useAll(app.notes.where({ id: params.id }), { tier: 'local' }) ?? []
 	const db = useDb()
 
 	return (
-		<article className="card">
+		<article className="card surface hi">
 			<h1><input value={note?.title ?? ''} onChange={async (e) => {
 				if (note) {
 					db.update(app.notes, note.id, { title: e.target.value })

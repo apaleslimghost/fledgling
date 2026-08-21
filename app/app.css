@@ -39,22 +39,9 @@ h6 {
 .card,
 button,
 .selection-menu {
-	background: rgb(from var(--background) r g b / 0.8);
-	box-shadow: var(--shadow);
+	background: var(--background);
 	border-radius: var(--wonky-radius);
-
 	position: relative;
-}
-
-:is(.card,
-	button,
-	.selection-menu):after {
-	content: "";
-	position: absolute;
-	z-index: -1;
-	inset: 0 calc(-1 * var(--shadow-x)) calc(-1 * var(--shadow-y)) 0;
-	backdrop-filter: blur(0.1rem);
-	border-radius: inherit;
 }
 
 .card {
@@ -63,7 +50,9 @@ button,
 }
 
 button {
-	transition: background 0.1s ease-in-out;
+	transition-property: top, left, background;
+	transition-duration: 0.1s;
+	transition-timing-function: ease-in-out;
 	--background: darkslateblue;
 	color: var(--lighter-salmon);
 	font-weight: 900;
@@ -72,18 +61,17 @@ button {
 	padding: 0.5rem;
 }
 
-button:hover {
-	--background: slateblue;
-}
-
+button:hover,
 button:active {
 	--background: slateblue;
-	--shadow-x: 0.25rem;
-	--shadow-y: 0.25rem;
-	margin-top: 0.25rem;
-	margin-left: 0.125rem;
 }
 
+button.surface:active {
+	--shadow-distance: 0.1rem;
+	position: relative;
+	top: 0.05rem;
+	left: 0.05rem;
+}
 
 .panels {
 	display: flex;
@@ -165,4 +153,47 @@ h1>input:focus-visible {
 a.label:hover {
 	background: darkslateblue;
 	color: var(--lighter-salmon);
+}
+
+.surface {
+	position: relative;
+	box-shadow: 1px 1px 4px rgb(from var(--shadow-colour, darkslateblue) r g b / 0.2);
+}
+
+@scope (.surface) {
+	&.hi {
+		--shadow-distance: 2rem;
+	}
+
+	&.mid {
+		--shadow-distance: 0.5rem;
+	}
+
+	&.lo {
+		--shadow-distance: 0.25rem;
+	}
+}
+
+.surface:after {
+	content: '';
+	position: absolute;
+	top: calc(-1 * var(--shadow-distance) / 2);
+	left: calc(-1 * var(--shadow-distance) / 2);
+	right: calc(-1 * var(--shadow-distance));
+	bottom: calc(-1 * var(--shadow-distance));
+	z-index: -1;
+
+	--adjusted-colour: oklch(from var(--shadow-colour, darkslateblue) calc(l / 4) calc(c / 4) h);
+	--shadow-stops: var(--adjusted-colour), var(--adjusted-colour) calc(100% - var(--shadow-distance)), white;
+	background:
+		linear-gradient(to bottom, var(--shadow-stops)),
+		linear-gradient(to right, var(--shadow-stops)),
+		linear-gradient(to left, var(--shadow-stops)),
+		linear-gradient(to top, var(--shadow-stops)),
+		url('./assets/grain.svg');
+
+	background-blend-mode: color-dodge;
+	background-size: auto, auto, auto, auto, 375px;
+	filter: contrast(300%) brightness(700%) saturate(80%);
+	mix-blend-mode: multiply;
 }
