@@ -26,6 +26,12 @@ body {
 	box-sizing: border-box;
 }
 
+.grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+	gap: 1rem;
+}
+
 h1,
 h2,
 h3,
@@ -166,11 +172,11 @@ a.label:hover {
 	}
 
 	&.mid {
-		--shadow-distance: 0.5rem;
+		--shadow-distance: 1rem;
 	}
 
 	&.lo {
-		--shadow-distance: 0.25rem;
+		--shadow-distance: 0.5rem;
 	}
 }
 

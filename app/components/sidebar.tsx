@@ -14,7 +14,7 @@ export function Sidebar() {
 				const pending = db.insert(app.notes, { title: '', content: {}, tagIds: [] })
 				const note = await pending.wait({ tier: 'local' })
 				navigate(`/note/${note.id}`)
-			}} className="surface mid">+ new note</button>
+			}} className="surface lo">+ new note</button>
 
 			{tags && <ul>
 				{tags.map((tag) => (
