@@ -12,6 +12,7 @@
 	"dependencies": {
 		"@fontsource/iosevka-aile": "^5.3.0",
 		"@fontsource/iosevka-curly": "^5.3.0",
+		"@fontsource/redacted-script": "^5.3.0",
 		"@react-router/node": "^8",
 		"@react-router/serve": "^8",
 		"@tiptap/extension-list": "^3.30.1",

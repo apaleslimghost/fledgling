@@ -3,6 +3,7 @@
 @import "@fontsource/iosevka-aile/900.css";
 @import "@fontsource/iosevka-aile/900-italic.css";
 @import "@fontsource/iosevka-curly";
+@import "@fontsource/redacted-script";
 
 :root {
 	--lighter-salmon: color-mix(in oklab, lightsalmon, white);
@@ -10,6 +11,7 @@
 	--shadow-y: 0.5rem;
 	--shadow: var(--shadow-x) var(--shadow-y) 0 rgb(from var(--shadow-colour, teal) r g b / 0.25);
 	--wonky-radius: calc(3px + 1%) calc(3px + 99%) calc(3px + 99%) calc(3px + 1%) / calc(3px + 99%) calc(3px + 1%) calc(3px + 1%) calc(3px + 99%);
+	--highlight: rgb(from slateblue r g b / 0.2);
 }
 
 body {
@@ -20,6 +22,27 @@ body {
 	background-image: radial-gradient(teal 1px, var(--lighter-salmon) 0);
 	background-size: 1rem 1rem;
 	color: darkslateblue
+}
+
+.placeholder {
+	font-family: "Redacted Script";
+	letter-spacing: initial;
+	color: rgb(from currentColor r g b / 0.8);
+	animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+	0% {
+		color: rgb(from currentColor r g b / 0.8);
+	}
+
+	50% {
+		color: rgb(from currentColor r g b / 0.5);
+	}
+
+	100% {
+		color: rgb(from currentColor r g b / 0.8);
+	}
 }
 
 * {
@@ -43,8 +66,7 @@ h6 {
 }
 
 .card,
-button,
-.selection-menu {
+button {
 	background: var(--background);
 	border-radius: var(--wonky-radius);
 	position: relative;
@@ -59,7 +81,7 @@ button {
 	transition-property: top, left, background;
 	transition-duration: 0.1s;
 	transition-timing-function: ease-in-out;
-	--background: darkslateblue;
+	--background: slateblue;
 	color: var(--lighter-salmon);
 	font-weight: 900;
 	cursor: pointer;
@@ -69,7 +91,7 @@ button {
 
 button:hover,
 button:active {
-	--background: slateblue;
+	--background: darkslateblue;
 }
 
 button.surface:active {
@@ -135,14 +157,46 @@ h1>input:focus-visible {
 
 .selection-menu {
 	position: absolute;
-	--background: lavenderblush;
-	padding: 0.5rem;
+	--background: white;
 	z-index: 10;
 	list-style: none;
+	width: 16rem;
+	--shadow-colour: darkslateblue;
+	--highlight: rgb(from var(--shadow-colour) r g b / 0.2);
+	border: 1px solid var(--shadow-colour);
+	box-shadow: 1px 2px 0 var(--shadow-colour);
+	border-radius: 0.5rem;
+	padding: 0;
+	margin: 0;
 }
 
-.selection-menu li.selected {
+.selection-menu li a {
+	display: block;
+	padding: 0.25rem 0.5rem;
+	text-decoration: none;
+	color: var(--shadow-colour);
+}
+
+.selection-menu li:not(:last-child) {
+	border-bottom: 1px dotted var(--shadow-colour);
+}
+
+.selection-menu li:first-child {
+	border-top-left-radius: 0.5rem;
+	border-top-right-radius: 0.5rem;
+}
+
+.selection-menu li:last-child {
+	border-bottom-left-radius: 0.5rem;
+	border-bottom-right-radius: 0.5rem;
+}
+
+.selection-menu li.selected a {
 	background: var(--highlight);
+}
+
+.selection-menu li a:hover {
+	background: rgb(from var(--highlight) r g b / 0.1);
 }
 
 .label {

@@ -66,13 +66,13 @@ const SuggestionList = forwardRef<
 	if (!items.length) return null
 
 	return (
-		<ul className="selection-menu surface mid">
+		<ul className="selection-menu">
 			{items.map((item, index) => (
 				<li key={item.id} id={item.id} className={index === selectedIndex ? 'selected' : ''}>
 					<a href='#' onClick={(event) => {
 						event.preventDefault()
 						selectMention(item)
-					}} className='label'>
+					}}>
 						{char}
 						{item.label}
 					</a>
