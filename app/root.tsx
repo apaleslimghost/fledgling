@@ -14,7 +14,7 @@ import type { Route } from "./+types/root";
 import "./app.css";
 import { Sidebar } from "./components/sidebar";
 import { app } from "../schema";
-import { tagSearch } from "./data/search";
+import { projectSearch, tagSearch } from "./data/search";
 import { useEffect } from "react";
 
 export const links: Route.LinksFunction = () => [
@@ -65,6 +65,14 @@ export default function App() {
 		db.subscribeAll(app.tags, (tags) => {
 			tagSearch.removeAll()
 			tagSearch.addAll(tags.all)
+		}),
+		[db]
+	)
+
+	useEffect(() =>
+		db.subscribeAll(app.projects, (projects) => {
+			projectSearch.removeAll()
+			projectSearch.addAll(projects.all)
 		}),
 		[db]
 	)

@@ -3,6 +3,7 @@ import type { SuggestionOptions, SuggestionProps } from '@tiptap/suggestion'
 import { useDb } from 'jazz-tools/react'
 import { type ComponentProps, forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react'
 import { app } from '../../../schema'
+import type { Db } from 'jazz-tools'
 
 export type SuggestionListHandle = {
 	onKeyDown: (event: KeyboardEvent) => boolean
@@ -13,10 +14,12 @@ type Suggestion = {
 	label: string
 }
 
+type OnCreate = (db: Db, suggestion: Suggestion) => Promise<{ id: string }>
+
 const SuggestionList = forwardRef<
 	SuggestionListHandle,
-	SuggestionProps<Suggestion> & { char: string }
->(({ items, command, char }, ref) => {
+	SuggestionProps<Suggestion> & { char: string, onCreate: OnCreate }
+>(({ items, command, char, onCreate }, ref) => {
 	const [selectedIndex, setSelectedIndex] = useState(0)
 	const db = useDb()
 
@@ -24,18 +27,15 @@ const SuggestionList = forwardRef<
 		setSelectedIndex((index) => (index >= items.length ? 0 : index))
 	}, [items.length])
 
-	const selectTag = useCallback(async (tag?: Suggestion) => {
-		if (!tag) return
+	const selectMention = useCallback(async (suggestion?: Suggestion) => {
+		if (!suggestion) return
 
-		if (!tag.id) {
-			const inserted = await db.insert(app.tags, {
-				path: tag.label
-			}).wait({ tier: 'local' })
-
-			tag.id = inserted.id
+		if (!suggestion.id) {
+			const { id } = await onCreate(db, suggestion)
+			suggestion.id = id
 		}
 
-		command(tag)
+		command(suggestion)
 	}, [db, command])
 
 	useImperativeHandle(ref, () => ({
@@ -51,7 +51,7 @@ const SuggestionList = forwardRef<
 			}
 
 			if (event.key === 'Enter') {
-				selectTag(items[selectedIndex])
+				selectMention(items[selectedIndex])
 				return true
 			}
 
@@ -66,12 +66,12 @@ const SuggestionList = forwardRef<
 	if (!items.length) return null
 
 	return (
-		<ul className="selection-menu">
+		<ul className="selection-menu surface mid">
 			{items.map((item, index) => (
 				<li key={item.id} id={item.id} className={index === selectedIndex ? 'selected' : ''}>
 					<a href='#' onClick={(event) => {
 						event.preventDefault()
-						selectTag(item)
+						selectMention(item)
 					}} className='label'>
 						{char}
 						{item.label}
@@ -85,12 +85,15 @@ const SuggestionList = forwardRef<
 export const makeSuggester = ({
 	char,
 	items,
-}: Pick<SuggestionOptions<Suggestion>, 'char' | 'items'>): Pick<
+	onCreate,
+	allowSpaces = false,
+}: Pick<SuggestionOptions<Suggestion>, 'char' | 'items' | 'allowSpaces'> & { onCreate: OnCreate }): Pick<
 	SuggestionOptions<Suggestion>,
-	'char' | 'items' | 'render'
+	'char' | 'items' | 'allowSpaces' | 'render'
 > => ({
 	char,
 	items,
+	allowSpaces,
 	render() {
 		let component: ReactRenderer
 		let unmount: () => void
@@ -101,6 +104,7 @@ export const makeSuggester = ({
 					props: {
 						...props,
 						char: char ?? '',
+						onCreate
 					},
 					editor: props.editor,
 				})

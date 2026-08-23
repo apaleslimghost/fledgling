@@ -4,10 +4,15 @@ const schema = {
 	notes: s.table({
 		title: s.string(),
 		content: s.json(),
-		tagIds: s.array(s.ref('tags'))
+		tagIds: s.array(s.ref('tags')),
+		projectIds: s.array(s.ref('projects')),
 	}),
 	tags: s.table({
 		path: s.string()
+	}),
+	projects: s.table({
+		title: s.string(),
+		tagIds: s.array(s.ref('tags'))
 	})
 };
 
@@ -19,3 +24,6 @@ export type NoteQueryBuilder = typeof app.notes;
 
 export type Tag = s.RowOf<typeof app.tags>;
 export type TagQueryBuilder = typeof app.tags;
+
+export type Project = s.RowOf<typeof app.projects>;
+export type ProjectQueryBuilder = typeof app.projects;
