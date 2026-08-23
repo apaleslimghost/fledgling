@@ -204,15 +204,29 @@ h1>input:focus-visible {
 	color: lavenderblush;
 	transition-duration: 0.1s;
 	transition-timing-function: ease-in-out;
-	transition-property: background, color;
+	transition-property: background, color, border;
 	padding: 0.125em 0.25em;
 	border-radius: var(--wonky-radius);
 	text-decoration: none;
 }
 
-a.label:hover {
-	background: darkslateblue;
-	color: var(--lighter-salmon);
+@scope (.label) {
+	&.secondary {
+		border: 1px solid slateblue;
+		color: slateblue;
+		background: lavender;
+	}
+
+	&:is(a):hover {
+		background: darkslateblue;
+		color: var(--lighter-salmon);
+	}
+
+	&:is(a).secondary:hover {
+		border-color: darkslateblue;
+		color: darkslateblue;
+		background: lightblue;
+	}
 }
 
 .surface {
