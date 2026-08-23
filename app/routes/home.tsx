@@ -14,6 +14,6 @@ export default function Home() {
 	const notes = useAll(app.notes) ?? []
 
 	return <ul>
-		{notes.map(note => <li key={note.id}><a href={`/note/${note.id}`}>{note.title}</a></li>)}
+		{notes.map(note => <li key={note.id}><a href={`/note/${note.id}`}>{note.title || <em>Untitled note</em>}</a></li>)}
 	</ul>;
 }

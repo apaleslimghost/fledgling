@@ -39,7 +39,7 @@ export default function Note({ params }: Route.ComponentProps) {
 				if (note) {
 					db.update(app.notes, note.id, { title: e.target.value })
 				}
-			}} /></h1>
+			}} placeholder="Untitled note" autoFocus={!note?.title} /></h1>
 
 			{note ?
 				<Editor content={note.content as Content} id={note.id}
