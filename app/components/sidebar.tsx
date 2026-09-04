@@ -17,21 +17,21 @@ export function Sidebar() {
 				navigate(`/note/${note.id}`)
 			}} className="surface lo">+ new note</button>
 
-			{tags && <ul>
+			{tags && <menu>
 				{tags.map((tag) => (
 					<li key={tag.id}>
 						<a href={`/tag/${tag.id}`}>#{tag.path}</a>
 					</li>
 				))}
-			</ul>}
+			</menu>}
 
-			{projects && <ul>
+			{projects && <menu>
 				{projects.map((project) => (
 					<li key={project.id}>
-						<a href={`/project/${project.id}`}>{project.title}</a>
+						<a href={`/project/${project.id}`}>@{project.title}</a>
 					</li>
 				))}
-			</ul>}
+			</menu>}
 		</aside>
 	);
 }

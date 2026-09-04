@@ -66,9 +66,9 @@ const SuggestionList = forwardRef<
 	if (!items.length) return null
 
 	return (
-		<ul className="selection-menu">
+		<menu>
 			{items.map((item, index) => (
-				<li key={item.id} id={item.id} className={index === selectedIndex ? 'selected' : ''}>
+				<li key={item.id ?? item.label} id={item.id} className={index === selectedIndex ? 'selected' : ''}>
 					<a href='#' onClick={(event) => {
 						event.preventDefault()
 						selectMention(item)
@@ -78,7 +78,7 @@ const SuggestionList = forwardRef<
 					</a>
 				</li>
 			))}
-		</ul>
+		</menu>
 	)
 })
 
