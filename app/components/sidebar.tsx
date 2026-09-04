@@ -17,21 +17,27 @@ export function Sidebar() {
 				navigate(`/note/${note.id}`)
 			}} className="surface lo">+ new note</button>
 
-			{tags && <menu>
+			{tags ? <menu>
 				{tags.map((tag) => (
 					<li key={tag.id}>
 						<a href={`/tag/${tag.id}`}>#{tag.path}</a>
 					</li>
 				))}
-			</menu>}
+			</menu> :
+				<menu className="placeholder">
+					<li><span>{Array.from({ length: Math.floor(10 * Math.random() + 3) }, () => String.fromCharCode(Math.floor(97 + Math.random() * 26)))}</span></li>
+				</menu>}
 
-			{projects && <menu>
+			{projects ? <menu>
 				{projects.map((project) => (
 					<li key={project.id}>
 						<a href={`/project/${project.id}`}>@{project.title}</a>
 					</li>
 				))}
-			</menu>}
+			</menu> :
+				<menu className="placeholder">
+					<li><span>{Array.from({ length: Math.floor(10 * Math.random() + 3) }, () => String.fromCharCode(Math.floor(97 + Math.random() * 26)))}</span></li>
+				</menu>}
 		</aside>
 	);
 }

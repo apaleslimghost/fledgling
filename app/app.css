@@ -177,7 +177,7 @@ menu {
 	margin: 0;
 }
 
-menu li a {
+menu li>* {
 	display: block;
 	padding: 0.25rem 0.5rem;
 	text-decoration: none;
