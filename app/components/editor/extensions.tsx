@@ -7,6 +7,38 @@ import { makeSuggester } from './suggestion'
 import { projectSearch, tagSearch } from '~/data/search'
 import { app } from '../../../schema'
 
+import { Extension, InputRule, Node } from '@tiptap/core'
+import { findParentNodeClosestToPos } from '@tiptap/core'
+
+const taskListInputRule = () => new InputRule({
+	find: /^\[ ?\]$/,
+	handler: ({ state, range, chain }) => {
+		const listItem = findParentNodeClosestToPos(
+			state.selection.$from,
+			node => node.type.name === 'listItem',
+		)
+
+		if (!listItem) {
+			return null
+		}
+
+		const list = state.doc.nodeAt(listItem.pos - 1)
+
+		if (!list || list.type.name !== 'bulletList') {
+			return null
+		}
+
+		chain()
+			.deleteRange({
+				from: range.from,
+				to: range.to,
+			})
+			.toggleTaskList()
+			.run()
+
+	},
+})
+
 export const extensions = [
 	StarterKit.configure({
 		heading: {
@@ -74,4 +106,8 @@ export const extensions = [
 			}),
 		],
 	}),
+	Extension.create({
+		name: 'taskListInputRule',
+		addInputRules: () => [taskListInputRule()]
+	})
 ]

@@ -271,3 +271,19 @@ h1>input:focus-visible {
 	filter: contrast(300%) brightness(700%) saturate(80%);
 	mix-blend-mode: multiply;
 }
+
+ul[data-type="taskList"] {
+	list-style-type: none;
+}
+
+@scope (ul[data-type="taskList"]) {
+	li>label {
+		float: left;
+		margin-left: -1.3em;
+	}
+
+	li[data-checked="true"] {
+		text-decoration: line-through;
+		color: rgb(from currentColor r g b / 0.8)
+	}
+}
