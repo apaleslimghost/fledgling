@@ -5,11 +5,14 @@ import Editor from "~/components/editor";
 import type { Content, JSONContent } from "@tiptap/react";
 import type { JsonValue } from "jazz-tools";
 import type { MentionNodeAttrs } from "@tiptap/extension-mention";
+import type { TaskItemOptions } from "@tiptap/extension-list";
 
 interface MentionNode extends JSONContent {
 	type: 'mention'
 	attrs: MentionNodeAttrs
 }
+
+
 
 function isNode<T extends JSONContent>(type: T['type'], obj: unknown): obj is T {
 	if (obj && typeof obj === 'object' && 'type' in obj && obj.type === type) {
@@ -54,13 +57,15 @@ export default function Note({ params }: Route.ComponentProps) {
 
 			<Editor content={note.content as Content} id={note.id}
 				onDelete={async (mutation) => {
-					if (mutation.type === 'node' && mutation.node.type.name === 'mention' && mutation.node.attrs.id) {
-						const [tag] = await db.all(app.tags.where({ id: mutation.node.attrs.id }).include({
-							notesViaTags: app.notes
-						}))
+					if (mutation.type === 'node') {
+						if (mutation.node.type.name === 'mention' && mutation.node.attrs.id) {
+							const [tag] = await db.all(app.tags.where({ id: mutation.node.attrs.id }).include({
+								notesViaTags: app.notes
+							}))
 
-						if (tag?.notesViaTags.length === 0) {
-							db.delete(app.tags, tag.id)
+							if (tag?.notesViaTags.length === 0) {
+								db.delete(app.tags, tag.id)
+							}
 						}
 					}
 				}}
@@ -71,11 +76,25 @@ export default function Note({ params }: Route.ComponentProps) {
 						(node) => node.attrs.mentionSuggestionChar === '#' && node.attrs.id
 					)
 
+					const bodyTasks = Array.from(collect<JSONContent & { type: 'taskItem', attrs: { id: string | null, checked: boolean } }>('taskItem', result))
+
 					const tagIds = bodyTags.map(t => t.attrs.id).filter((id): id is string => !!id)
 
+					const taskIds = await Promise.all(
+						bodyTasks.map(async tag => {
+							if(tag.attrs.id) return tag.attrs.id
+
+							await db.insert(app.tasks, {
+								completed: tag.attrs.checked,
+							})
+							return tag.attrs.id
+						})
+					)
+
 					db.update(app.notes, note.id, {
-						content: editor.getJSON() as JsonValue,
+						content: result as JsonValue,
 						tagIds,
+						taskIds,
 					})
 				}} />
 		</article>

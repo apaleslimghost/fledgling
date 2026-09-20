@@ -1,4 +1,4 @@
-import { ListKit } from '@tiptap/extension-list'
+import { ListKit, TaskItem } from '@tiptap/extension-list'
 import { Mention } from '@tiptap/extension-mention'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
@@ -48,6 +48,18 @@ export const extensions = [
 	ListKit.configure({
 		taskItem: {
 			nested: true,
+		}
+	}),
+	Extension.create({
+		addGlobalAttributes() {
+			return [{
+				types: ['taskItem'],
+				attributes: {
+					id: {
+						default: null
+					}
+				}
+			}]
 		},
 	}),
 	Mention.extend({

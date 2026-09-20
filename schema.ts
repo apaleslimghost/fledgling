@@ -5,6 +5,7 @@ const schema = {
 		title: s.string(),
 		content: s.json(),
 		tagIds: s.array(s.ref('tags')),
+		taskIds: s.array(s.ref('tasks')),
 		projectIds: s.array(s.ref('projects')),
 	}),
 	tags: s.table({
@@ -13,6 +14,11 @@ const schema = {
 	projects: s.table({
 		title: s.string(),
 		tagIds: s.array(s.ref('tags'))
+	}),
+	tasks: s.table({
+		title: s.string(),
+		completed: s.boolean(),
+		dueDate: s.timestamp(),
 	})
 };
 
@@ -27,3 +33,6 @@ export type TagQueryBuilder = typeof app.tags;
 
 export type Project = s.RowOf<typeof app.projects>;
 export type ProjectQueryBuilder = typeof app.projects;
+
+export type Task = s.RowOf<typeof app.tasks>;
+export type TaskQueryBuilder = typeof app.tasks;

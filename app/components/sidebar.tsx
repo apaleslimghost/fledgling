@@ -12,7 +12,7 @@ export function Sidebar() {
 	return (
 		<aside>
 			<button onClick={async () => {
-				const pending = db.insert(app.notes, { title: '', content: {}, tagIds: [], projectIds: [] })
+				const pending = db.insert(app.notes, { title: '', content: {}, tagIds: [], projectIds: [], taskIds: [] })
 				const note = await pending.wait({ tier: 'local' })
 				navigate(`/note/${note.id}`)
 			}} className="surface lo">+ new note</button>

@@ -14,4 +14,8 @@ export default s.definePermissions(app, ({ policy }) => {
 	policy.projects.allowInsert.always();
 	policy.projects.allowUpdate.always();
 	policy.projects.allowDelete.always();
+	policy.tasks.allowRead.always();
+	policy.tasks.allowInsert.always();
+	policy.tasks.allowUpdate.always();
+	policy.tasks.allowDelete.always();
 });
