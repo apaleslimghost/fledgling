@@ -1,9 +1,8 @@
 import { type Editor, ReactRenderer } from '@tiptap/react'
 import type { SuggestionOptions, SuggestionProps } from '@tiptap/suggestion'
-import { useDb } from 'jazz-tools/react'
 import { type ComponentProps, forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react'
-import { app } from '../../../schema'
-import type { Db } from 'jazz-tools'
+import { useZero } from '@rocicorp/zero/react'
+import type { Zero } from '@rocicorp/zero'
 
 export type SuggestionListHandle = {
 	onKeyDown: (event: KeyboardEvent) => boolean
@@ -14,14 +13,14 @@ type Suggestion = {
 	label: string
 }
 
-type OnCreate = (db: Db, suggestion: Suggestion) => Promise<{ id: string }>
+type OnCreate = (zero: Zero, suggestion: Suggestion) => Promise<{ id: string }>
 
 const SuggestionList = forwardRef<
 	SuggestionListHandle,
 	SuggestionProps<Suggestion> & { char: string, onCreate: OnCreate }
 >(({ items, command, char, onCreate }, ref) => {
 	const [selectedIndex, setSelectedIndex] = useState(0)
-	const db = useDb()
+	const zero = useZero()
 
 	useEffect(() => {
 		setSelectedIndex((index) => (index >= items.length ? 0 : index))
@@ -31,12 +30,12 @@ const SuggestionList = forwardRef<
 		if (!suggestion) return
 
 		if (!suggestion.id) {
-			const { id } = await onCreate(db, suggestion)
+			const { id } = await onCreate(zero, suggestion)
 			suggestion.id = id
 		}
 
 		command(suggestion)
-	}, [db, command])
+	}, [zero, command])
 
 	useImperativeHandle(ref, () => ({
 		onKeyDown: (event: KeyboardEvent) => {

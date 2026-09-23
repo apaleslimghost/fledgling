@@ -1,9 +1,10 @@
-import { useAll } from "jazz-tools/react";
 import type { Route } from "./+types/tag";
-import { app } from "../../schema";
+import { useQuery } from "@rocicorp/zero/react";
+import { queries } from "~/zero/queries";
 
 export default function Tag({ params }: Route.ComponentProps) {
-	const notes = useAll(app.notes.where({ tagIds: { contains: params.id } }), { tier: 'local' }) ?? []
+	const [tag] = useQuery(queries.tag.byId({ id: params.id }))
+	const notes = tag?.notes ?? []
 
 	return <div className="grid">
 		{notes.map(note => <div className="card surface mid" key={note.id}>

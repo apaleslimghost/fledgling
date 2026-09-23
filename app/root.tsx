@@ -1,5 +1,3 @@
-import { JazzProvider, useDb } from "jazz-tools/react";
-
 import {
 	isRouteErrorResponse,
 	Links,
@@ -13,9 +11,11 @@ import type { Route } from "./+types/root";
 
 import "./app.css";
 import { Sidebar } from "./components/sidebar";
-import { app } from "../schema";
 import { projectSearch, tagSearch } from "./data/search";
-import { useEffect } from "react";
+
+import { ZeroProvider } from '@rocicorp/zero/react'
+import { schema } from './prisma/generated/zero/schema'
+import { mutators } from "./zero/mutators";
 
 export const links: Route.LinksFunction = () => [
 	{ rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -40,15 +40,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				<Links />
 			</head>
 			<body>
-				<JazzProvider config={{
-					appId: 'f5f7f66a-49c7-402a-8c73-05fed46801bb',
-					serverUrl: 'https://v2.sync.jazz.tools/'
-				}}>
+				<ZeroProvider cacheURL='http://localhost:4848' schema={schema} mutators={mutators}>
 					<main className="panels">
 						<Sidebar />
 						{children}
 					</main>
-				</JazzProvider>
+				</ZeroProvider>
 				<ScrollRestoration />
 				<Scripts />
 			</body>
@@ -57,25 +54,22 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-	const db = useDb()
+	// TODO
+	// useEffect(() =>
+	// 	db.subscribeAll(app.tags, (tags) => {
+	// 		tagSearch.removeAll()
+	// 		tagSearch.addAll(tags.all)
+	// 	}),
+	// 	[db]
+	// )
 
-	Object.assign(window, { db, app })
-
-	useEffect(() =>
-		db.subscribeAll(app.tags, (tags) => {
-			tagSearch.removeAll()
-			tagSearch.addAll(tags.all)
-		}),
-		[db]
-	)
-
-	useEffect(() =>
-		db.subscribeAll(app.projects, (projects) => {
-			projectSearch.removeAll()
-			projectSearch.addAll(projects.all)
-		}),
-		[db]
-	)
+	// useEffect(() =>
+	// 	db.subscribeAll(app.projects, (projects) => {
+	// 		projectSearch.removeAll()
+	// 		projectSearch.addAll(projects.all)
+	// 	}),
+	// 	[db]
+	// )
 
 	return <Outlet />
 }

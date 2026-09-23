@@ -1,15 +1,15 @@
 import type { Node } from '@tiptap/pm/model'
 import { NodeViewWrapper } from '@tiptap/react'
-import { useAll } from 'jazz-tools/react'
 import { Link } from 'react-router'
-import { app } from '../../schema'
+import { useQuery } from '@rocicorp/zero/react'
+import { queries } from '~/zero/queries'
 
 
 const TagMention = (props: {
 	node: Node
 	ref?: React.RefObject<HTMLAnchorElement | null>
 }) => {
-	const [tag] = useAll(app.tags.where({ id: props.node.attrs.id })) ?? []
+	const [tag] = useQuery(queries.tag.byId({ id: props.node.attrs.id }))
 
 	return (
 		<NodeViewWrapper as="span">
@@ -24,7 +24,7 @@ const ProjectMention = (props: {
 	node: Node
 	ref?: React.RefObject<HTMLAnchorElement | null>
 }) => {
-	const [project] = useAll(app.projects.where({ id: props.node.attrs.id })) ?? []
+	const [project] = useQuery(queries.project.byId({ id: props.node.attrs.id }))
 
 	return (
 		<NodeViewWrapper as="span">

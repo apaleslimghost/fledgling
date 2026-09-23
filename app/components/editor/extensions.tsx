@@ -5,10 +5,11 @@ import { StarterKit } from '@tiptap/starter-kit'
 import { MentionView } from '../mention'
 import { makeSuggester } from './suggestion'
 import { projectSearch, tagSearch } from '~/data/search'
-import { app } from '../../../schema'
 
 import { Extension, InputRule, Node } from '@tiptap/core'
 import { findParentNodeClosestToPos } from '@tiptap/core'
+import { cuid } from '~/data/cuid'
+import { mutators } from '~/zero/mutators'
 
 const taskListInputRule = () => new InputRule({
 	find: /^\[ ?\]$/,
@@ -83,12 +84,14 @@ export const extensions = [
 						})),
 					]
 				},
-				onCreate: async (db, tag) => {
-					const inserted = await db.insert(app.tags, {
+				onCreate: async (zero, tag) => {
+					const id = cuid()
+					await zero.mutate(mutators.tag.create({
+						id,
 						path: tag.label
-					}).wait({ tier: 'local' })
+					})).client
 
-					return { id: inserted.id }
+					return { id }
 				},
 			}),
 			makeSuggester({
@@ -107,13 +110,14 @@ export const extensions = [
 						})),
 					]
 				},
-				onCreate: async (db, project) => {
-					const inserted = await db.insert(app.projects, {
+				onCreate: async (zero, project) => {
+					const id = cuid()
+					await zero.mutate(mutators.project.create({
+						id,
 						title: project.label,
-						tagIds: [],
-					}).wait({ tier: 'local' })
+					})).client
 
-					return { id: inserted.id }
+					return { id }
 				},
 			}),
 		],

@@ -1,7 +1,6 @@
 import type { Route } from "./+types/home";
-import { useAll, useDb } from "jazz-tools/react";
-import { app } from "../../schema";
-import { useState } from "react";
+import { useQuery } from "@rocicorp/zero/react";
+import { queries } from "~/zero/queries";
 
 export function meta({ }: Route.MetaArgs) {
 	return [
@@ -11,7 +10,7 @@ export function meta({ }: Route.MetaArgs) {
 }
 
 export default function Home() {
-	const notes = useAll(app.notes) ?? []
+	const [notes] = useQuery(queries.note.all())
 
 	return <ul>
 		{notes.map(note => <li key={note.id}><a href={`/note/${note.id}`}>{note.title || <em>Untitled note</em>}</a></li>)}

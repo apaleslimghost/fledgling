@@ -1,0 +1,34 @@
+datasource db {
+   provider = "postgresql"
+}
+
+generator client {
+   provider = "prisma-client"
+   output   = "./generated/prisma"
+}
+
+generator zero {
+   provider = "prisma-zero"
+}
+
+model Note {
+   id       String    @id
+   title    String
+   content  Json
+   tags     Tag[]
+   projects Project[]
+}
+
+model Tag {
+   id       String    @id
+   path     String
+   notes    Note[]
+   projects Project[]
+}
+
+model Project {
+   id    String @id
+   title String
+   notes Note[]
+   tags  Tag[]
+}

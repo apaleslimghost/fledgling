@@ -1,43 +1,43 @@
-import { useAll, useDb } from "jazz-tools/react";
-import { app } from "../../schema";
 import { useNavigate } from "react-router";
+import { useQuery, useZero } from "@rocicorp/zero/react";
+import { queries } from "~/zero/queries";
+import { cuid } from "~/data/cuid";
+import { mutators } from "~/zero/mutators";
 
 export function Sidebar() {
-	const db = useDb()
+	const zero = useZero()
 	const navigate = useNavigate()
 
-	const tags = useAll(app.tags)
-	const projects = useAll(app.projects)
+	const [tags] = useQuery(queries.tag.all({}))
+	const [projects] = useQuery(queries.project.all({}))
 
 	return (
 		<aside>
 			<button onClick={async () => {
-				const pending = db.insert(app.notes, { title: '', content: {}, tagIds: [], projectIds: [], taskIds: [] })
-				const note = await pending.wait({ tier: 'local' })
-				navigate(`/note/${note.id}`)
+				const id = cuid()
+				const pending = zero.mutate(mutators.note.create({
+					id
+				}))
+
+				await pending.client
+				navigate(`/note/${id}`)
 			}} className="surface lo">+ new note</button>
 
-			{tags ? <menu>
+			<menu>
 				{tags.map((tag) => (
 					<li key={tag.id}>
 						<a href={`/tag/${tag.id}`}>#{tag.path}</a>
 					</li>
 				))}
-			</menu> :
-				<menu className="placeholder">
-					<li><span>{Array.from({ length: Math.floor(10 * Math.random() + 3) }, () => String.fromCharCode(Math.floor(97 + Math.random() * 26)))}</span></li>
-				</menu>}
+			</menu>
 
-			{projects ? <menu>
+			<menu>
 				{projects.map((project) => (
 					<li key={project.id}>
 						<a href={`/project/${project.id}`}>@{project.title}</a>
 					</li>
 				))}
-			</menu> :
-				<menu className="placeholder">
-					<li><span>{Array.from({ length: Math.floor(10 * Math.random() + 3) }, () => String.fromCharCode(Math.floor(97 + Math.random() * 26)))}</span></li>
-				</menu>}
+			</menu>
 		</aside>
 	);
 }
