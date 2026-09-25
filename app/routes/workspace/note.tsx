@@ -1,4 +1,4 @@
-import type { Route } from "./+types/note";
+import type { Route } from "../+types/note";
 import Editor from "~/components/editor";
 import type { Content, JSONContent } from "@tiptap/react";
 import type { MentionNodeAttrs } from "@tiptap/extension-mention";
@@ -31,11 +31,11 @@ function* collect<T extends JSONContent>(type: T['type'], tree: JSONContent): Ge
 
 export default function Note({ params }: Route.ComponentProps) {
 	const zero = useZero()
-	const [note, noteResult] = useQuery(queries.note.byId({ id: params.id }))
+	const [note, noteResult] = useQuery(queries.note.byId({ id: params.noteId }))
 
 	if (!note) {
 		if (noteResult.type === 'complete') {
-			throw new Error(`Note ${params.id} not found`)
+			throw new Error(`Note ${params.noteId} not found`)
 		} else {
 			return null
 		}
@@ -45,7 +45,7 @@ export default function Note({ params }: Route.ComponentProps) {
 		<article className="card surface hi">
 			<h1>
 				<input value={note.title ?? ''} onChange={async (e) => {
-					zero.mutate(mutators.note.setTitle({ id: params.id, title: e.target.value }))
+					zero.mutate(mutators.note.setTitle({ id: params.noteId, title: e.target.value }))
 				}} placeholder="Untitled note" autoFocus={!note.title} />
 			</h1>
 
@@ -66,7 +66,7 @@ export default function Note({ params }: Route.ComponentProps) {
 
 					const tagIds = bodyTags.map(t => t.attrs.id).filter((id): id is string => !!id)
 
-					zero.mutate(mutators.note.setContent({ id: params.id, content: result, tagIds }))
+					zero.mutate(mutators.note.setContent({ id: params.noteId, content: result, tagIds }))
 				}} />
 		</article>
 	);

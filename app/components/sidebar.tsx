@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { useQuery, useZero } from "@rocicorp/zero/react";
 import { queries } from "~/zero/queries";
-import { cuid } from "~/data/cuid";
+import { shortId } from "~/data/cuid";
 import { mutators } from "~/zero/mutators";
 
 export function Sidebar() {
@@ -14,7 +14,7 @@ export function Sidebar() {
 	return (
 		<aside>
 			<button onClick={async () => {
-				const id = cuid()
+				const id = shortId()
 				const pending = zero.mutate(mutators.note.create({
 					id
 				}))

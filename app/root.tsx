@@ -10,12 +10,6 @@ import {
 import type { Route } from "./+types/root";
 
 import "./app.css";
-import { Sidebar } from "./components/sidebar";
-import { projectSearch, tagSearch } from "./data/search";
-
-import { ZeroProvider } from '@rocicorp/zero/react'
-import { schema } from './prisma/generated/zero/schema'
-import { mutators } from "./zero/mutators";
 
 export const links: Route.LinksFunction = () => [
 	{ rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -40,12 +34,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				<Links />
 			</head>
 			<body>
-				<ZeroProvider cacheURL='http://localhost:4848' schema={schema} mutators={mutators}>
-					<main className="panels">
-						<Sidebar />
-						{children}
-					</main>
-				</ZeroProvider>
+				{children}
 				<ScrollRestoration />
 				<Scripts />
 			</body>

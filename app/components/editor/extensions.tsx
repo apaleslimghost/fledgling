@@ -8,7 +8,7 @@ import { projectSearch, tagSearch } from '~/data/search'
 
 import { Extension, InputRule, Node } from '@tiptap/core'
 import { findParentNodeClosestToPos } from '@tiptap/core'
-import { cuid } from '~/data/cuid'
+import { shortId } from '~/data/cuid'
 import { mutators } from '~/zero/mutators'
 
 const taskListInputRule = () => new InputRule({
@@ -85,7 +85,7 @@ export const extensions = [
 					]
 				},
 				onCreate: async (zero, tag) => {
-					const id = cuid()
+					const id = shortId()
 					await zero.mutate(mutators.tag.create({
 						id,
 						path: tag.label
@@ -111,7 +111,7 @@ export const extensions = [
 					]
 				},
 				onCreate: async (zero, project) => {
-					const id = cuid()
+					const id = shortId()
 					await zero.mutate(mutators.project.create({
 						id,
 						title: project.label,
