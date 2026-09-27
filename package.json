@@ -15,10 +15,8 @@
 		"@fontsource/iosevka-curly": "^5.3.0",
 		"@fontsource/redacted-script": "^5.3.0",
 		"@paralleldrive/cuid2": "^3.3.0",
-		"@prisma-next-idb/client-idb": "^0.6.0",
 		"@prisma/adapter-pg": "^7.10.0",
 		"@prisma/client": "^7.10.0",
-		"@prisma/orm-toolchain": "^8.0.0-rc.11",
 		"@react-router/node": "^8",
 		"@react-router/serve": "^8",
 		"@rocicorp/zero": "^1.9.0",
@@ -34,12 +32,6 @@
 		"zod": "^4.6.5"
 	},
 	"devDependencies": {
-		"@prisma-next-idb/adapter-idb": "^0.6.0",
-		"@prisma-next-idb/driver-idb": "^0.6.0",
-		"@prisma-next-idb/family-idb": "^0.6.0",
-		"@prisma-next-idb/target-idb": "^0.6.0",
-		"@prisma/cli-engine": "^0.4.0",
-		"@prisma/orm-framework": "^8.0.0-rc.11",
 		"@react-router/dev": "^8",
 		"@tailwindcss/vite": "^4.2.2",
 		"@types/node": "^22",
