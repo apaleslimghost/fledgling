@@ -3,14 +3,30 @@ import { z } from 'zod'
 import { zql } from '~/prisma/generated/zero/schema'
 
 export const mutators = defineMutators({
-	note: {
+	workspace: {
 		create: defineMutator(
 			z.object({
 				id: z.string(),
 			}),
 			async ({ tx, args }) => {
+				await tx.mutate.Workspace.insert({
+					id: args.id,
+				})
+			}
+		),
+	},
+
+	note: {
+		create: defineMutator(
+			z.object({
+				id: z.string(),
+			}),
+			async ({ tx, args, ctx }) => {
+				if (!ctx) throw new Error('no workspace')
+
 				await tx.mutate.Note.insert({
 					id: args.id,
+					workspaceId: ctx.workspaceId,
 					title: '',
 					content: {}
 				})
@@ -50,9 +66,12 @@ export const mutators = defineMutators({
 				id: z.string(),
 				path: z.string(),
 			}),
-			async ({ tx, args }) => {
+			async ({ tx, args, ctx }) => {
+				if (!ctx) throw new Error('no workspace')
+
 				await tx.mutate.Tag.insert({
 					id: args.id,
+					workspaceId: ctx.workspaceId,
 					path: args.path,
 				})
 			}
@@ -80,9 +99,12 @@ export const mutators = defineMutators({
 				id: z.string(),
 				title: z.string(),
 			}),
-			async ({ tx, args }) => {
+			async ({ tx, args, ctx }) => {
+				if (!ctx) throw new Error('no workspace')
+
 				await tx.mutate.Project.insert({
 					id: args.id,
+					workspaceId: ctx.workspaceId,
 					title: args.title,
 				})
 			},

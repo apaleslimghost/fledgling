@@ -27,17 +27,20 @@ export type AggregateNote = {
 export type NoteMinAggregateOutputType = {
   id: string | null
   title: string | null
+  workspaceId: string | null
 }
 
 export type NoteMaxAggregateOutputType = {
   id: string | null
   title: string | null
+  workspaceId: string | null
 }
 
 export type NoteCountAggregateOutputType = {
   id: number
   title: number
   content: number
+  workspaceId: number
   _all: number
 }
 
@@ -45,17 +48,20 @@ export type NoteCountAggregateOutputType = {
 export type NoteMinAggregateInputType = {
   id?: true
   title?: true
+  workspaceId?: true
 }
 
 export type NoteMaxAggregateInputType = {
   id?: true
   title?: true
+  workspaceId?: true
 }
 
 export type NoteCountAggregateInputType = {
   id?: true
   title?: true
   content?: true
+  workspaceId?: true
   _all?: true
 }
 
@@ -135,6 +141,7 @@ export type NoteGroupByOutputType = {
   id: string
   title: string
   content: runtime.JsonValue
+  workspaceId: string
   _count: NoteCountAggregateOutputType | null
   _min: NoteMinAggregateOutputType | null
   _max: NoteMaxAggregateOutputType | null
@@ -162,16 +169,20 @@ export type NoteWhereInput = {
   id?: Prisma.StringFilter<"Note"> | string
   title?: Prisma.StringFilter<"Note"> | string
   content?: Prisma.JsonFilter<"Note">
+  workspaceId?: Prisma.StringFilter<"Note"> | string
   tags?: Prisma.TagListRelationFilter
   projects?: Prisma.ProjectListRelationFilter
+  workspace?: Prisma.XOR<Prisma.WorkspaceScalarRelationFilter, Prisma.WorkspaceWhereInput>
 }
 
 export type NoteOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  workspaceId?: Prisma.SortOrder
   tags?: Prisma.TagOrderByRelationAggregateInput
   projects?: Prisma.ProjectOrderByRelationAggregateInput
+  workspace?: Prisma.WorkspaceOrderByWithRelationInput
 }
 
 export type NoteWhereUniqueInput = Prisma.AtLeast<{
@@ -181,14 +192,17 @@ export type NoteWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.NoteWhereInput | Prisma.NoteWhereInput[]
   title?: Prisma.StringFilter<"Note"> | string
   content?: Prisma.JsonFilter<"Note">
+  workspaceId?: Prisma.StringFilter<"Note"> | string
   tags?: Prisma.TagListRelationFilter
   projects?: Prisma.ProjectListRelationFilter
+  workspace?: Prisma.XOR<Prisma.WorkspaceScalarRelationFilter, Prisma.WorkspaceWhereInput>
 }, "id">
 
 export type NoteOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  workspaceId?: Prisma.SortOrder
   _count?: Prisma.NoteCountOrderByAggregateInput
   _max?: Prisma.NoteMaxOrderByAggregateInput
   _min?: Prisma.NoteMinOrderByAggregateInput
@@ -201,6 +215,7 @@ export type NoteScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Note"> | string
   title?: Prisma.StringWithAggregatesFilter<"Note"> | string
   content?: Prisma.JsonWithAggregatesFilter<"Note">
+  workspaceId?: Prisma.StringWithAggregatesFilter<"Note"> | string
 }
 
 export type NoteCreateInput = {
@@ -209,12 +224,14 @@ export type NoteCreateInput = {
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   tags?: Prisma.TagCreateNestedManyWithoutNotesInput
   projects?: Prisma.ProjectCreateNestedManyWithoutNotesInput
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutNotesInput
 }
 
 export type NoteUncheckedCreateInput = {
   id: string
   title: string
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  workspaceId: string
   tags?: Prisma.TagUncheckedCreateNestedManyWithoutNotesInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutNotesInput
 }
@@ -225,12 +242,14 @@ export type NoteUpdateInput = {
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   tags?: Prisma.TagUpdateManyWithoutNotesNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutNotesNestedInput
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutNotesNestedInput
 }
 
 export type NoteUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.TagUncheckedUpdateManyWithoutNotesNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutNotesNestedInput
 }
@@ -239,6 +258,7 @@ export type NoteCreateManyInput = {
   id: string
   title: string
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  workspaceId: string
 }
 
 export type NoteUpdateManyMutationInput = {
@@ -251,22 +271,7 @@ export type NoteUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-}
-
-export type NoteCountOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  title?: Prisma.SortOrder
-  content?: Prisma.SortOrder
-}
-
-export type NoteMaxOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  title?: Prisma.SortOrder
-}
-
-export type NoteMinOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  title?: Prisma.SortOrder
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type NoteListRelationFilter = {
@@ -279,8 +284,65 @@ export type NoteOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string
+export type NoteCountOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  content?: Prisma.SortOrder
+  workspaceId?: Prisma.SortOrder
+}
+
+export type NoteMaxOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  workspaceId?: Prisma.SortOrder
+}
+
+export type NoteMinOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  workspaceId?: Prisma.SortOrder
+}
+
+export type NoteCreateNestedManyWithoutWorkspaceInput = {
+  create?: Prisma.XOR<Prisma.NoteCreateWithoutWorkspaceInput, Prisma.NoteUncheckedCreateWithoutWorkspaceInput> | Prisma.NoteCreateWithoutWorkspaceInput[] | Prisma.NoteUncheckedCreateWithoutWorkspaceInput[]
+  connectOrCreate?: Prisma.NoteCreateOrConnectWithoutWorkspaceInput | Prisma.NoteCreateOrConnectWithoutWorkspaceInput[]
+  createMany?: Prisma.NoteCreateManyWorkspaceInputEnvelope
+  connect?: Prisma.NoteWhereUniqueInput | Prisma.NoteWhereUniqueInput[]
+}
+
+export type NoteUncheckedCreateNestedManyWithoutWorkspaceInput = {
+  create?: Prisma.XOR<Prisma.NoteCreateWithoutWorkspaceInput, Prisma.NoteUncheckedCreateWithoutWorkspaceInput> | Prisma.NoteCreateWithoutWorkspaceInput[] | Prisma.NoteUncheckedCreateWithoutWorkspaceInput[]
+  connectOrCreate?: Prisma.NoteCreateOrConnectWithoutWorkspaceInput | Prisma.NoteCreateOrConnectWithoutWorkspaceInput[]
+  createMany?: Prisma.NoteCreateManyWorkspaceInputEnvelope
+  connect?: Prisma.NoteWhereUniqueInput | Prisma.NoteWhereUniqueInput[]
+}
+
+export type NoteUpdateManyWithoutWorkspaceNestedInput = {
+  create?: Prisma.XOR<Prisma.NoteCreateWithoutWorkspaceInput, Prisma.NoteUncheckedCreateWithoutWorkspaceInput> | Prisma.NoteCreateWithoutWorkspaceInput[] | Prisma.NoteUncheckedCreateWithoutWorkspaceInput[]
+  connectOrCreate?: Prisma.NoteCreateOrConnectWithoutWorkspaceInput | Prisma.NoteCreateOrConnectWithoutWorkspaceInput[]
+  upsert?: Prisma.NoteUpsertWithWhereUniqueWithoutWorkspaceInput | Prisma.NoteUpsertWithWhereUniqueWithoutWorkspaceInput[]
+  createMany?: Prisma.NoteCreateManyWorkspaceInputEnvelope
+  set?: Prisma.NoteWhereUniqueInput | Prisma.NoteWhereUniqueInput[]
+  disconnect?: Prisma.NoteWhereUniqueInput | Prisma.NoteWhereUniqueInput[]
+  delete?: Prisma.NoteWhereUniqueInput | Prisma.NoteWhereUniqueInput[]
+  connect?: Prisma.NoteWhereUniqueInput | Prisma.NoteWhereUniqueInput[]
+  update?: Prisma.NoteUpdateWithWhereUniqueWithoutWorkspaceInput | Prisma.NoteUpdateWithWhereUniqueWithoutWorkspaceInput[]
+  updateMany?: Prisma.NoteUpdateManyWithWhereWithoutWorkspaceInput | Prisma.NoteUpdateManyWithWhereWithoutWorkspaceInput[]
+  deleteMany?: Prisma.NoteScalarWhereInput | Prisma.NoteScalarWhereInput[]
+}
+
+export type NoteUncheckedUpdateManyWithoutWorkspaceNestedInput = {
+  create?: Prisma.XOR<Prisma.NoteCreateWithoutWorkspaceInput, Prisma.NoteUncheckedCreateWithoutWorkspaceInput> | Prisma.NoteCreateWithoutWorkspaceInput[] | Prisma.NoteUncheckedCreateWithoutWorkspaceInput[]
+  connectOrCreate?: Prisma.NoteCreateOrConnectWithoutWorkspaceInput | Prisma.NoteCreateOrConnectWithoutWorkspaceInput[]
+  upsert?: Prisma.NoteUpsertWithWhereUniqueWithoutWorkspaceInput | Prisma.NoteUpsertWithWhereUniqueWithoutWorkspaceInput[]
+  createMany?: Prisma.NoteCreateManyWorkspaceInputEnvelope
+  set?: Prisma.NoteWhereUniqueInput | Prisma.NoteWhereUniqueInput[]
+  disconnect?: Prisma.NoteWhereUniqueInput | Prisma.NoteWhereUniqueInput[]
+  delete?: Prisma.NoteWhereUniqueInput | Prisma.NoteWhereUniqueInput[]
+  connect?: Prisma.NoteWhereUniqueInput | Prisma.NoteWhereUniqueInput[]
+  update?: Prisma.NoteUpdateWithWhereUniqueWithoutWorkspaceInput | Prisma.NoteUpdateWithWhereUniqueWithoutWorkspaceInput[]
+  updateMany?: Prisma.NoteUpdateManyWithWhereWithoutWorkspaceInput | Prisma.NoteUpdateManyWithWhereWithoutWorkspaceInput[]
+  deleteMany?: Prisma.NoteScalarWhereInput | Prisma.NoteScalarWhereInput[]
 }
 
 export type NoteCreateNestedManyWithoutTagsInput = {
@@ -359,17 +421,71 @@ export type NoteUncheckedUpdateManyWithoutProjectsNestedInput = {
   deleteMany?: Prisma.NoteScalarWhereInput | Prisma.NoteScalarWhereInput[]
 }
 
+export type NoteCreateWithoutWorkspaceInput = {
+  id: string
+  title: string
+  content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  tags?: Prisma.TagCreateNestedManyWithoutNotesInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutNotesInput
+}
+
+export type NoteUncheckedCreateWithoutWorkspaceInput = {
+  id: string
+  title: string
+  content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  tags?: Prisma.TagUncheckedCreateNestedManyWithoutNotesInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutNotesInput
+}
+
+export type NoteCreateOrConnectWithoutWorkspaceInput = {
+  where: Prisma.NoteWhereUniqueInput
+  create: Prisma.XOR<Prisma.NoteCreateWithoutWorkspaceInput, Prisma.NoteUncheckedCreateWithoutWorkspaceInput>
+}
+
+export type NoteCreateManyWorkspaceInputEnvelope = {
+  data: Prisma.NoteCreateManyWorkspaceInput | Prisma.NoteCreateManyWorkspaceInput[]
+  skipDuplicates?: boolean
+}
+
+export type NoteUpsertWithWhereUniqueWithoutWorkspaceInput = {
+  where: Prisma.NoteWhereUniqueInput
+  update: Prisma.XOR<Prisma.NoteUpdateWithoutWorkspaceInput, Prisma.NoteUncheckedUpdateWithoutWorkspaceInput>
+  create: Prisma.XOR<Prisma.NoteCreateWithoutWorkspaceInput, Prisma.NoteUncheckedCreateWithoutWorkspaceInput>
+}
+
+export type NoteUpdateWithWhereUniqueWithoutWorkspaceInput = {
+  where: Prisma.NoteWhereUniqueInput
+  data: Prisma.XOR<Prisma.NoteUpdateWithoutWorkspaceInput, Prisma.NoteUncheckedUpdateWithoutWorkspaceInput>
+}
+
+export type NoteUpdateManyWithWhereWithoutWorkspaceInput = {
+  where: Prisma.NoteScalarWhereInput
+  data: Prisma.XOR<Prisma.NoteUpdateManyMutationInput, Prisma.NoteUncheckedUpdateManyWithoutWorkspaceInput>
+}
+
+export type NoteScalarWhereInput = {
+  AND?: Prisma.NoteScalarWhereInput | Prisma.NoteScalarWhereInput[]
+  OR?: Prisma.NoteScalarWhereInput[]
+  NOT?: Prisma.NoteScalarWhereInput | Prisma.NoteScalarWhereInput[]
+  id?: Prisma.StringFilter<"Note"> | string
+  title?: Prisma.StringFilter<"Note"> | string
+  content?: Prisma.JsonFilter<"Note">
+  workspaceId?: Prisma.StringFilter<"Note"> | string
+}
+
 export type NoteCreateWithoutTagsInput = {
   id: string
   title: string
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   projects?: Prisma.ProjectCreateNestedManyWithoutNotesInput
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutNotesInput
 }
 
 export type NoteUncheckedCreateWithoutTagsInput = {
   id: string
   title: string
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  workspaceId: string
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutNotesInput
 }
 
@@ -394,26 +510,19 @@ export type NoteUpdateManyWithWhereWithoutTagsInput = {
   data: Prisma.XOR<Prisma.NoteUpdateManyMutationInput, Prisma.NoteUncheckedUpdateManyWithoutTagsInput>
 }
 
-export type NoteScalarWhereInput = {
-  AND?: Prisma.NoteScalarWhereInput | Prisma.NoteScalarWhereInput[]
-  OR?: Prisma.NoteScalarWhereInput[]
-  NOT?: Prisma.NoteScalarWhereInput | Prisma.NoteScalarWhereInput[]
-  id?: Prisma.StringFilter<"Note"> | string
-  title?: Prisma.StringFilter<"Note"> | string
-  content?: Prisma.JsonFilter<"Note">
-}
-
 export type NoteCreateWithoutProjectsInput = {
   id: string
   title: string
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   tags?: Prisma.TagCreateNestedManyWithoutNotesInput
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutNotesInput
 }
 
 export type NoteUncheckedCreateWithoutProjectsInput = {
   id: string
   title: string
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  workspaceId: string
   tags?: Prisma.TagUncheckedCreateNestedManyWithoutNotesInput
 }
 
@@ -438,17 +547,47 @@ export type NoteUpdateManyWithWhereWithoutProjectsInput = {
   data: Prisma.XOR<Prisma.NoteUpdateManyMutationInput, Prisma.NoteUncheckedUpdateManyWithoutProjectsInput>
 }
 
+export type NoteCreateManyWorkspaceInput = {
+  id: string
+  title: string
+  content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+}
+
+export type NoteUpdateWithoutWorkspaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  tags?: Prisma.TagUpdateManyWithoutNotesNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutNotesNestedInput
+}
+
+export type NoteUncheckedUpdateWithoutWorkspaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  tags?: Prisma.TagUncheckedUpdateManyWithoutNotesNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutNotesNestedInput
+}
+
+export type NoteUncheckedUpdateManyWithoutWorkspaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+}
+
 export type NoteUpdateWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   projects?: Prisma.ProjectUpdateManyWithoutNotesNestedInput
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutNotesNestedInput
 }
 
 export type NoteUncheckedUpdateWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutNotesNestedInput
 }
 
@@ -456,6 +595,7 @@ export type NoteUncheckedUpdateManyWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type NoteUpdateWithoutProjectsInput = {
@@ -463,12 +603,14 @@ export type NoteUpdateWithoutProjectsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   tags?: Prisma.TagUpdateManyWithoutNotesNestedInput
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutNotesNestedInput
 }
 
 export type NoteUncheckedUpdateWithoutProjectsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.TagUncheckedUpdateManyWithoutNotesNestedInput
 }
 
@@ -476,6 +618,7 @@ export type NoteUncheckedUpdateManyWithoutProjectsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -522,8 +665,10 @@ export type NoteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   id?: boolean
   title?: boolean
   content?: boolean
+  workspaceId?: boolean
   tags?: boolean | Prisma.Note$tagsArgs<ExtArgs>
   projects?: boolean | Prisma.Note$projectsArgs<ExtArgs>
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.NoteCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["note"]>
 
@@ -531,39 +676,51 @@ export type NoteSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   title?: boolean
   content?: boolean
+  workspaceId?: boolean
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["note"]>
 
 export type NoteSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
   content?: boolean
+  workspaceId?: boolean
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["note"]>
 
 export type NoteSelectScalar = {
   id?: boolean
   title?: boolean
   content?: boolean
+  workspaceId?: boolean
 }
 
-export type NoteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "content", ExtArgs["result"]["note"]>
+export type NoteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "content" | "workspaceId", ExtArgs["result"]["note"]>
 export type NoteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tags?: boolean | Prisma.Note$tagsArgs<ExtArgs>
   projects?: boolean | Prisma.Note$projectsArgs<ExtArgs>
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.NoteCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type NoteIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type NoteIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type NoteIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
+}
+export type NoteIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
+}
 
 export type $NotePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Note"
   objects: {
     tags: Prisma.$TagPayload<ExtArgs>[]
     projects: Prisma.$ProjectPayload<ExtArgs>[]
+    workspace: Prisma.$WorkspacePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     title: string
     content: runtime.JsonValue
+    workspaceId: string
   }, ExtArgs["result"]["note"]>
   composites: {}
 }
@@ -960,6 +1117,7 @@ export interface Prisma__NoteClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   tags<T extends Prisma.Note$tagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Note$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   projects<T extends Prisma.Note$projectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Note$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  workspace<T extends Prisma.WorkspaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorkspaceDefaultArgs<ExtArgs>>): Prisma.Prisma__WorkspaceClient<runtime.Types.Result.GetResult<Prisma.$WorkspacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -992,6 +1150,7 @@ export interface NoteFieldRefs {
   readonly id: Prisma.FieldRef<"Note", 'String'>
   readonly title: Prisma.FieldRef<"Note", 'String'>
   readonly content: Prisma.FieldRef<"Note", 'Json'>
+  readonly workspaceId: Prisma.FieldRef<"Note", 'String'>
 }
     
 
@@ -1246,6 +1405,10 @@ export type NoteCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    */
   data: Prisma.NoteCreateManyInput | Prisma.NoteCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NoteIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1316,6 +1479,10 @@ export type NoteUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many Notes to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NoteIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

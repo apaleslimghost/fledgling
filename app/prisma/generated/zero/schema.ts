@@ -10,11 +10,18 @@ import {
   table,
 } from "@rocicorp/zero";
 
+export const workspaceTable = table("Workspace")
+  .columns({
+    id: string(),
+  })
+  .primaryKey("id");
+
 export const noteTable = table("Note")
   .columns({
     id: string(),
     title: string(),
     content: json(),
+    workspaceId: string(),
   })
   .primaryKey("id");
 
@@ -22,6 +29,7 @@ export const tagTable = table("Tag")
   .columns({
     id: string(),
     path: string(),
+    workspaceId: string(),
   })
   .primaryKey("id");
 
@@ -29,6 +37,7 @@ export const projectTable = table("Project")
   .columns({
     id: string(),
     title: string(),
+    workspaceId: string(),
   })
   .primaryKey("id");
 
@@ -56,7 +65,24 @@ export const _projectToTagTable = table("_ProjectToTag")
   })
   .primaryKey("A", "B");
 
-export const noteTableRelationships = relationships(noteTable, ({ many }) => ({
+export const workspaceTableRelationships = relationships(workspaceTable, ({ many }) => ({
+  notes: many({
+    sourceField: ["id"],
+    destField: ["workspaceId"],
+    destSchema: noteTable,
+  }),
+  tags: many({
+    sourceField: ["id"],
+    destField: ["workspaceId"],
+    destSchema: tagTable,
+  }),
+  projects: many({
+    sourceField: ["id"],
+    destField: ["workspaceId"],
+    destSchema: projectTable,
+  })
+}));
+export const noteTableRelationships = relationships(noteTable, ({ one, many }) => ({
   tags: many({
     sourceField: ["id"],
     destField: ["A"],
@@ -74,9 +100,14 @@ export const noteTableRelationships = relationships(noteTable, ({ many }) => ({
     sourceField: ["B"],
     destField: ["id"],
     destSchema: projectTable,
+  }),
+  workspace: one({
+    sourceField: ["workspaceId"],
+    destField: ["id"],
+    destSchema: workspaceTable,
   })
 }));
-export const tagTableRelationships = relationships(tagTable, ({ many }) => ({
+export const tagTableRelationships = relationships(tagTable, ({ one, many }) => ({
   notes: many({
     sourceField: ["id"],
     destField: ["B"],
@@ -94,9 +125,14 @@ export const tagTableRelationships = relationships(tagTable, ({ many }) => ({
     sourceField: ["A"],
     destField: ["id"],
     destSchema: projectTable,
+  }),
+  workspace: one({
+    sourceField: ["workspaceId"],
+    destField: ["id"],
+    destSchema: workspaceTable,
   })
 }));
-export const projectTableRelationships = relationships(projectTable, ({ many }) => ({
+export const projectTableRelationships = relationships(projectTable, ({ one, many }) => ({
   notes: many({
     sourceField: ["id"],
     destField: ["B"],
@@ -114,6 +150,11 @@ export const projectTableRelationships = relationships(projectTable, ({ many }) 
     sourceField: ["B"],
     destField: ["id"],
     destSchema: tagTable,
+  }),
+  workspace: one({
+    sourceField: ["workspaceId"],
+    destField: ["id"],
+    destSchema: workspaceTable,
   })
 }));
 export const _noteToTagTableRelationships = relationships(_noteToTagTable, ({ one }) => ({
@@ -158,6 +199,7 @@ export const _projectToTagTableRelationships = relationships(_projectToTagTable,
  */
 export const schema = createSchema({
   tables: [
+    workspaceTable,
     noteTable,
     tagTable,
     projectTable,
@@ -166,6 +208,7 @@ export const schema = createSchema({
     _projectToTagTable,
   ],
   relationships: [
+    workspaceTableRelationships,
     noteTableRelationships,
     tagTableRelationships,
     projectTableRelationships,

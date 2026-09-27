@@ -1,4 +1,4 @@
-import type { Route } from "../+types/home";
+import type { Route } from "./+types/home";
 import { useQuery } from "@rocicorp/zero/react";
 import { queries } from "~/zero/queries";
 

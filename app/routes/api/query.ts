@@ -4,13 +4,16 @@ import { queries } from '../../zero/queries'
 import { schema } from '../../prisma/generated/zero/schema'
 import type { Route } from './+types/query'
 import { data } from 'react-router'
+import { getWorkspaceFromRequest } from '~/data/auth'
 
 export async function action({ request }: Route.ActionArgs) {
+	const ctx = getWorkspaceFromRequest(request)
+
 	const result = await handleQueryRequest({
-		handler: (name, args) => mustGetQuery(queries, name).fn({ args }),
+		handler: (name, args) => mustGetQuery(queries, name).fn({ args, ctx }),
 		schema,
 		request,
-		userID: null
+		userID: ctx?.workspaceId
 	})
 
 	return data(result)

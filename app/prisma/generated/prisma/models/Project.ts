@@ -27,16 +27,19 @@ export type AggregateProject = {
 export type ProjectMinAggregateOutputType = {
   id: string | null
   title: string | null
+  workspaceId: string | null
 }
 
 export type ProjectMaxAggregateOutputType = {
   id: string | null
   title: string | null
+  workspaceId: string | null
 }
 
 export type ProjectCountAggregateOutputType = {
   id: number
   title: number
+  workspaceId: number
   _all: number
 }
 
@@ -44,16 +47,19 @@ export type ProjectCountAggregateOutputType = {
 export type ProjectMinAggregateInputType = {
   id?: true
   title?: true
+  workspaceId?: true
 }
 
 export type ProjectMaxAggregateInputType = {
   id?: true
   title?: true
+  workspaceId?: true
 }
 
 export type ProjectCountAggregateInputType = {
   id?: true
   title?: true
+  workspaceId?: true
   _all?: true
 }
 
@@ -132,6 +138,7 @@ export type ProjectGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 export type ProjectGroupByOutputType = {
   id: string
   title: string
+  workspaceId: string
   _count: ProjectCountAggregateOutputType | null
   _min: ProjectMinAggregateOutputType | null
   _max: ProjectMaxAggregateOutputType | null
@@ -158,15 +165,19 @@ export type ProjectWhereInput = {
   NOT?: Prisma.ProjectWhereInput | Prisma.ProjectWhereInput[]
   id?: Prisma.StringFilter<"Project"> | string
   title?: Prisma.StringFilter<"Project"> | string
+  workspaceId?: Prisma.StringFilter<"Project"> | string
   notes?: Prisma.NoteListRelationFilter
   tags?: Prisma.TagListRelationFilter
+  workspace?: Prisma.XOR<Prisma.WorkspaceScalarRelationFilter, Prisma.WorkspaceWhereInput>
 }
 
 export type ProjectOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  workspaceId?: Prisma.SortOrder
   notes?: Prisma.NoteOrderByRelationAggregateInput
   tags?: Prisma.TagOrderByRelationAggregateInput
+  workspace?: Prisma.WorkspaceOrderByWithRelationInput
 }
 
 export type ProjectWhereUniqueInput = Prisma.AtLeast<{
@@ -175,13 +186,16 @@ export type ProjectWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ProjectWhereInput[]
   NOT?: Prisma.ProjectWhereInput | Prisma.ProjectWhereInput[]
   title?: Prisma.StringFilter<"Project"> | string
+  workspaceId?: Prisma.StringFilter<"Project"> | string
   notes?: Prisma.NoteListRelationFilter
   tags?: Prisma.TagListRelationFilter
+  workspace?: Prisma.XOR<Prisma.WorkspaceScalarRelationFilter, Prisma.WorkspaceWhereInput>
 }, "id">
 
 export type ProjectOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  workspaceId?: Prisma.SortOrder
   _count?: Prisma.ProjectCountOrderByAggregateInput
   _max?: Prisma.ProjectMaxOrderByAggregateInput
   _min?: Prisma.ProjectMinOrderByAggregateInput
@@ -193,6 +207,7 @@ export type ProjectScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ProjectScalarWhereWithAggregatesInput | Prisma.ProjectScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Project"> | string
   title?: Prisma.StringWithAggregatesFilter<"Project"> | string
+  workspaceId?: Prisma.StringWithAggregatesFilter<"Project"> | string
 }
 
 export type ProjectCreateInput = {
@@ -200,11 +215,13 @@ export type ProjectCreateInput = {
   title: string
   notes?: Prisma.NoteCreateNestedManyWithoutProjectsInput
   tags?: Prisma.TagCreateNestedManyWithoutProjectsInput
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutProjectsInput
 }
 
 export type ProjectUncheckedCreateInput = {
   id: string
   title: string
+  workspaceId: string
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutProjectsInput
   tags?: Prisma.TagUncheckedCreateNestedManyWithoutProjectsInput
 }
@@ -214,11 +231,13 @@ export type ProjectUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NoteUpdateManyWithoutProjectsNestedInput
   tags?: Prisma.TagUpdateManyWithoutProjectsNestedInput
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutProjectsNestedInput
 }
 
 export type ProjectUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NoteUncheckedUpdateManyWithoutProjectsNestedInput
   tags?: Prisma.TagUncheckedUpdateManyWithoutProjectsNestedInput
 }
@@ -226,6 +245,7 @@ export type ProjectUncheckedUpdateInput = {
 export type ProjectCreateManyInput = {
   id: string
   title: string
+  workspaceId: string
 }
 
 export type ProjectUpdateManyMutationInput = {
@@ -236,6 +256,7 @@ export type ProjectUpdateManyMutationInput = {
 export type ProjectUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type ProjectListRelationFilter = {
@@ -251,16 +272,61 @@ export type ProjectOrderByRelationAggregateInput = {
 export type ProjectCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  workspaceId?: Prisma.SortOrder
 }
 
 export type ProjectMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  workspaceId?: Prisma.SortOrder
 }
 
 export type ProjectMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  workspaceId?: Prisma.SortOrder
+}
+
+export type ProjectCreateNestedManyWithoutWorkspaceInput = {
+  create?: Prisma.XOR<Prisma.ProjectCreateWithoutWorkspaceInput, Prisma.ProjectUncheckedCreateWithoutWorkspaceInput> | Prisma.ProjectCreateWithoutWorkspaceInput[] | Prisma.ProjectUncheckedCreateWithoutWorkspaceInput[]
+  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutWorkspaceInput | Prisma.ProjectCreateOrConnectWithoutWorkspaceInput[]
+  createMany?: Prisma.ProjectCreateManyWorkspaceInputEnvelope
+  connect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[]
+}
+
+export type ProjectUncheckedCreateNestedManyWithoutWorkspaceInput = {
+  create?: Prisma.XOR<Prisma.ProjectCreateWithoutWorkspaceInput, Prisma.ProjectUncheckedCreateWithoutWorkspaceInput> | Prisma.ProjectCreateWithoutWorkspaceInput[] | Prisma.ProjectUncheckedCreateWithoutWorkspaceInput[]
+  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutWorkspaceInput | Prisma.ProjectCreateOrConnectWithoutWorkspaceInput[]
+  createMany?: Prisma.ProjectCreateManyWorkspaceInputEnvelope
+  connect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[]
+}
+
+export type ProjectUpdateManyWithoutWorkspaceNestedInput = {
+  create?: Prisma.XOR<Prisma.ProjectCreateWithoutWorkspaceInput, Prisma.ProjectUncheckedCreateWithoutWorkspaceInput> | Prisma.ProjectCreateWithoutWorkspaceInput[] | Prisma.ProjectUncheckedCreateWithoutWorkspaceInput[]
+  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutWorkspaceInput | Prisma.ProjectCreateOrConnectWithoutWorkspaceInput[]
+  upsert?: Prisma.ProjectUpsertWithWhereUniqueWithoutWorkspaceInput | Prisma.ProjectUpsertWithWhereUniqueWithoutWorkspaceInput[]
+  createMany?: Prisma.ProjectCreateManyWorkspaceInputEnvelope
+  set?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[]
+  disconnect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[]
+  delete?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[]
+  connect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[]
+  update?: Prisma.ProjectUpdateWithWhereUniqueWithoutWorkspaceInput | Prisma.ProjectUpdateWithWhereUniqueWithoutWorkspaceInput[]
+  updateMany?: Prisma.ProjectUpdateManyWithWhereWithoutWorkspaceInput | Prisma.ProjectUpdateManyWithWhereWithoutWorkspaceInput[]
+  deleteMany?: Prisma.ProjectScalarWhereInput | Prisma.ProjectScalarWhereInput[]
+}
+
+export type ProjectUncheckedUpdateManyWithoutWorkspaceNestedInput = {
+  create?: Prisma.XOR<Prisma.ProjectCreateWithoutWorkspaceInput, Prisma.ProjectUncheckedCreateWithoutWorkspaceInput> | Prisma.ProjectCreateWithoutWorkspaceInput[] | Prisma.ProjectUncheckedCreateWithoutWorkspaceInput[]
+  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutWorkspaceInput | Prisma.ProjectCreateOrConnectWithoutWorkspaceInput[]
+  upsert?: Prisma.ProjectUpsertWithWhereUniqueWithoutWorkspaceInput | Prisma.ProjectUpsertWithWhereUniqueWithoutWorkspaceInput[]
+  createMany?: Prisma.ProjectCreateManyWorkspaceInputEnvelope
+  set?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[]
+  disconnect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[]
+  delete?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[]
+  connect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[]
+  update?: Prisma.ProjectUpdateWithWhereUniqueWithoutWorkspaceInput | Prisma.ProjectUpdateWithWhereUniqueWithoutWorkspaceInput[]
+  updateMany?: Prisma.ProjectUpdateManyWithWhereWithoutWorkspaceInput | Prisma.ProjectUpdateManyWithWhereWithoutWorkspaceInput[]
+  deleteMany?: Prisma.ProjectScalarWhereInput | Prisma.ProjectScalarWhereInput[]
 }
 
 export type ProjectCreateNestedManyWithoutNotesInput = {
@@ -339,15 +405,66 @@ export type ProjectUncheckedUpdateManyWithoutTagsNestedInput = {
   deleteMany?: Prisma.ProjectScalarWhereInput | Prisma.ProjectScalarWhereInput[]
 }
 
+export type ProjectCreateWithoutWorkspaceInput = {
+  id: string
+  title: string
+  notes?: Prisma.NoteCreateNestedManyWithoutProjectsInput
+  tags?: Prisma.TagCreateNestedManyWithoutProjectsInput
+}
+
+export type ProjectUncheckedCreateWithoutWorkspaceInput = {
+  id: string
+  title: string
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutProjectsInput
+  tags?: Prisma.TagUncheckedCreateNestedManyWithoutProjectsInput
+}
+
+export type ProjectCreateOrConnectWithoutWorkspaceInput = {
+  where: Prisma.ProjectWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProjectCreateWithoutWorkspaceInput, Prisma.ProjectUncheckedCreateWithoutWorkspaceInput>
+}
+
+export type ProjectCreateManyWorkspaceInputEnvelope = {
+  data: Prisma.ProjectCreateManyWorkspaceInput | Prisma.ProjectCreateManyWorkspaceInput[]
+  skipDuplicates?: boolean
+}
+
+export type ProjectUpsertWithWhereUniqueWithoutWorkspaceInput = {
+  where: Prisma.ProjectWhereUniqueInput
+  update: Prisma.XOR<Prisma.ProjectUpdateWithoutWorkspaceInput, Prisma.ProjectUncheckedUpdateWithoutWorkspaceInput>
+  create: Prisma.XOR<Prisma.ProjectCreateWithoutWorkspaceInput, Prisma.ProjectUncheckedCreateWithoutWorkspaceInput>
+}
+
+export type ProjectUpdateWithWhereUniqueWithoutWorkspaceInput = {
+  where: Prisma.ProjectWhereUniqueInput
+  data: Prisma.XOR<Prisma.ProjectUpdateWithoutWorkspaceInput, Prisma.ProjectUncheckedUpdateWithoutWorkspaceInput>
+}
+
+export type ProjectUpdateManyWithWhereWithoutWorkspaceInput = {
+  where: Prisma.ProjectScalarWhereInput
+  data: Prisma.XOR<Prisma.ProjectUpdateManyMutationInput, Prisma.ProjectUncheckedUpdateManyWithoutWorkspaceInput>
+}
+
+export type ProjectScalarWhereInput = {
+  AND?: Prisma.ProjectScalarWhereInput | Prisma.ProjectScalarWhereInput[]
+  OR?: Prisma.ProjectScalarWhereInput[]
+  NOT?: Prisma.ProjectScalarWhereInput | Prisma.ProjectScalarWhereInput[]
+  id?: Prisma.StringFilter<"Project"> | string
+  title?: Prisma.StringFilter<"Project"> | string
+  workspaceId?: Prisma.StringFilter<"Project"> | string
+}
+
 export type ProjectCreateWithoutNotesInput = {
   id: string
   title: string
   tags?: Prisma.TagCreateNestedManyWithoutProjectsInput
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutProjectsInput
 }
 
 export type ProjectUncheckedCreateWithoutNotesInput = {
   id: string
   title: string
+  workspaceId: string
   tags?: Prisma.TagUncheckedCreateNestedManyWithoutProjectsInput
 }
 
@@ -372,23 +489,17 @@ export type ProjectUpdateManyWithWhereWithoutNotesInput = {
   data: Prisma.XOR<Prisma.ProjectUpdateManyMutationInput, Prisma.ProjectUncheckedUpdateManyWithoutNotesInput>
 }
 
-export type ProjectScalarWhereInput = {
-  AND?: Prisma.ProjectScalarWhereInput | Prisma.ProjectScalarWhereInput[]
-  OR?: Prisma.ProjectScalarWhereInput[]
-  NOT?: Prisma.ProjectScalarWhereInput | Prisma.ProjectScalarWhereInput[]
-  id?: Prisma.StringFilter<"Project"> | string
-  title?: Prisma.StringFilter<"Project"> | string
-}
-
 export type ProjectCreateWithoutTagsInput = {
   id: string
   title: string
   notes?: Prisma.NoteCreateNestedManyWithoutProjectsInput
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutProjectsInput
 }
 
 export type ProjectUncheckedCreateWithoutTagsInput = {
   id: string
   title: string
+  workspaceId: string
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutProjectsInput
 }
 
@@ -413,38 +524,68 @@ export type ProjectUpdateManyWithWhereWithoutTagsInput = {
   data: Prisma.XOR<Prisma.ProjectUpdateManyMutationInput, Prisma.ProjectUncheckedUpdateManyWithoutTagsInput>
 }
 
+export type ProjectCreateManyWorkspaceInput = {
+  id: string
+  title: string
+}
+
+export type ProjectUpdateWithoutWorkspaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  notes?: Prisma.NoteUpdateManyWithoutProjectsNestedInput
+  tags?: Prisma.TagUpdateManyWithoutProjectsNestedInput
+}
+
+export type ProjectUncheckedUpdateWithoutWorkspaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutProjectsNestedInput
+  tags?: Prisma.TagUncheckedUpdateManyWithoutProjectsNestedInput
+}
+
+export type ProjectUncheckedUpdateManyWithoutWorkspaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
 export type ProjectUpdateWithoutNotesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.TagUpdateManyWithoutProjectsNestedInput
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutProjectsNestedInput
 }
 
 export type ProjectUncheckedUpdateWithoutNotesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.TagUncheckedUpdateManyWithoutProjectsNestedInput
 }
 
 export type ProjectUncheckedUpdateManyWithoutNotesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type ProjectUpdateWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NoteUpdateManyWithoutProjectsNestedInput
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutProjectsNestedInput
 }
 
 export type ProjectUncheckedUpdateWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NoteUncheckedUpdateManyWithoutProjectsNestedInput
 }
 
 export type ProjectUncheckedUpdateManyWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -490,44 +631,58 @@ export type ProjectCountOutputTypeCountTagsArgs<ExtArgs extends runtime.Types.Ex
 export type ProjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
+  workspaceId?: boolean
   notes?: boolean | Prisma.Project$notesArgs<ExtArgs>
   tags?: boolean | Prisma.Project$tagsArgs<ExtArgs>
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.ProjectCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["project"]>
 
 export type ProjectSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
+  workspaceId?: boolean
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["project"]>
 
 export type ProjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
+  workspaceId?: boolean
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["project"]>
 
 export type ProjectSelectScalar = {
   id?: boolean
   title?: boolean
+  workspaceId?: boolean
 }
 
-export type ProjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title", ExtArgs["result"]["project"]>
+export type ProjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "workspaceId", ExtArgs["result"]["project"]>
 export type ProjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   notes?: boolean | Prisma.Project$notesArgs<ExtArgs>
   tags?: boolean | Prisma.Project$tagsArgs<ExtArgs>
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.ProjectCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type ProjectIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type ProjectIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type ProjectIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
+}
+export type ProjectIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
+}
 
 export type $ProjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Project"
   objects: {
     notes: Prisma.$NotePayload<ExtArgs>[]
     tags: Prisma.$TagPayload<ExtArgs>[]
+    workspace: Prisma.$WorkspacePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     title: string
+    workspaceId: string
   }, ExtArgs["result"]["project"]>
   composites: {}
 }
@@ -924,6 +1079,7 @@ export interface Prisma__ProjectClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   notes<T extends Prisma.Project$notesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$notesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tags<T extends Prisma.Project$tagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  workspace<T extends Prisma.WorkspaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorkspaceDefaultArgs<ExtArgs>>): Prisma.Prisma__WorkspaceClient<runtime.Types.Result.GetResult<Prisma.$WorkspacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -955,6 +1111,7 @@ export interface Prisma__ProjectClient<T, Null = never, ExtArgs extends runtime.
 export interface ProjectFieldRefs {
   readonly id: Prisma.FieldRef<"Project", 'String'>
   readonly title: Prisma.FieldRef<"Project", 'String'>
+  readonly workspaceId: Prisma.FieldRef<"Project", 'String'>
 }
     
 
@@ -1209,6 +1366,10 @@ export type ProjectCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    */
   data: Prisma.ProjectCreateManyInput | Prisma.ProjectCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProjectIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1279,6 +1440,10 @@ export type ProjectUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    * Limit how many Projects to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProjectIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

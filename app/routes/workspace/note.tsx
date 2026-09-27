@@ -1,4 +1,4 @@
-import type { Route } from "../+types/note";
+import type { Route } from "./+types/note";
 import Editor from "~/components/editor";
 import type { Content, JSONContent } from "@tiptap/react";
 import type { MentionNodeAttrs } from "@tiptap/extension-mention";

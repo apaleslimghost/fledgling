@@ -27,16 +27,19 @@ export type AggregateTag = {
 export type TagMinAggregateOutputType = {
   id: string | null
   path: string | null
+  workspaceId: string | null
 }
 
 export type TagMaxAggregateOutputType = {
   id: string | null
   path: string | null
+  workspaceId: string | null
 }
 
 export type TagCountAggregateOutputType = {
   id: number
   path: number
+  workspaceId: number
   _all: number
 }
 
@@ -44,16 +47,19 @@ export type TagCountAggregateOutputType = {
 export type TagMinAggregateInputType = {
   id?: true
   path?: true
+  workspaceId?: true
 }
 
 export type TagMaxAggregateInputType = {
   id?: true
   path?: true
+  workspaceId?: true
 }
 
 export type TagCountAggregateInputType = {
   id?: true
   path?: true
+  workspaceId?: true
   _all?: true
 }
 
@@ -132,6 +138,7 @@ export type TagGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type TagGroupByOutputType = {
   id: string
   path: string
+  workspaceId: string
   _count: TagCountAggregateOutputType | null
   _min: TagMinAggregateOutputType | null
   _max: TagMaxAggregateOutputType | null
@@ -158,15 +165,19 @@ export type TagWhereInput = {
   NOT?: Prisma.TagWhereInput | Prisma.TagWhereInput[]
   id?: Prisma.StringFilter<"Tag"> | string
   path?: Prisma.StringFilter<"Tag"> | string
+  workspaceId?: Prisma.StringFilter<"Tag"> | string
   notes?: Prisma.NoteListRelationFilter
   projects?: Prisma.ProjectListRelationFilter
+  workspace?: Prisma.XOR<Prisma.WorkspaceScalarRelationFilter, Prisma.WorkspaceWhereInput>
 }
 
 export type TagOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   path?: Prisma.SortOrder
+  workspaceId?: Prisma.SortOrder
   notes?: Prisma.NoteOrderByRelationAggregateInput
   projects?: Prisma.ProjectOrderByRelationAggregateInput
+  workspace?: Prisma.WorkspaceOrderByWithRelationInput
 }
 
 export type TagWhereUniqueInput = Prisma.AtLeast<{
@@ -175,13 +186,16 @@ export type TagWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.TagWhereInput[]
   NOT?: Prisma.TagWhereInput | Prisma.TagWhereInput[]
   path?: Prisma.StringFilter<"Tag"> | string
+  workspaceId?: Prisma.StringFilter<"Tag"> | string
   notes?: Prisma.NoteListRelationFilter
   projects?: Prisma.ProjectListRelationFilter
+  workspace?: Prisma.XOR<Prisma.WorkspaceScalarRelationFilter, Prisma.WorkspaceWhereInput>
 }, "id">
 
 export type TagOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   path?: Prisma.SortOrder
+  workspaceId?: Prisma.SortOrder
   _count?: Prisma.TagCountOrderByAggregateInput
   _max?: Prisma.TagMaxOrderByAggregateInput
   _min?: Prisma.TagMinOrderByAggregateInput
@@ -193,6 +207,7 @@ export type TagScalarWhereWithAggregatesInput = {
   NOT?: Prisma.TagScalarWhereWithAggregatesInput | Prisma.TagScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Tag"> | string
   path?: Prisma.StringWithAggregatesFilter<"Tag"> | string
+  workspaceId?: Prisma.StringWithAggregatesFilter<"Tag"> | string
 }
 
 export type TagCreateInput = {
@@ -200,11 +215,13 @@ export type TagCreateInput = {
   path: string
   notes?: Prisma.NoteCreateNestedManyWithoutTagsInput
   projects?: Prisma.ProjectCreateNestedManyWithoutTagsInput
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutTagsInput
 }
 
 export type TagUncheckedCreateInput = {
   id: string
   path: string
+  workspaceId: string
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutTagsInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutTagsInput
 }
@@ -214,11 +231,13 @@ export type TagUpdateInput = {
   path?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NoteUpdateManyWithoutTagsNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutTagsNestedInput
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutTagsNestedInput
 }
 
 export type TagUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NoteUncheckedUpdateManyWithoutTagsNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutTagsNestedInput
 }
@@ -226,6 +245,7 @@ export type TagUncheckedUpdateInput = {
 export type TagCreateManyInput = {
   id: string
   path: string
+  workspaceId: string
 }
 
 export type TagUpdateManyMutationInput = {
@@ -236,6 +256,7 @@ export type TagUpdateManyMutationInput = {
 export type TagUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type TagListRelationFilter = {
@@ -251,16 +272,61 @@ export type TagOrderByRelationAggregateInput = {
 export type TagCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   path?: Prisma.SortOrder
+  workspaceId?: Prisma.SortOrder
 }
 
 export type TagMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   path?: Prisma.SortOrder
+  workspaceId?: Prisma.SortOrder
 }
 
 export type TagMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   path?: Prisma.SortOrder
+  workspaceId?: Prisma.SortOrder
+}
+
+export type TagCreateNestedManyWithoutWorkspaceInput = {
+  create?: Prisma.XOR<Prisma.TagCreateWithoutWorkspaceInput, Prisma.TagUncheckedCreateWithoutWorkspaceInput> | Prisma.TagCreateWithoutWorkspaceInput[] | Prisma.TagUncheckedCreateWithoutWorkspaceInput[]
+  connectOrCreate?: Prisma.TagCreateOrConnectWithoutWorkspaceInput | Prisma.TagCreateOrConnectWithoutWorkspaceInput[]
+  createMany?: Prisma.TagCreateManyWorkspaceInputEnvelope
+  connect?: Prisma.TagWhereUniqueInput | Prisma.TagWhereUniqueInput[]
+}
+
+export type TagUncheckedCreateNestedManyWithoutWorkspaceInput = {
+  create?: Prisma.XOR<Prisma.TagCreateWithoutWorkspaceInput, Prisma.TagUncheckedCreateWithoutWorkspaceInput> | Prisma.TagCreateWithoutWorkspaceInput[] | Prisma.TagUncheckedCreateWithoutWorkspaceInput[]
+  connectOrCreate?: Prisma.TagCreateOrConnectWithoutWorkspaceInput | Prisma.TagCreateOrConnectWithoutWorkspaceInput[]
+  createMany?: Prisma.TagCreateManyWorkspaceInputEnvelope
+  connect?: Prisma.TagWhereUniqueInput | Prisma.TagWhereUniqueInput[]
+}
+
+export type TagUpdateManyWithoutWorkspaceNestedInput = {
+  create?: Prisma.XOR<Prisma.TagCreateWithoutWorkspaceInput, Prisma.TagUncheckedCreateWithoutWorkspaceInput> | Prisma.TagCreateWithoutWorkspaceInput[] | Prisma.TagUncheckedCreateWithoutWorkspaceInput[]
+  connectOrCreate?: Prisma.TagCreateOrConnectWithoutWorkspaceInput | Prisma.TagCreateOrConnectWithoutWorkspaceInput[]
+  upsert?: Prisma.TagUpsertWithWhereUniqueWithoutWorkspaceInput | Prisma.TagUpsertWithWhereUniqueWithoutWorkspaceInput[]
+  createMany?: Prisma.TagCreateManyWorkspaceInputEnvelope
+  set?: Prisma.TagWhereUniqueInput | Prisma.TagWhereUniqueInput[]
+  disconnect?: Prisma.TagWhereUniqueInput | Prisma.TagWhereUniqueInput[]
+  delete?: Prisma.TagWhereUniqueInput | Prisma.TagWhereUniqueInput[]
+  connect?: Prisma.TagWhereUniqueInput | Prisma.TagWhereUniqueInput[]
+  update?: Prisma.TagUpdateWithWhereUniqueWithoutWorkspaceInput | Prisma.TagUpdateWithWhereUniqueWithoutWorkspaceInput[]
+  updateMany?: Prisma.TagUpdateManyWithWhereWithoutWorkspaceInput | Prisma.TagUpdateManyWithWhereWithoutWorkspaceInput[]
+  deleteMany?: Prisma.TagScalarWhereInput | Prisma.TagScalarWhereInput[]
+}
+
+export type TagUncheckedUpdateManyWithoutWorkspaceNestedInput = {
+  create?: Prisma.XOR<Prisma.TagCreateWithoutWorkspaceInput, Prisma.TagUncheckedCreateWithoutWorkspaceInput> | Prisma.TagCreateWithoutWorkspaceInput[] | Prisma.TagUncheckedCreateWithoutWorkspaceInput[]
+  connectOrCreate?: Prisma.TagCreateOrConnectWithoutWorkspaceInput | Prisma.TagCreateOrConnectWithoutWorkspaceInput[]
+  upsert?: Prisma.TagUpsertWithWhereUniqueWithoutWorkspaceInput | Prisma.TagUpsertWithWhereUniqueWithoutWorkspaceInput[]
+  createMany?: Prisma.TagCreateManyWorkspaceInputEnvelope
+  set?: Prisma.TagWhereUniqueInput | Prisma.TagWhereUniqueInput[]
+  disconnect?: Prisma.TagWhereUniqueInput | Prisma.TagWhereUniqueInput[]
+  delete?: Prisma.TagWhereUniqueInput | Prisma.TagWhereUniqueInput[]
+  connect?: Prisma.TagWhereUniqueInput | Prisma.TagWhereUniqueInput[]
+  update?: Prisma.TagUpdateWithWhereUniqueWithoutWorkspaceInput | Prisma.TagUpdateWithWhereUniqueWithoutWorkspaceInput[]
+  updateMany?: Prisma.TagUpdateManyWithWhereWithoutWorkspaceInput | Prisma.TagUpdateManyWithWhereWithoutWorkspaceInput[]
+  deleteMany?: Prisma.TagScalarWhereInput | Prisma.TagScalarWhereInput[]
 }
 
 export type TagCreateNestedManyWithoutNotesInput = {
@@ -339,15 +405,66 @@ export type TagUncheckedUpdateManyWithoutProjectsNestedInput = {
   deleteMany?: Prisma.TagScalarWhereInput | Prisma.TagScalarWhereInput[]
 }
 
+export type TagCreateWithoutWorkspaceInput = {
+  id: string
+  path: string
+  notes?: Prisma.NoteCreateNestedManyWithoutTagsInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutTagsInput
+}
+
+export type TagUncheckedCreateWithoutWorkspaceInput = {
+  id: string
+  path: string
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutTagsInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutTagsInput
+}
+
+export type TagCreateOrConnectWithoutWorkspaceInput = {
+  where: Prisma.TagWhereUniqueInput
+  create: Prisma.XOR<Prisma.TagCreateWithoutWorkspaceInput, Prisma.TagUncheckedCreateWithoutWorkspaceInput>
+}
+
+export type TagCreateManyWorkspaceInputEnvelope = {
+  data: Prisma.TagCreateManyWorkspaceInput | Prisma.TagCreateManyWorkspaceInput[]
+  skipDuplicates?: boolean
+}
+
+export type TagUpsertWithWhereUniqueWithoutWorkspaceInput = {
+  where: Prisma.TagWhereUniqueInput
+  update: Prisma.XOR<Prisma.TagUpdateWithoutWorkspaceInput, Prisma.TagUncheckedUpdateWithoutWorkspaceInput>
+  create: Prisma.XOR<Prisma.TagCreateWithoutWorkspaceInput, Prisma.TagUncheckedCreateWithoutWorkspaceInput>
+}
+
+export type TagUpdateWithWhereUniqueWithoutWorkspaceInput = {
+  where: Prisma.TagWhereUniqueInput
+  data: Prisma.XOR<Prisma.TagUpdateWithoutWorkspaceInput, Prisma.TagUncheckedUpdateWithoutWorkspaceInput>
+}
+
+export type TagUpdateManyWithWhereWithoutWorkspaceInput = {
+  where: Prisma.TagScalarWhereInput
+  data: Prisma.XOR<Prisma.TagUpdateManyMutationInput, Prisma.TagUncheckedUpdateManyWithoutWorkspaceInput>
+}
+
+export type TagScalarWhereInput = {
+  AND?: Prisma.TagScalarWhereInput | Prisma.TagScalarWhereInput[]
+  OR?: Prisma.TagScalarWhereInput[]
+  NOT?: Prisma.TagScalarWhereInput | Prisma.TagScalarWhereInput[]
+  id?: Prisma.StringFilter<"Tag"> | string
+  path?: Prisma.StringFilter<"Tag"> | string
+  workspaceId?: Prisma.StringFilter<"Tag"> | string
+}
+
 export type TagCreateWithoutNotesInput = {
   id: string
   path: string
   projects?: Prisma.ProjectCreateNestedManyWithoutTagsInput
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutTagsInput
 }
 
 export type TagUncheckedCreateWithoutNotesInput = {
   id: string
   path: string
+  workspaceId: string
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutTagsInput
 }
 
@@ -372,23 +489,17 @@ export type TagUpdateManyWithWhereWithoutNotesInput = {
   data: Prisma.XOR<Prisma.TagUpdateManyMutationInput, Prisma.TagUncheckedUpdateManyWithoutNotesInput>
 }
 
-export type TagScalarWhereInput = {
-  AND?: Prisma.TagScalarWhereInput | Prisma.TagScalarWhereInput[]
-  OR?: Prisma.TagScalarWhereInput[]
-  NOT?: Prisma.TagScalarWhereInput | Prisma.TagScalarWhereInput[]
-  id?: Prisma.StringFilter<"Tag"> | string
-  path?: Prisma.StringFilter<"Tag"> | string
-}
-
 export type TagCreateWithoutProjectsInput = {
   id: string
   path: string
   notes?: Prisma.NoteCreateNestedManyWithoutTagsInput
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutTagsInput
 }
 
 export type TagUncheckedCreateWithoutProjectsInput = {
   id: string
   path: string
+  workspaceId: string
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutTagsInput
 }
 
@@ -413,38 +524,68 @@ export type TagUpdateManyWithWhereWithoutProjectsInput = {
   data: Prisma.XOR<Prisma.TagUpdateManyMutationInput, Prisma.TagUncheckedUpdateManyWithoutProjectsInput>
 }
 
+export type TagCreateManyWorkspaceInput = {
+  id: string
+  path: string
+}
+
+export type TagUpdateWithoutWorkspaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  path?: Prisma.StringFieldUpdateOperationsInput | string
+  notes?: Prisma.NoteUpdateManyWithoutTagsNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutTagsNestedInput
+}
+
+export type TagUncheckedUpdateWithoutWorkspaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  path?: Prisma.StringFieldUpdateOperationsInput | string
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutTagsNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutTagsNestedInput
+}
+
+export type TagUncheckedUpdateManyWithoutWorkspaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  path?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
 export type TagUpdateWithoutNotesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   projects?: Prisma.ProjectUpdateManyWithoutTagsNestedInput
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutTagsNestedInput
 }
 
 export type TagUncheckedUpdateWithoutNotesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutTagsNestedInput
 }
 
 export type TagUncheckedUpdateManyWithoutNotesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type TagUpdateWithoutProjectsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NoteUpdateManyWithoutTagsNestedInput
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutTagsNestedInput
 }
 
 export type TagUncheckedUpdateWithoutProjectsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NoteUncheckedUpdateManyWithoutTagsNestedInput
 }
 
 export type TagUncheckedUpdateManyWithoutProjectsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -490,44 +631,58 @@ export type TagCountOutputTypeCountProjectsArgs<ExtArgs extends runtime.Types.Ex
 export type TagSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   path?: boolean
+  workspaceId?: boolean
   notes?: boolean | Prisma.Tag$notesArgs<ExtArgs>
   projects?: boolean | Prisma.Tag$projectsArgs<ExtArgs>
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.TagCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tag"]>
 
 export type TagSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   path?: boolean
+  workspaceId?: boolean
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tag"]>
 
 export type TagSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   path?: boolean
+  workspaceId?: boolean
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tag"]>
 
 export type TagSelectScalar = {
   id?: boolean
   path?: boolean
+  workspaceId?: boolean
 }
 
-export type TagOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "path", ExtArgs["result"]["tag"]>
+export type TagOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "path" | "workspaceId", ExtArgs["result"]["tag"]>
 export type TagInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   notes?: boolean | Prisma.Tag$notesArgs<ExtArgs>
   projects?: boolean | Prisma.Tag$projectsArgs<ExtArgs>
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.TagCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type TagIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type TagIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type TagIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
+}
+export type TagIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
+}
 
 export type $TagPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Tag"
   objects: {
     notes: Prisma.$NotePayload<ExtArgs>[]
     projects: Prisma.$ProjectPayload<ExtArgs>[]
+    workspace: Prisma.$WorkspacePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     path: string
+    workspaceId: string
   }, ExtArgs["result"]["tag"]>
   composites: {}
 }
@@ -924,6 +1079,7 @@ export interface Prisma__TagClient<T, Null = never, ExtArgs extends runtime.Type
   readonly [Symbol.toStringTag]: "PrismaPromise"
   notes<T extends Prisma.Tag$notesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tag$notesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   projects<T extends Prisma.Tag$projectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tag$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  workspace<T extends Prisma.WorkspaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorkspaceDefaultArgs<ExtArgs>>): Prisma.Prisma__WorkspaceClient<runtime.Types.Result.GetResult<Prisma.$WorkspacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -955,6 +1111,7 @@ export interface Prisma__TagClient<T, Null = never, ExtArgs extends runtime.Type
 export interface TagFieldRefs {
   readonly id: Prisma.FieldRef<"Tag", 'String'>
   readonly path: Prisma.FieldRef<"Tag", 'String'>
+  readonly workspaceId: Prisma.FieldRef<"Tag", 'String'>
 }
     
 
@@ -1209,6 +1366,10 @@ export type TagCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.
    */
   data: Prisma.TagCreateManyInput | Prisma.TagCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TagIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1279,6 +1440,10 @@ export type TagUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.
    * Limit how many Tags to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TagIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

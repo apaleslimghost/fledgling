@@ -51,6 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  Workspace: 'Workspace',
   Note: 'Note',
   Tag: 'Tag',
   Project: 'Project'
@@ -72,10 +73,18 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const WorkspaceScalarFieldEnum = {
+  id: 'id'
+} as const
+
+export type WorkspaceScalarFieldEnum = (typeof WorkspaceScalarFieldEnum)[keyof typeof WorkspaceScalarFieldEnum]
+
+
 export const NoteScalarFieldEnum = {
   id: 'id',
   title: 'title',
-  content: 'content'
+  content: 'content',
+  workspaceId: 'workspaceId'
 } as const
 
 export type NoteScalarFieldEnum = (typeof NoteScalarFieldEnum)[keyof typeof NoteScalarFieldEnum]
@@ -83,7 +92,8 @@ export type NoteScalarFieldEnum = (typeof NoteScalarFieldEnum)[keyof typeof Note
 
 export const TagScalarFieldEnum = {
   id: 'id',
-  path: 'path'
+  path: 'path',
+  workspaceId: 'workspaceId'
 } as const
 
 export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagScalarFieldEnum]
@@ -91,7 +101,8 @@ export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagSca
 
 export const ProjectScalarFieldEnum = {
   id: 'id',
-  title: 'title'
+  title: 'title',
+  workspaceId: 'workspaceId'
 } as const
 
 export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]

@@ -11,24 +11,38 @@ generator zero {
    provider = "prisma-zero"
 }
 
+model Workspace {
+   id       String    @id
+   notes    Note[]
+   tags     Tag[]
+   projects Project[]
+}
+
 model Note {
    id       String    @id
    title    String
    content  Json
    tags     Tag[]
    projects Project[]
+
+   workspace   Workspace @relation(fields: [workspaceId], references: [id])
+   workspaceId String
 }
 
 model Tag {
-   id       String    @id
-   path     String
-   notes    Note[]
-   projects Project[]
+   id          String    @id
+   path        String
+   notes       Note[]
+   projects    Project[]
+   workspace   Workspace @relation(fields: [workspaceId], references: [id])
+   workspaceId String
 }
 
 model Project {
-   id    String @id
-   title String
-   notes Note[]
-   tags  Tag[]
+   id          String    @id
+   title       String
+   notes       Note[]
+   tags        Tag[]
+   workspace   Workspace @relation(fields: [workspaceId], references: [id])
+   workspaceId String
 }
