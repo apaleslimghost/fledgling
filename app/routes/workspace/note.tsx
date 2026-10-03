@@ -70,11 +70,16 @@ export default function Note({ params }: Route.ComponentProps) {
 						(node) => node.attrs.mentionSuggestionChar === '#' && node.attrs.id
 					)
 
+					const bodyProjects = Array.from(collect<MentionNode>('mention', content)).filter(
+						(node) => node.attrs.mentionSuggestionChar === '@' && node.attrs.id
+					)
+
 					const tags = bodyTags.map(t => t.attrs.id).filter((id): id is string => !!id)
+					const projects = bodyProjects.map(t => t.attrs.id).filter((id): id is string => !!id)
 
 					await database.notes.find({
 						selector: { id: params.noteId },
-					}).patch({ content, tags })
+					}).patch({ content, tags, projects })
 				}} />
 		</article>
 	);

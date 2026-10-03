@@ -6,5 +6,6 @@ export default [
 		index("routes/workspace/home.tsx"),
 		route("note/:noteId", "routes/workspace/note.tsx"),
 		route("tag/:tagId", "routes/workspace/tag.tsx"),
+		route("project/:projectId", "routes/workspace/project.tsx"),
 	]),
 ] satisfies RouteConfig;
