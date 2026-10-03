@@ -3,6 +3,7 @@ import { NodeViewWrapper } from '@tiptap/react'
 import { useMemo } from 'react'
 import { Link } from 'react-router'
 import { useRxQuery } from 'rxdb/plugins/react'
+import { useWorkspace } from '~/data/context'
 import database from '~/data/rxdb.client'
 
 const TagMention = (props: {
@@ -20,9 +21,11 @@ const TagMention = (props: {
 		query: tagQuery
 	})
 
+	const workspaceId = useWorkspace()
+
 	return (
 		<NodeViewWrapper as="span">
-			<Link ref={props.ref} to={`/tag/${tag?.id ?? props.node.attrs.id}`} className="label">
+			<Link ref={props.ref} to={`/workspace/${workspaceId}/tag/${tag?.id ?? props.node.attrs.id}`} className="label">
 				{props.node.attrs.mentionSuggestionChar}{tag?.path ?? props.node.attrs.label}
 			</Link>
 		</NodeViewWrapper>
@@ -44,9 +47,11 @@ const ProjectMention = (props: {
 		query: projectQuery
 	})
 
+	const workspaceId = useWorkspace()
+
 	return (
 		<NodeViewWrapper as="span">
-			<Link ref={props.ref} to={`/project/${project?.id ?? props.node.attrs.id}`} className="label secondary">
+			<Link ref={props.ref} to={`/workspace/${workspaceId}/project/${project?.id ?? props.node.attrs.id}`} className="label secondary">
 				{props.node.attrs.mentionSuggestionChar}{project?.title ?? props.node.attrs.label}
 			</Link>
 		</NodeViewWrapper>
