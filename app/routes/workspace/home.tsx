@@ -1,15 +1,12 @@
 import type { Route } from "./+types/home";
 import database from "~/data/rxdb.client";
 
-export function meta({ }: Route.MetaArgs) {
-	return [
-		{ title: "New React Router App" },
-		{ name: "description", content: "Welcome to React Router!" },
-	];
-}
-
-export function clientLoader() {
-	return database.notes.find().exec()
+export function clientLoader({ params }: Route.ComponentProps) {
+	return database.notes.find({
+		selector: {
+			workspace: params.workspaceId
+		}
+	}).exec()
 }
 
 export default function Home({ loaderData: notes, params }: Route.ComponentProps) {
