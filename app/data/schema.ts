@@ -26,6 +26,10 @@ export type Project = {
 	workspace: string
 }
 
+export type Session = {
+	workspaceId: string
+}
+
 export const workspaceSchema: RxJsonSchema<Workspace> = {
 	type: 'object',
 	properties: {

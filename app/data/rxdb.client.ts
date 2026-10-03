@@ -12,6 +12,7 @@ import {
 	workspaceSchema,
 	type Collections,
 } from './schema'
+import { RxDBLocalDocumentsPlugin } from 'rxdb/plugins/local-documents';
 
 
 const ajv = getAjv()
@@ -25,11 +26,13 @@ disableWarnings()
 
 addRxPlugin(RxDBUpdatePlugin)
 addRxPlugin(RxDBMigrationSchemaPlugin)
+addRxPlugin(RxDBLocalDocumentsPlugin);
 
 const database = await createRxDatabase<Collections>({
 	name: 'fledgling',
 	closeDuplicates: true,
 	storage,
+	localDocuments: true
 })
 
 await database.addCollections({
