@@ -1,5 +1,5 @@
 import Minisearch from 'minisearch'
-import type { Project, Tag } from '../../schema'
+import type { Project, Tag } from './schema'
 
 export const tagSearch = new Minisearch<Tag>({
 	fields: ['path'],

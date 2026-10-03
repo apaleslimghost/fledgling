@@ -1,8 +1,7 @@
 import { type Editor, ReactRenderer } from '@tiptap/react'
 import type { SuggestionOptions, SuggestionProps } from '@tiptap/suggestion'
 import { type ComponentProps, forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react'
-import { useZero } from '@rocicorp/zero/react'
-import type { Zero } from '@rocicorp/zero'
+import { useWorkspace } from '~/data/context'
 
 export type SuggestionListHandle = {
 	onKeyDown: (event: KeyboardEvent) => boolean
@@ -13,14 +12,14 @@ type Suggestion = {
 	label: string
 }
 
-type OnCreate = (zero: Zero, suggestion: Suggestion) => Promise<{ id: string }>
+type OnCreate = (suggestion: Suggestion, workspaceId: string) => Promise<{ id: string }>
 
 const SuggestionList = forwardRef<
 	SuggestionListHandle,
 	SuggestionProps<Suggestion> & { char: string, onCreate: OnCreate }
 >(({ items, command, char, onCreate }, ref) => {
 	const [selectedIndex, setSelectedIndex] = useState(0)
-	const zero = useZero()
+	const workspaceId = useWorkspace()
 
 	useEffect(() => {
 		setSelectedIndex((index) => (index >= items.length ? 0 : index))
@@ -30,12 +29,12 @@ const SuggestionList = forwardRef<
 		if (!suggestion) return
 
 		if (!suggestion.id) {
-			const { id } = await onCreate(zero, suggestion)
+			const { id } = await onCreate(suggestion, workspaceId)
 			suggestion.id = id
 		}
 
 		command(suggestion)
-	}, [zero, command])
+	}, [command])
 
 	useImperativeHandle(ref, () => ({
 		onKeyDown: (event: KeyboardEvent) => {

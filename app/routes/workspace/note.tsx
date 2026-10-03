@@ -2,9 +2,9 @@ import type { Route } from "./+types/note";
 import Editor from "~/components/editor";
 import type { Content, JSONContent } from "@tiptap/react";
 import type { MentionNodeAttrs } from "@tiptap/extension-mention";
-import { queries } from "~/zero/queries";
-import { useQuery, useZero } from "@rocicorp/zero/react";
-import { mutators } from "~/zero/mutators";
+import { useMemo, useState } from "react";
+import database from "~/data/rxdb.client";
+import { useLiveRxQuery, useRxQuery } from "rxdb/plugins/react";
 
 interface MentionNode extends JSONContent {
 	type: 'mention'
@@ -30,22 +30,19 @@ function* collect<T extends JSONContent>(type: T['type'], tree: JSONContent): Ge
 }
 
 export default function Note({ params }: Route.ComponentProps) {
-	const zero = useZero()
-	const [note, noteResult] = useQuery(queries.note.byId({ id: params.noteId }))
+	const query = useMemo(() => ({ selector: { id: params.noteId } }), [params.noteId])
+	const { results: [note] } = useLiveRxQuery({
+		collection: database.notes,
+		query,
+	})
 
-	if (!note) {
-		if (noteResult.type === 'complete') {
-			throw new Error(`Note ${params.noteId} not found`)
-		} else {
-			return null
-		}
-	}
+	if (!note) return null
 
 	return (
 		<article className="card surface hi">
 			<h1>
-				<input value={note.title ?? ''} onChange={async (e) => {
-					zero.mutate(mutators.note.setTitle({ id: params.noteId, title: e.target.value }))
+				<input value={note.title} onChange={async (e) => {
+					await note.patch({ title: e.target.value })
 				}} placeholder="Untitled note" autoFocus={!note.title} />
 			</h1>
 
@@ -53,20 +50,31 @@ export default function Note({ params }: Route.ComponentProps) {
 				onDelete={async (mutation) => {
 					if (mutation.type === 'node') {
 						if (mutation.node.type.name === 'mention' && mutation.node.attrs.id) {
-							zero.mutate(mutators.tag.removeAndMaybeCleanUp({ noteId: note.id, id: mutation.node.attrs.id }))
+							await note.modify(n => {
+								n.tags = n.tags.filter(t => t !== mutation.node.attrs.id)
+								return n
+							})
+
+							const notesWithTag = await database.notes.find({ selector: { tags: mutation.node.attrs.id } }).exec()
+
+							if (notesWithTag.length === 0) {
+								await database.tags.find({ selector: { id: mutation.node.attrs.id } }).remove()
+							}
 						}
 					}
 				}}
 				onUpdate={async ({ editor }) => {
-					const result = editor.getJSON() as JSONContent
+					const content = editor.getJSON() as JSONContent
 
-					const bodyTags = Array.from(collect<MentionNode>('mention', result)).filter(
+					const bodyTags = Array.from(collect<MentionNode>('mention', content)).filter(
 						(node) => node.attrs.mentionSuggestionChar === '#' && node.attrs.id
 					)
 
-					const tagIds = bodyTags.map(t => t.attrs.id).filter((id): id is string => !!id)
+					const tags = bodyTags.map(t => t.attrs.id).filter((id): id is string => !!id)
 
-					zero.mutate(mutators.note.setContent({ id: params.noteId, content: result, tagIds }))
+					await database.notes.find({
+						selector: { id: params.noteId },
+					}).patch({ content, tags })
 				}} />
 		</article>
 	);

@@ -9,7 +9,7 @@ import { projectSearch, tagSearch } from '~/data/search'
 import { Extension, InputRule, Node } from '@tiptap/core'
 import { findParentNodeClosestToPos } from '@tiptap/core'
 import { shortId } from '~/data/cuid'
-import { mutators } from '~/zero/mutators'
+import database from '~/data/rxdb.client'
 
 const taskListInputRule = () => new InputRule({
 	find: /^\[ ?\]$/,
@@ -84,12 +84,13 @@ export const extensions = [
 						})),
 					]
 				},
-				onCreate: async (zero, tag) => {
+				onCreate: async (tag, workspaceId) => {
 					const id = shortId()
-					await zero.mutate(mutators.tag.create({
+					await database.tags.insert({
 						id,
-						path: tag.label
-					})).client
+						path: tag.label,
+						workspace: workspaceId,
+					})
 
 					return { id }
 				},
@@ -110,12 +111,13 @@ export const extensions = [
 						})),
 					]
 				},
-				onCreate: async (zero, project) => {
+				onCreate: async (project, workspaceId) => {
 					const id = shortId()
-					await zero.mutate(mutators.project.create({
+					await database.projects.insert({
 						id,
 						title: project.label,
-					})).client
+						workspace: workspaceId,
+					})
 
 					return { id }
 				},

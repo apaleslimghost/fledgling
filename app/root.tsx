@@ -7,9 +7,14 @@ import {
 	ScrollRestoration,
 } from "react-router";
 
+import { RxDatabaseProvider } from 'rxdb/plugins/react';
+
 import type { Route } from "./+types/root";
 
 import "./app.css";
+import database from "./data/rxdb.client";
+import { useEffect } from "react";
+import { projectSearch, tagSearch } from "./data/search";
 
 export function Layout({ children }: { children: React.ReactNode }) {
 	return (
@@ -30,24 +35,27 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-	// TODO
-	// useEffect(() =>
-	// 	db.subscribeAll(app.tags, (tags) => {
-	// 		tagSearch.removeAll()
-	// 		tagSearch.addAll(tags.all)
-	// 	}),
-	// 	[db]
-	// )
+	useEffect(() => {
+		database.tags.find().$.subscribe((tags) => {
+			tagSearch.removeAll()
+			tagSearch.addAll(tags)
+		})
+	},
+		[database]
+	)
 
-	// useEffect(() =>
-	// 	db.subscribeAll(app.projects, (projects) => {
-	// 		projectSearch.removeAll()
-	// 		projectSearch.addAll(projects.all)
-	// 	}),
-	// 	[db]
-	// )
+	useEffect(() => {
+		database.projects.find().$.subscribe((projects) => {
+			projectSearch.removeAll()
+			projectSearch.addAll(projects)
+		})
+	},
+		[database]
+	)
 
-	return <Outlet />
+	return <RxDatabaseProvider database={database}>
+		<Outlet />
+	</RxDatabaseProvider>
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

@@ -4,9 +4,7 @@
 	"type": "module",
 	"scripts": {
 		"build": "react-router build",
-		"dev": "run-p dev:*",
-		"dev:zero": "zero-cache-dev",
-		"dev:router": "react-router dev",
+		"dev": "react-router dev",
 		"start": "react-router-serve ./build/server/index.js",
 		"typecheck": "react-router typegen && tsc"
 	},
@@ -15,11 +13,8 @@
 		"@fontsource/iosevka-curly": "^5.3.0",
 		"@fontsource/redacted-script": "^5.3.0",
 		"@paralleldrive/cuid2": "^3.3.0",
-		"@prisma/adapter-pg": "^7.10.0",
-		"@prisma/client": "^7.10.0",
 		"@react-router/node": "^8",
 		"@react-router/serve": "^8",
-		"@rocicorp/zero": "^1.9.0",
 		"@tiptap/extension-list": "^3.30.1",
 		"@tiptap/extension-mention": "^3.30.1",
 		"@tiptap/react": "^3.30.1",
@@ -29,6 +24,8 @@
 		"react": "^19.2.7",
 		"react-dom": "^19.2.7",
 		"react-router": "^8",
+		"rxdb": "^17.5.0",
+		"rxjs": "^7.8.2",
 		"zod": "^4.6.5"
 	},
 	"devDependencies": {
@@ -38,8 +35,6 @@
 		"@types/react": "^19.2.14",
 		"@types/react-dom": "^19.2.3",
 		"npm-run-all": "^4.1.5",
-		"prisma": "^7.10.0",
-		"prisma-zero": "^0.2.1",
 		"tailwindcss": "^4.2.2",
 		"typescript": "^5.9.3",
 		"vite": "^8.0.3"

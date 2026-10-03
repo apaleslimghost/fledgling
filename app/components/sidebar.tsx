@@ -1,42 +1,48 @@
 import { useNavigate } from "react-router";
-import { useQuery, useZero } from "@rocicorp/zero/react";
-import { queries } from "~/zero/queries";
 import { shortId } from "~/data/cuid";
-import { mutators } from "~/zero/mutators";
+import database from "~/data/rxdb.client";
+import type { Project, Tag } from "~/data/schema";
 
-export function Sidebar() {
-	const zero = useZero()
+export function Sidebar({
+	tags,
+	projects,
+	workspaceId
+}: {
+	tags: Tag[],
+	projects: Project[],
+	workspaceId: string
+}) {
 	const navigate = useNavigate()
-
-	const [tags] = useQuery(queries.tag.all({}))
-	const [projects] = useQuery(queries.project.all({}))
 
 	return (
 		<aside>
 			<button onClick={async () => {
 				const id = shortId()
-				const pending = zero.mutate(mutators.note.create({
-					id
-				}))
-
-				await pending.client
-				navigate(`/note/${id}`)
+				await database.notes.insert({
+					id,
+					title: '',
+					content: {},
+					tags: [],
+					projects: [],
+					workspace: workspaceId
+				})
+				navigate(`/workspace/${workspaceId}/note/${id}`)
 			}} className="surface lo">+ new note</button>
 
 			<menu>
-				{tags.map((tag) => (
+				{tags ? tags.map((tag) => (
 					<li key={tag.id}>
-						<a href={`/tag/${tag.id}`}>#{tag.path}</a>
+						<a href={`/workspace/${workspaceId}/tag/${tag.id}`}>#{tag.path}</a>
 					</li>
-				))}
+				)) : <li className="placeholder">loading tags</li>}
 			</menu>
 
 			<menu>
-				{projects.map((project) => (
+				{projects ? projects.map((project) => (
 					<li key={project.id}>
-						<a href={`/project/${project.id}`}>@{project.title}</a>
+						<a href={`/workspace/${workspaceId}/project/${project.id}`}>@{project.title}</a>
 					</li>
-				))}
+				)) : <li className="placeholder">loading projects</li>}
 			</menu>
 		</aside>
 	);

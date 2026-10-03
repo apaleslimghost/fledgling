@@ -6,5 +6,4 @@
 /.react-router/
 /build/
 
-zero.db*
 .vite

@@ -1,15 +1,24 @@
 import type { Node } from '@tiptap/pm/model'
 import { NodeViewWrapper } from '@tiptap/react'
+import { useMemo } from 'react'
 import { Link } from 'react-router'
-import { useQuery } from '@rocicorp/zero/react'
-import { queries } from '~/zero/queries'
-
+import { useRxQuery } from 'rxdb/plugins/react'
+import database from '~/data/rxdb.client'
 
 const TagMention = (props: {
 	node: Node
 	ref?: React.RefObject<HTMLAnchorElement | null>
 }) => {
-	const [tag] = useQuery(queries.tag.byId({ id: props.node.attrs.id }))
+	const tagQuery = useMemo(
+		() => ({
+			selector: { id: props.node.attrs.id }
+		}), [props.node.attrs.id]
+	)
+
+	const { results: [tag] } = useRxQuery({
+		collection: database.tags,
+		query: tagQuery
+	})
 
 	return (
 		<NodeViewWrapper as="span">
@@ -24,7 +33,16 @@ const ProjectMention = (props: {
 	node: Node
 	ref?: React.RefObject<HTMLAnchorElement | null>
 }) => {
-	const [project] = useQuery(queries.project.byId({ id: props.node.attrs.id }))
+	const projectQuery = useMemo(
+		() => ({
+			selector: { id: props.node.attrs.id }
+		}), [props.node.attrs.id]
+	)
+
+	const { results: [project] } = useRxQuery({
+		collection: database.projects,
+		query: projectQuery
+	})
 
 	return (
 		<NodeViewWrapper as="span">

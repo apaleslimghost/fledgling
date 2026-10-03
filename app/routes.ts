@@ -7,6 +7,4 @@ export default [
 		route("note/:noteId", "routes/workspace/note.tsx"),
 		route("tag/:tagId", "routes/workspace/tag.tsx"),
 	]),
-	route("/api/query", "routes/api/query.ts"),
-	route("/api/mutate", "routes/api/mutate.ts"),
 ] satisfies RouteConfig;

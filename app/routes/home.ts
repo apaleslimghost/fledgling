@@ -1,11 +1,13 @@
 import { redirect } from "react-router";
 import { cuid } from "~/data/cuid";
-// import { zero } from "~/data/zero";
-import { mutators } from "~/zero/mutators";
+import database from "~/data/rxdb.client";
 
 export async function clientLoader() {
 	const workspaceId = cuid()
-	// await zero.mutate(mutators.workspace.create({ id: workspaceId })).client
+	// TODO session
+	await database.workspaces.insert({ id: workspaceId })
 
 	return redirect(`/workspace/${workspaceId}`)
 }
+
+export default () => null
