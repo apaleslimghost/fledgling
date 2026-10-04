@@ -203,6 +203,7 @@ menu a:hover {
 
 menu a .chip {
 	float: right;
+	margin-block: 0.2em;
 }
 
 menu :is(li:not(:last-child),
