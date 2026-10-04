@@ -338,17 +338,31 @@ ul[data-type="taskList"] {
 	padding-inline: 0.5em;
 }
 
-h1.tag-path {
-	font-weight: normal;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin: 0 0 1rem;
+	line-height: 1;
 }
 
-h1.tag-path a {
+h1 {
+	font-size: 2.4em;
+}
+
+h1 a {
 	color: inherit;
 	text-decoration: none;
 }
 
-h1.tag-path a:hover {
+h1 a:hover {
 	text-decoration: underline;
+}
+
+h1.tag-path {
+	font-weight: normal;
 }
 
 h1.tag-path a[aria-current="page"] {

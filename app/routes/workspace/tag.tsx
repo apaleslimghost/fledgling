@@ -39,7 +39,7 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 export default function Tag({ loaderData: { notes, projects }, params }: Route.ComponentProps) {
 	const pathParts = params['*'].split('/')
 
-	return <div className="grid">
+	return <div>
 		<h1 className='tag-path'>
 			{pathParts.map((part, index) => (
 				<span key={pathParts.slice(0, index + 1).join('/')}>
@@ -53,19 +53,21 @@ export default function Tag({ loaderData: { notes, projects }, params }: Route.C
 				</span>
 			))}
 		</h1>
-		{notes.map(note => <div className="card surface mid" key={note.id}>
-			<h2>
-				<Link to={`/workspace/${params.workspaceId}/note/${note.id}`}>
-					{note.title}
-				</Link>
-			</h2>
-		</div>)}
-		{projects.map(project => <div className="card surface mid" key={project.id}>
-			<h2>
-				<Link to={`/workspace/${params.workspaceId}/project/${project.id}`}>
-					@{project.title}
-				</Link>
-			</h2>
-		</div>)}
+		<div className="grid">
+			{notes.map(note => <div className="card surface mid" key={note.id}>
+				<h2>
+					<Link to={`/workspace/${params.workspaceId}/note/${note.id}`}>
+						{note.title}
+					</Link>
+				</h2>
+			</div>)}
+			{projects.map(project => <div className="card surface mid" key={project.id}>
+				<h2>
+					<Link to={`/workspace/${params.workspaceId}/project/${project.id}`}>
+						@{project.title}
+					</Link>
+				</h2>
+			</div>)}
+		</div>
 	</div>
 }

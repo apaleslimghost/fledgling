@@ -1,6 +1,6 @@
 import database from "~/data/rxdb.client";
 import type { Route } from "./+types/project";
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 	const [project, notes] = await Promise.all([
@@ -14,14 +14,21 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 }
 
 export default function Project({ loaderData: { project, notes }, params }: Route.ComponentProps) {
-	return <div className="grid">
-		<h1>{project.title}</h1>
-		{notes.map(note => <div className="card surface mid" key={note.id}>
-			<h2>
-				<Link to={`/workspace/${params.workspaceId}/note/${note.id}`}>
-					{note.title}
-				</Link>
-			</h2>
-		</div>)}
+	return <div>
+		<h1>
+			<NavLink to={`/workspace/${params.workspaceId}/project/${project.id}`}>
+				@{project.title}
+			</NavLink>
+		</h1>
+		<div className="grid">
+
+			{notes.map(note => <div className="card surface mid" key={note.id}>
+				<h2>
+					<Link to={`/workspace/${params.workspaceId}/note/${note.id}`}>
+						{note.title}
+					</Link>
+				</h2>
+			</div>)}
+		</div>
 	</div>
 }
