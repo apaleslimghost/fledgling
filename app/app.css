@@ -177,24 +177,43 @@ menu {
 	margin: 0;
 }
 
-menu details summary {
-	list-style: none;
-}
-
 menu ul {
 	list-style: none;
 	padding-left: 0.5rem;
 }
 
-menu li>* {
+menu li>:not(details, .leaf),
+menu .leaf a {
 	display: block;
 	padding: 0.25rem 0.5rem;
+}
+
+menu summary {
+	padding: 0.25rem 0.5rem;
+}
+
+menu a {
 	text-decoration: none;
 	color: var(--shadow-colour);
 }
 
-menu li:not(:last-child) {
+menu a:hover {
+	font-weight: bold;
+}
+
+:is(summary, .leaf) .chip {
+	float: right;
+}
+
+menu :is(li:not(:last-child),
+	details[open] > summary,
+	details:not(:last-child),
+	.leaf:not(:last-child)) {
 	border-bottom: 1px dotted var(--shadow-colour);
+}
+
+menu details details :is(summary, .leaf) {
+	border-left: 1px dotted var(--shadow-colour);
 }
 
 menu>li:first-child {
@@ -216,7 +235,7 @@ menu li.selected a:after {
 	float: right;
 }
 
-menu li a:hover {
+menu li :is(li>a, summary, .leaf>a):hover {
 	background: rgb(from var(--highlight) r g b / 0.1);
 }
 

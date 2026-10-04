@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { NavLink } from 'react-router';
 import { useWorkspace } from '~/data/context';
 import { TagTree, type TagWithNotes } from '~/lib/tag-tree'
@@ -7,10 +8,11 @@ const TagLink = ({ tree, className }: { tree: TagTree; className?: string }) => 
 	return <>
 		<NavLink className={className} to={`/workspace/${workspaceid}/tag/${tree.tag.path}`}>
 			#{tree.path[tree.path.length - 1]}
-		</NavLink>{' '}
-		<span className='chip'>
-			{tree.notes.length}
-		</span>
+			{' '}
+			<span className='chip'>
+				{tree.notes.length}
+			</span>
+		</NavLink>
 	</>
 }
 
@@ -27,7 +29,7 @@ const TagBranch = ({ tree }: { tree: TagTree }) => {
 						<ul><TagBranch tree={child} /></ul>
 					</details>
 				) : (
-					<div key={child.tag.path}>
+					<div className="leaf" key={child.tag.path}>
 						<TagLink tree={child} />
 					</div>
 				),
