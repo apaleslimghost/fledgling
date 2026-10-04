@@ -177,6 +177,15 @@ menu {
 	margin: 0;
 }
 
+menu details summary {
+	list-style: none;
+}
+
+menu ul {
+	list-style: none;
+	padding-left: 0.5rem;
+}
+
 menu li>* {
 	display: block;
 	padding: 0.25rem 0.5rem;
@@ -188,12 +197,12 @@ menu li:not(:last-child) {
 	border-bottom: 1px dotted var(--shadow-colour);
 }
 
-menu li:first-child {
+menu>li:first-child {
 	border-top-left-radius: 0.5rem;
 	border-top-right-radius: 0.5rem;
 }
 
-menu li:last-child {
+menu>li:last-child {
 	border-bottom-left-radius: 0.5rem;
 	border-bottom-right-radius: 0.5rem;
 }
@@ -298,4 +307,14 @@ ul[data-type="taskList"] {
 		text-decoration: line-through;
 		color: rgb(from currentColor r g b / 0.8)
 	}
+}
+
+.chip {
+	display: inline-block;
+	vertical-align: middle;
+	font-weight: bold;
+	font-size: 0.6em;
+	border: 1px solid currentColor;
+	border-radius: 1em;
+	padding-inline: 0.5em;
 }

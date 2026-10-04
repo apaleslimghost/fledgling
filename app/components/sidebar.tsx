@@ -2,13 +2,15 @@ import { Link, useNavigate } from "react-router";
 import { shortId } from "~/data/cuid";
 import database from "~/data/rxdb.client";
 import type { Project, Tag } from "~/data/schema";
+import TagTreeComponent from "./tag-tree";
+import type { TagWithNotes } from "~/lib/tag-tree";
 
 export function Sidebar({
 	tags,
 	projects,
 	workspaceId
 }: {
-	tags: Tag[],
+	tags: TagWithNotes[],
 	projects: Project[],
 	workspaceId: string
 }) {
@@ -31,11 +33,7 @@ export function Sidebar({
 			}} className="surface lo">+ new note</button>
 
 			<menu>
-				{tags ? tags.map((tag) => (
-					<li key={tag.id}>
-						<Link to={`/workspace/${workspaceId}/tag/${tag.id}`}>#{tag.path}</Link>
-					</li>
-				)) : <li className="placeholder">loading tags</li>}
+				{tags ? <TagTreeComponent tags={tags} /> : <li className="placeholder">loading tags</li>}
 			</menu>
 
 			<menu>

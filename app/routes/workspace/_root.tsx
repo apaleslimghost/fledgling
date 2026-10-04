@@ -31,6 +31,17 @@ export default function ({ params, loaderData }: Route.ComponentProps) {
 		query
 	})
 
+	const { results: notes } = useLiveRxQuery({
+		collection: database.notes,
+		query
+	})
+
+	const tagsWithNotes = tags.map(({ path, id, ...props }) => ({
+		...props,
+		path,
+		notes: notes.filter((note) => note.tags.includes(id)),
+	}))
+
 	const { results: projects } = useLiveRxQuery({
 		collection: database.projects,
 		query
@@ -38,7 +49,7 @@ export default function ({ params, loaderData }: Route.ComponentProps) {
 
 	return <Workspace.Provider value={params.workspaceId}>
 		<main className="panels">
-			<Sidebar tags={tags} projects={projects} workspaceId={params.workspaceId} />
+			<Sidebar tags={tagsWithNotes} projects={projects} workspaceId={params.workspaceId} />
 			<Outlet />
 		</main>
 	</Workspace.Provider>
