@@ -324,7 +324,7 @@ ul[data-type="taskList"] {
 		margin-left: -1.3em;
 	}
 
-	li[data-checked="true"] {
+	li[data-checked="true"] div {
 		text-decoration: line-through;
 		color: rgb(from currentColor r g b / 0.8)
 	}
