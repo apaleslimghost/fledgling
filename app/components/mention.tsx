@@ -25,7 +25,7 @@ const TagMention = (props: {
 
 	return (
 		<NodeViewWrapper as="span">
-			<Link ref={props.ref} to={`/workspace/${workspaceId}/tag/${tag?.id ?? props.node.attrs.id}`} className="label">
+			<Link ref={props.ref} to={`/workspace/${workspaceId}/tag/${tag?.path ?? props.node.attrs.id}`} className="label">
 				{props.node.attrs.mentionSuggestionChar}{tag?.path ?? props.node.attrs.label}
 			</Link>
 		</NodeViewWrapper>
