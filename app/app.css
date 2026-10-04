@@ -330,7 +330,9 @@ ul[data-type="taskList"] {
 	}
 
 	li.highlight-match {
-		background-color: gold;
+		text-decoration: underline solid gold 1.3em;
+		text-underline-offset: -1em;
+		text-decoration-skip-ink: none;
 	}
 }
 
