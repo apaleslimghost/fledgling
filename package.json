@@ -15,6 +15,7 @@
 		"@paralleldrive/cuid2": "^3.3.0",
 		"@react-router/node": "^8",
 		"@react-router/serve": "^8",
+		"@sketchicon/hugeicons": "^0.2.0",
 		"@tiptap/extension-list": "^3.31.4",
 		"@tiptap/extension-mention": "^3.31.4",
 		"@tiptap/extension-unique-id": "^3.31.4",
@@ -28,6 +29,7 @@
 		"react-router": "^8",
 		"rxdb": "^17.5.0",
 		"rxjs": "^7.8.2",
+		"sketchicon": "^0.2.0",
 		"zod": "^4.6.5"
 	},
 	"devDependencies": {

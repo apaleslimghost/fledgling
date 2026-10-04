@@ -101,6 +101,11 @@ button.surface:active {
 	left: 0.05rem;
 }
 
+button .icon {
+	margin-block: -0.25em;
+	margin-right: 0.25em;
+}
+
 .panels {
 	display: flex;
 	gap: 1rem;

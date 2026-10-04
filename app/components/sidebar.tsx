@@ -4,6 +4,7 @@ import database from "~/data/rxdb.client";
 import type { Project, Tag } from "~/data/schema";
 import TagTreeComponent from "./tag-tree";
 import type { TagWithNotes } from "~/lib/tag-tree";
+import { Icon } from "./icon";
 
 export function Sidebar({
 	tags,
@@ -30,7 +31,10 @@ export function Sidebar({
 					workspace: workspaceId
 				})
 				navigate(`/workspace/${workspaceId}/note/${id}`)
-			}} className="surface lo">+ new note</button>
+			}} className="surface lo">
+				<Icon icon='NoteAdd' />
+				new note
+			</button>
 
 			<menu>
 				{tags ? <TagTreeComponent tags={tags} /> : <li className="placeholder">loading tags</li>}
