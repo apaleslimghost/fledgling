@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { shortId } from "~/data/cuid";
 import database from "~/data/rxdb.client";
 import type { Project, Tag } from "~/data/schema";
@@ -24,6 +24,7 @@ export function Sidebar({
 					content: {},
 					tags: [],
 					projects: [],
+					tasks: [],
 					workspace: workspaceId
 				})
 				navigate(`/workspace/${workspaceId}/note/${id}`)
@@ -32,7 +33,7 @@ export function Sidebar({
 			<menu>
 				{tags ? tags.map((tag) => (
 					<li key={tag.id}>
-						<a href={`/workspace/${workspaceId}/tag/${tag.id}`}>#{tag.path}</a>
+						<Link to={`/workspace/${workspaceId}/tag/${tag.id}`}>#{tag.path}</Link>
 					</li>
 				)) : <li className="placeholder">loading tags</li>}
 			</menu>
@@ -40,7 +41,7 @@ export function Sidebar({
 			<menu>
 				{projects ? projects.map((project) => (
 					<li key={project.id}>
-						<a href={`/workspace/${workspaceId}/project/${project.id}`}>@{project.title}</a>
+						<Link to={`/workspace/${workspaceId}/project/${project.id}`}>@{project.title}</Link>
 					</li>
 				)) : <li className="placeholder">loading projects</li>}
 			</menu>
