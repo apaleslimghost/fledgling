@@ -40,7 +40,7 @@ export default function Tag({ loaderData: { notes, projects }, params }: Route.C
 	const pathParts = params['*'].split('/')
 
 	return <div className="grid">
-		<h1>
+		<h1 className='tag-path'>
 			{pathParts.map((part, index) => (
 				<span key={pathParts.slice(0, index + 1).join('/')}>
 					<>

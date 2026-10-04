@@ -337,3 +337,20 @@ ul[data-type="taskList"] {
 	border-radius: 1em;
 	padding-inline: 0.5em;
 }
+
+h1.tag-path {
+	font-weight: normal;
+}
+
+h1.tag-path a {
+	color: inherit;
+	text-decoration: none;
+}
+
+h1.tag-path a:hover {
+	text-decoration: underline;
+}
+
+h1.tag-path a[aria-current="page"] {
+	font-weight: bold;
+}
