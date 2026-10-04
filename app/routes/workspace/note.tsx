@@ -2,14 +2,23 @@ import type { Route } from "./+types/note";
 import Editor from "~/components/editor";
 import type { Content, JSONContent } from "@tiptap/react";
 import type { MentionNodeAttrs } from "@tiptap/extension-mention";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import database from "~/data/rxdb.client";
-import { useLiveRxQuery, useRxQuery } from "rxdb/plugins/react";
+import { useLiveRxQuery } from "rxdb/plugins/react";
 
 interface MentionNode extends JSONContent {
 	type: 'mention'
 	attrs: MentionNodeAttrs
 }
+
+interface TaskNode extends JSONContent {
+	type: 'taskItem'
+	attrs: {
+		checked: boolean
+		id: string
+	}
+}
+
 
 function isNode<T extends JSONContent>(type: T['type'], obj: unknown): obj is T {
 	if (obj && typeof obj === 'object' && 'type' in obj && obj.type === type) {
@@ -60,6 +69,8 @@ export default function Note({ params }: Route.ComponentProps) {
 							if (notesWithTag.length === 0) {
 								await database.tags.find({ selector: { id: mutation.node.attrs.id } }).remove()
 							}
+						} else if (mutation.node.type.name === 'taskItem' && mutation.node.attrs.id) {
+							await database.tasks.find({ selector: { id: mutation.node.attrs.id } }).remove()
 						}
 					}
 				}}
@@ -74,12 +85,22 @@ export default function Note({ params }: Route.ComponentProps) {
 						(node) => node.attrs.mentionSuggestionChar === '@' && node.attrs.id
 					)
 
+					const bodyTasks = Array.from(collect<TaskNode>('taskItem', content))
+
+					console.log(await database.tasks.bulkUpsert(bodyTasks.map(
+						t => ({
+							id: t.attrs.id,
+							status: t.attrs.checked ? 'done' : 'todo',
+							content: t,
+							note: note.id
+						})
+					)))
+
 					const tags = bodyTags.map(t => t.attrs.id).filter((id): id is string => !!id)
 					const projects = bodyProjects.map(t => t.attrs.id).filter((id): id is string => !!id)
+					const tasks = bodyTasks.map(t => t.attrs.id)
 
-					await database.notes.find({
-						selector: { id: params.noteId },
-					}).patch({ content, tags, projects })
+					await note.incrementalPatch({ content, tags, projects, tasks })
 				}} />
 		</article>
 	);

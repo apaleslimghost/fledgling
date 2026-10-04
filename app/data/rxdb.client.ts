@@ -9,6 +9,7 @@ import {
 	noteSchema,
 	projectSchema,
 	tagSchema,
+	taskSchema,
 	workspaceSchema,
 	type Collections,
 } from './schema'
@@ -41,12 +42,21 @@ await database.addCollections({
 	},
 	notes: {
 		schema: noteSchema,
+		migrationStrategies: {
+			1(note) {
+				note.tasks = []
+				return note
+			}
+		}
 	},
 	projects: {
 		schema: projectSchema,
 	},
 	workspaces: {
 		schema: workspaceSchema,
+	},
+	tasks: {
+		schema: taskSchema,
 	},
 })
 

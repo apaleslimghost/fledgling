@@ -2,12 +2,12 @@ import { ListKit, TaskItem } from '@tiptap/extension-list'
 import { Mention } from '@tiptap/extension-mention'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
+import { Extension, InputRule, findParentNodeClosestToPos } from '@tiptap/core'
+import UniqueID from '@tiptap/extension-unique-id'
+
 import { MentionView } from '../mention'
 import { makeSuggester } from './suggestion'
 import { projectSearch, tagSearch } from '~/data/search'
-
-import { Extension, InputRule, Node } from '@tiptap/core'
-import { findParentNodeClosestToPos } from '@tiptap/core'
 import { shortId } from '~/data/cuid'
 import database from '~/data/rxdb.client'
 
@@ -51,17 +51,9 @@ export const extensions = [
 			nested: true,
 		}
 	}),
-	Extension.create({
-		addGlobalAttributes() {
-			return [{
-				types: ['taskItem'],
-				attributes: {
-					id: {
-						default: null
-					}
-				}
-			}]
-		},
+	UniqueID.configure({
+		types: ['taskItem'],
+		generateID: shortId
 	}),
 	Mention.extend({
 		addNodeView() {
