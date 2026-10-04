@@ -201,7 +201,7 @@ menu a:hover {
 	font-weight: bold;
 }
 
-:is(summary, .leaf) .chip {
+menu a .chip {
 	float: right;
 }
 
@@ -325,6 +325,10 @@ ul[data-type="taskList"] {
 	li[data-checked="true"] {
 		text-decoration: line-through;
 		color: rgb(from currentColor r g b / 0.8)
+	}
+
+	li.highlight-match {
+		background-color: gold;
 	}
 }
 

@@ -19,7 +19,6 @@ interface TaskNode extends JSONContent {
 	}
 }
 
-
 function isNode<T extends JSONContent>(type: T['type'], obj: unknown): obj is T {
 	if (obj && typeof obj === 'object' && 'type' in obj && obj.type === type) {
 		return true
@@ -56,6 +55,9 @@ export default function Note({ params }: Route.ComponentProps) {
 			</h1>
 
 			<Editor content={note.content as Content} id={note.id}
+				onCreate={({ editor }) => {
+					editor.commands.setTaskId(params.taskId)
+				}}
 				onDelete={async (mutation) => {
 					if (mutation.type === 'node') {
 						if (mutation.node.type.name === 'mention' && mutation.node.attrs.id) {
@@ -75,6 +77,8 @@ export default function Note({ params }: Route.ComponentProps) {
 					}
 				}}
 				onUpdate={async ({ editor }) => {
+					editor.commands.setTaskId(undefined)
+
 					const content = editor.getJSON() as JSONContent
 
 					const bodyTags = Array.from(collect<MentionNode>('mention', content)).filter(

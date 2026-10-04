@@ -10,6 +10,7 @@ import { makeSuggester } from './suggestion'
 import { projectSearch, tagSearch } from '~/data/search'
 import { shortId } from '~/data/cuid'
 import database from '~/data/rxdb.client'
+import { Highlight } from './highlight-task'
 
 const taskListInputRule = () => new InputRule({
 	find: /^\[ ?\]$/,
@@ -55,6 +56,7 @@ export const extensions = [
 		types: ['taskItem'],
 		generateID: shortId
 	}),
+	Highlight,
 	Mention.extend({
 		addNodeView() {
 			return ReactNodeViewRenderer(MentionView)
