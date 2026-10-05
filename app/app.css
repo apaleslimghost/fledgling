@@ -399,3 +399,11 @@ h1.tag-path {
 h1.tag-path a[aria-current="page"] {
 	font-weight: bold;
 }
+
+.ProseMirror code {
+	font-family: 'Iosevka Curly', monospace;
+	letter-spacing: initial;
+	background: rgb(from darkslateblue r g b / 0.15);
+	box-shadow: 0 0 0 0.1em rgb(from darkslateblue r g b / 0.15);
+	border-radius: 0.2em;
+}
