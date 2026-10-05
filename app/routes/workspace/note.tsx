@@ -91,14 +91,14 @@ export default function Note({ params }: Route.ComponentProps) {
 
 					const bodyTasks = Array.from(collect<TaskNode>('taskItem', content))
 
-					console.log(await database.tasks.bulkUpsert(bodyTasks.map(
+					await database.tasks.bulkUpsert(bodyTasks.map(
 						t => ({
 							id: t.attrs.id,
 							status: t.attrs.checked ? 'done' : 'todo',
 							content: t,
 							note: note.id
 						})
-					)))
+					))
 
 					const tags = bodyTags.map(t => t.attrs.id).filter((id): id is string => !!id)
 					const projects = bodyProjects.map(t => t.attrs.id).filter((id): id is string => !!id)
