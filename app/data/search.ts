@@ -8,7 +8,7 @@ export const tagSearch = new Minisearch<Tag>({
 	tokenize: (text) => text.split('/'),
 	searchOptions: {
 		prefix: true,
-		fuzzy: 0.2,
+		fuzzy: 0.5,
 	},
 })
 
@@ -17,6 +17,7 @@ export const projectSearch = new Minisearch<Project>({
 	storeFields: ['title', 'id'],
 	idField: 'id',
 	searchOptions: {
-		fuzzy: 0.2,
+		prefix: true,
+		fuzzy: 0.5,
 	},
 })
