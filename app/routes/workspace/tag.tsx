@@ -1,6 +1,7 @@
 import database from "~/data/rxdb.client";
 import type { Route } from "./+types/tag";
 import { Link, NavLink } from "react-router";
+import { Icon } from "~/components/icon";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 	const path = params['*']
@@ -45,7 +46,7 @@ export default function Tag({ loaderData: { notes, projects }, params }: Route.C
 				<span key={pathParts.slice(0, index + 1).join('/')}>
 					<>
 						<NavLink end to={`/workspace/${params.workspaceId}/tag/${pathParts.slice(0, index + 1).join('/')}`}>
-							{index === 0 ? '#' : ''}
+							{index === 0 ? <Icon icon='Hashtag' /> : ''}
 							{part}
 						</NavLink>
 						{index === pathParts.length - 1 ? null : <span>/</span>}

@@ -101,9 +101,27 @@ button.surface:active {
 	left: 0.05rem;
 }
 
-button .icon {
-	margin-block: -0.25em;
+.icon {
+	width: 1em;
+	height: 1em;
+	stroke-width: calc(3px - 0.025em);
+	margin-block: -0.2em;
+}
+
+:is(button, summary, .label, menu li) .icon {
 	margin-right: 0.25em;
+}
+
+summary {
+	list-style: none;
+}
+
+details>summary .icon {
+	transition: transform 0.1s ease-in-out;
+}
+
+details[open]>summary .icon {
+	transform: rotate(90deg);
 }
 
 .panels {

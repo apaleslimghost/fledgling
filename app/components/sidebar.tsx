@@ -43,7 +43,10 @@ export function Sidebar({
 			<menu>
 				{projects ? projects.map((project) => (
 					<li key={project.id}>
-						<Link to={`/workspace/${workspaceId}/project/${project.id}`}>@{project.title}</Link>
+						<Link to={`/workspace/${workspaceId}/project/${project.id}`}>
+							<Icon icon='FolderKanban' />
+							{project.title}
+						</Link>
 					</li>
 				)) : <li className="placeholder">loading projects</li>}
 			</menu>

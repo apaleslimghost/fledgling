@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { NavLink } from 'react-router';
 import { useWorkspace } from '~/data/context';
 import { TagTree, type TagWithNotes } from '~/lib/tag-tree'
+import { Icon } from './icon';
 
 const TagLink = ({ tree, className }: { tree: TagTree; className?: string }) => {
 	const workspaceid = useWorkspace()
@@ -23,6 +24,7 @@ const TagBranch = ({ tree }: { tree: TagTree }) => {
 				Object.keys(child.children).length > 0 ? (
 					<details key={child.tag.path}>
 						<summary>
+							<Icon icon='ChevronRight' />
 							<TagLink tree={child} />
 						</summary>
 
