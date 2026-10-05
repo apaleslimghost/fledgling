@@ -35,24 +35,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-	useEffect(() => {
-		database.tags.find().$.subscribe((tags) => {
-			tagSearch.removeAll()
-			tagSearch.addAll(tags)
-		})
-	},
-		[database]
-	)
-
-	useEffect(() => {
-		database.projects.find().$.subscribe((projects) => {
-			projectSearch.removeAll()
-			projectSearch.addAll(projects)
-		})
-	},
-		[database]
-	)
-
 	return <RxDatabaseProvider database={database}>
 		<Outlet />
 	</RxDatabaseProvider>

@@ -6,7 +6,8 @@ import { Workspace } from "~/data/context";
 import database from "~/data/rxdb.client";
 import { useLiveRxQuery } from "rxdb/plugins/react";
 import type { Session } from "~/data/schema";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { projectSearch, tagSearch } from "~/data/search";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 	if (!isCuid(params.workspaceId)) {
@@ -19,7 +20,35 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 	}
 }
 
-export default function ({ params, loaderData }: Route.ComponentProps) {
+export default function ({ params }: Route.ComponentProps) {
+	useEffect(() => {
+		const sub = database.tags.find({ selector: { workspace: params.workspaceId } }).$.subscribe((tags) => {
+			tagSearch.removeAll()
+			tagSearch.addAll(tags)
+		})
+
+		return () => {
+			tagSearch.removeAll()
+			sub.unsubscribe()
+		}
+	},
+		[database]
+	)
+
+	useEffect(() => {
+		const sub = database.projects.find({ selector: { workspace: params.workspaceId } }).$.subscribe((projects) => {
+			projectSearch.removeAll()
+			projectSearch.addAll(projects)
+		})
+
+		return () => {
+			projectSearch.removeAll()
+			sub.unsubscribe()
+		}
+	},
+		[database]
+	)
+
 	const query = useMemo(() => ({
 		selector: {
 			workspace: params.workspaceId
