@@ -104,8 +104,15 @@ button.surface:active {
 .icon {
 	width: 1em;
 	height: 1em;
-	stroke-width: calc(3px - 0.025em);
-	margin-block: -0.2em;
+	stroke-width: calc(3px - 0.05em);
+	margin-block: -0.15em;
+}
+
+button .icon {
+	width: 1.3em;
+	height: 1.3em;
+	margin-block: -0.3em;
+	stroke-width: 2px;
 }
 
 :is(button, summary, .label, menu li) .icon {
@@ -275,19 +282,19 @@ menu li :is(li>a, summary, .leaf>a):hover {
 	text-decoration: none;
 }
 
-@scope (.label) {
+@scope (:is(.label, button)) {
 	&.secondary {
 		border: 1px solid slateblue;
 		color: slateblue;
 		background: lavender;
 	}
 
-	&:is(a):hover {
+	&:is(a, button):hover {
 		background: darkslateblue;
 		color: var(--lighter-salmon);
 	}
 
-	&:is(a).secondary:hover {
+	&:is(a, button).secondary:hover {
 		border-color: darkslateblue;
 		color: darkslateblue;
 		background: lightblue;
@@ -406,4 +413,40 @@ h1.tag-path a[aria-current="page"] {
 	background: rgb(from darkslateblue r g b / 0.15);
 	box-shadow: 0 0 0 0.1em rgb(from darkslateblue r g b / 0.15);
 	border-radius: 0.2em;
+}
+
+.tooltip {
+	anchor-scope: --tooltip;
+}
+
+.tooltip [popover] {
+	margin: 0;
+	padding: 0;
+	border: 0 none;
+	position-anchor: --tooltip;
+	position: absolute;
+	inset-block-start: anchor(--tooltip bottom);
+	inset-inline-start: anchor(--tooltip left);
+}
+
+[popover].card {
+	box-shadow: 2px 2px 8px rgb(from var(--shadow-colour, darkslateblue) r g b / 0.5);
+	padding: 0.5rem;
+}
+
+.qr svg {
+	width: 8rem;
+	display: block;
+}
+
+.qr {
+	width: 9rem;
+}
+
+.qr small {
+	line-height: 0.7;
+}
+
+.tooltip [popovertarget] {
+	anchor-name: --tooltip;
 }

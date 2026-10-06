@@ -5,6 +5,7 @@ import type { Project, Tag } from "~/data/schema";
 import TagTreeComponent from "./tag-tree";
 import type { TagWithNotes } from "~/lib/tag-tree";
 import { Icon } from "./icon";
+import { QrCode } from "./qr-code";
 
 export function Sidebar({
 	tags,
@@ -35,6 +36,20 @@ export function Sidebar({
 				<Icon icon='NoteAdd' />
 				new note
 			</button>
+
+			<div className='tooltip'>
+				<button className="secondary surface lo" popoverTarget={`qr-${workspaceId}`}>
+					<Icon icon='QrCode' />
+					connect
+				</button>
+
+				<div id={`qr-${workspaceId}`} popover='auto' className='card qr'>
+					<QrCode data={`https://👻🪺.ws/w/${workspaceId}`} />
+					<small>
+						this QR code gives full write access to this workspace
+					</small>
+				</div>
+			</div>
 
 			<menu>
 				{tags ? <TagTreeComponent tags={tags} /> : <li className="placeholder">loading tags</li>}
