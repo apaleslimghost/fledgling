@@ -13,6 +13,11 @@ export default forwardRef<Editor, Omit<EditorProviderProps, 'extensions'> & { id
 		const editor = useEditor({
 			extensions,
 			immediatelyRender: false,
+			editorProps: {
+				attributes: {
+					spellcheck: 'false'
+				}
+			},
 			...props,
 		})
 
