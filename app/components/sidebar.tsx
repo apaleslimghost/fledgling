@@ -20,33 +20,35 @@ export function Sidebar({
 
 	return (
 		<aside>
-			<button onClick={async () => {
-				const id = shortId()
-				await database.notes.insert({
-					id,
-					content: {},
-					tags: [],
-					projects: [],
-					tasks: [],
-					workspace: workspaceId
-				})
-				navigate(`/workspace/${workspaceId}/note/${id}`)
-			}} className="surface lo">
-				<Icon icon='NoteAdd' />
-				new note
-			</button>
-
-			<div className='tooltip'>
-				<button className="secondary surface lo" popoverTarget={`qr-${workspaceId}`}>
-					<Icon icon='QrCode' />
-					connect
+			<div className="toolbar">
+				<button onClick={async () => {
+					const id = shortId()
+					await database.notes.insert({
+						id,
+						content: {},
+						tags: [],
+						projects: [],
+						tasks: [],
+						workspace: workspaceId
+					})
+					navigate(`/workspace/${workspaceId}/note/${id}`)
+				}} className="surface lo">
+					<Icon icon='NoteAdd' />
+					new note
 				</button>
 
-				<div id={`qr-${workspaceId}`} popover='auto' className='card qr'>
-					<QrCode data={`https://👻🪺.ws/w/${workspaceId}`} />
-					<small>
-						this QR code gives full write access to this workspace
-					</small>
+				<div className='tooltip'>
+					<button className="secondary surface lo" popoverTarget={`qr-${workspaceId}`}>
+						<Icon icon='QrCode' />
+						connect
+					</button>
+
+					<div id={`qr-${workspaceId}`} popover='auto' className='card qr'>
+						<QrCode data={`https://👻🪺.ws/w/${workspaceId}`} />
+						<small>
+							this QR code gives full write access to this workspace
+						</small>
+					</div>
 				</div>
 			</div>
 
