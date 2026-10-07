@@ -2,7 +2,8 @@ import { ListKit, TaskItem } from '@tiptap/extension-list'
 import { Mention } from '@tiptap/extension-mention'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
-import { Extension, InputRule, findParentNodeClosestToPos } from '@tiptap/core'
+import { Document } from '@tiptap/extension-document'
+import { Extension, InputRule, Node, findParentNodeClosestToPos } from '@tiptap/core'
 import UniqueID from '@tiptap/extension-unique-id'
 
 import { MentionView } from '../mention'
@@ -41,12 +42,35 @@ const taskListInputRule = () => new InputRule({
 	},
 })
 
+const Title = Node.create({
+	name: 'title',
+	content: 'text*',
+
+	parseHTML() {
+		return [
+			{
+				tag: 'h1',
+			},
+		]
+	},
+
+	renderHTML({ HTMLAttributes }) {
+		return ['h1', HTMLAttributes, 0]
+	},
+
+})
+
 export const extensions = [
 	StarterKit.configure({
 		heading: {
 			levels: [2, 3, 4, 5, 6],
 		},
+		document: false
 	}),
+	Document.extend({
+		content: 'title block*'
+	}),
+	Title.configure(),
 	ListKit.configure({
 		taskItem: {
 			nested: true,

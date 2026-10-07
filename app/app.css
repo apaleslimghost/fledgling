@@ -285,6 +285,7 @@ menu li :is(li>a, summary, .leaf>a):hover {
 	padding: 0.125em 0.25em;
 	border-radius: var(--wonky-radius);
 	text-decoration: none;
+	white-space: nowrap;
 }
 
 @scope (:is(.label, button)) {
@@ -454,4 +455,9 @@ h1.tag-path a[aria-current="page"] {
 
 .tooltip [popovertarget] {
 	anchor-name: --tooltip;
+}
+
+a:has(>.card) {
+	text-decoration: none;
+	color: inherit;
 }

@@ -24,7 +24,6 @@ export function Sidebar({
 				const id = shortId()
 				await database.notes.insert({
 					id,
-					title: '',
 					content: {},
 					tags: [],
 					projects: [],

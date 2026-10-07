@@ -1,8 +1,8 @@
 import type { Route } from "./+types/note";
 import Editor from "~/components/editor";
-import type { Content, JSONContent } from "@tiptap/react";
+import type { Content, Editor as TiptapEditor, JSONContent } from "@tiptap/react";
 import type { MentionNodeAttrs } from "@tiptap/extension-mention";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import database from "~/data/rxdb.client";
 import { useLiveRxQuery } from "rxdb/plugins/react";
 
@@ -39,22 +39,22 @@ function* collect<T extends JSONContent>(type: T['type'], tree: JSONContent): Ge
 
 export default function Note({ params }: Route.ComponentProps) {
 	const query = useMemo(() => ({ selector: { id: params.noteId } }), [params.noteId])
+
 	const { results: [note] } = useLiveRxQuery({
 		collection: database.notes,
 		query,
 	})
 
+	const editorRef = useRef<TiptapEditor>(null)
+
 	if (!note) return null
 
 	return (
 		<article className="card surface hi">
-			<h1>
-				<input value={note.title} onChange={async (e) => {
-					await note.patch({ title: e.target.value })
-				}} placeholder="Untitled note" autoFocus={!note.title} />
-			</h1>
-
-			<Editor content={note.content as Content} id={note.id}
+			<Editor
+				id={note.id}
+				ref={editorRef}
+				content={note.content as Content}
 				onCreate={({ editor }) => {
 					editor.commands.setTaskId(params.taskId)
 				}}

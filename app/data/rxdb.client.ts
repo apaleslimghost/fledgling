@@ -46,6 +46,10 @@ await database.addCollections({
 			1(note) {
 				note.tasks = []
 				return note
+			},
+			2(note) {
+				delete note.title
+				return note
 			}
 		}
 	},

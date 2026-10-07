@@ -16,7 +16,6 @@ export type Note = {
 	tags: string[]
 	projects: string[]
 	tasks: string[]
-	title?: string
 	content?: JSONContent
 	workspace: string
 }
@@ -93,11 +92,10 @@ export const noteSchema: RxJsonSchema<Note> = {
 		projects: { type: 'array', ref: 'project', items: { type: 'string' } },
 		tasks: { type: 'array', ref: 'task', items: { type: 'string' } },
 		workspace: { type: 'string', ref: 'workspace' },
-		title: { type: 'string' },
 		content: { type: 'object' },
 	},
 	required: ['id', 'tags'],
-	version: 1,
+	version: 2,
 	primaryKey: 'id',
 }
 

@@ -2,6 +2,7 @@ import database from "~/data/rxdb.client";
 import type { Route } from "./+types/project";
 import { Link, NavLink } from "react-router";
 import Editor from "~/components/editor";
+import NoteCard from "~/components/note-card";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 	const [project, notes] = await Promise.all([
@@ -36,13 +37,7 @@ export default function Project({ loaderData: { project, notes, tasks }, params 
 				</ul>
 			</div>
 
-			{notes.map(note => <div className="card surface mid" key={note.id}>
-				<h2>
-					<Link to={`/workspace/${params.workspaceId}/note/${note.id}`}>
-						{note.title}
-					</Link>
-				</h2>
-			</div>)}
+			{notes.map(note => <NoteCard key={note.id} note={note} />)}
 		</div>
 	</div>
 }
