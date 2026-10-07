@@ -54,7 +54,8 @@ export default function Note({ params }: Route.ComponentProps) {
 			<Editor
 				id={note.id}
 				ref={editorRef}
-				content={note.content as Content}
+				content={note.content}
+				autofocus={note.content ? 'end' : true}
 				onCreate={({ editor }) => {
 					editor.commands.setTaskId(params.taskId)
 				}}
