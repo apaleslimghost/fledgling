@@ -204,6 +204,11 @@ h1>input:focus-visible {
 	}
 }
 
+article {
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
 menu {
 	background: white;
 	z-index: 10;
