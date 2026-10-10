@@ -2,6 +2,7 @@ import { type Editor, ReactRenderer } from '@tiptap/react'
 import type { SuggestionOptions, SuggestionProps } from '@tiptap/suggestion'
 import { type ComponentProps, forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react'
 import { useWorkspace } from '~/data/context'
+import { Icon } from '../icon'
 
 export type SuggestionListHandle = {
 	onKeyDown: (event: KeyboardEvent) => boolean
@@ -13,6 +14,12 @@ type Suggestion = {
 }
 
 type OnCreate = (suggestion: Suggestion, workspaceId: string) => Promise<{ id: string }>
+
+const mentionIcon = {
+	'#': 'Hashtag',
+	'@': 'FolderKanban',
+	'~': 'Note01'
+} as const
 
 const SuggestionList = forwardRef<
 	SuggestionListHandle,
@@ -71,7 +78,7 @@ const SuggestionList = forwardRef<
 						event.preventDefault()
 						selectMention(item)
 					}}>
-						{char}
+						<Icon icon={mentionIcon[char as keyof typeof mentionIcon]} />
 						{item.label}
 					</a>
 				</li>
