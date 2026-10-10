@@ -439,6 +439,9 @@ h1.tag-path {
 .ProseMirror code {
 	font-family: 'Iosevka Curly', monospace;
 	letter-spacing: initial;
+}
+
+.ProseMirror :is(*:not(pre) > code, pre) {
 	background: rgb(from darkslateblue r g b / 0.15);
 	box-shadow: 0 0 0 0.1em rgb(from darkslateblue r g b / 0.15);
 	border-radius: 0.2em;
