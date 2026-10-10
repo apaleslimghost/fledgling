@@ -7,7 +7,8 @@ import database from "~/data/rxdb.client";
 import { useLiveRxQuery } from "rxdb/plugins/react";
 import type { Session } from "~/data/schema";
 import { useEffect, useMemo } from "react";
-import { projectSearch, tagSearch } from "~/data/search";
+import { noteSearch, projectSearch, tagSearch } from "~/data/search";
+import { title } from "~/data/note";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 	if (!isCuid(params.workspaceId)) {
@@ -43,6 +44,31 @@ export default function ({ params }: Route.ComponentProps) {
 
 		return () => {
 			projectSearch.removeAll()
+			sub.unsubscribe()
+		}
+	},
+		[database]
+	)
+
+	useEffect(() => {
+		const sub = database.notes.find({ selector: { workspace: params.workspaceId } }).$.subscribe((notes) => {
+			noteSearch.removeAll()
+			noteSearch.addAll(notes.flatMap(note => {
+				const t = title(note)
+
+				if (t) {
+					return {
+						id: note.id,
+						title: t
+					}
+				}
+
+				return []
+			}))
+		})
+
+		return () => {
+			noteSearch.removeAll()
 			sub.unsubscribe()
 		}
 	},

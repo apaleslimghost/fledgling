@@ -8,10 +8,11 @@ import UniqueID from '@tiptap/extension-unique-id'
 
 import { MentionView } from '../mention'
 import { makeSuggester } from './suggestion'
-import { projectSearch, tagSearch } from '~/data/search'
+import { noteSearch, projectSearch, tagSearch } from '~/data/search'
 import { shortId } from '~/data/cuid'
 import database from '~/data/rxdb.client'
 import { Highlight } from './highlight-task'
+import MiniSearch from 'minisearch'
 
 const taskListInputRule = () => new InputRule({
 	find: /^\[ ?\]$/,
@@ -65,7 +66,11 @@ export const extensions = [
 		heading: {
 			levels: [2, 3, 4, 5, 6],
 		},
-		document: false
+		document: false,
+		link: {
+			openOnClick: false,
+			enableClickSelection: true
+		}
 	}),
 	Document.extend({
 		content: 'title block*'
@@ -90,7 +95,7 @@ export const extensions = [
 			makeSuggester({
 				char: '#',
 				async items({ query }) {
-					const tags = tagSearch.search(query)
+					const tags = tagSearch.search(query || MiniSearch.wildcard)
 
 					return [
 						...(query && !tags.some((t) => t.path === query)
@@ -117,7 +122,7 @@ export const extensions = [
 				char: '@',
 				allowSpaces: true,
 				async items({ query }) {
-					const projects = projectSearch.search(query)
+					const projects = projectSearch.search(query || MiniSearch.wildcard)
 
 					return [
 						...(query && !projects.some((t) => t.title === query)
@@ -139,6 +144,20 @@ export const extensions = [
 
 					return { id }
 				},
+			}),
+			makeSuggester({
+				char: '~',
+				allowSpaces: true,
+				async items({ query }) {
+					const notes = noteSearch.search(query || MiniSearch.wildcard)
+
+					return [
+						...notes.map((note) => ({
+							id: note.id,
+							label: note.title,
+						})),
+					]
+				}
 			}),
 		],
 	}),

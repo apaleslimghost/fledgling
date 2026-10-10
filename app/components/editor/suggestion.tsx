@@ -16,7 +16,7 @@ type OnCreate = (suggestion: Suggestion, workspaceId: string) => Promise<{ id: s
 
 const SuggestionList = forwardRef<
 	SuggestionListHandle,
-	SuggestionProps<Suggestion> & { char: string, onCreate: OnCreate }
+	SuggestionProps<Suggestion> & { char: string, onCreate?: OnCreate }
 >(({ items, command, char, onCreate }, ref) => {
 	const [selectedIndex, setSelectedIndex] = useState(0)
 	const workspaceId = useWorkspace()
@@ -28,7 +28,7 @@ const SuggestionList = forwardRef<
 	const selectMention = useCallback(async (suggestion?: Suggestion) => {
 		if (!suggestion) return
 
-		if (!suggestion.id) {
+		if (!suggestion.id && onCreate) {
 			const { id } = await onCreate(suggestion, workspaceId)
 			suggestion.id = id
 		}
@@ -85,7 +85,7 @@ export const makeSuggester = ({
 	items,
 	onCreate,
 	allowSpaces = false,
-}: Pick<SuggestionOptions<Suggestion>, 'char' | 'items' | 'allowSpaces'> & { onCreate: OnCreate }): Pick<
+}: Pick<SuggestionOptions<Suggestion>, 'char' | 'items' | 'allowSpaces'> & { onCreate?: OnCreate }): Pick<
 	SuggestionOptions<Suggestion>,
 	'char' | 'items' | 'allowSpaces' | 'render'
 > => ({

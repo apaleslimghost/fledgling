@@ -1,5 +1,5 @@
 import Minisearch from 'minisearch'
-import type { Project, Tag } from './schema'
+import type { Note, Project, Tag } from './schema'
 
 export const tagSearch = new Minisearch<Tag>({
 	fields: ['path'],
@@ -13,6 +13,16 @@ export const tagSearch = new Minisearch<Tag>({
 })
 
 export const projectSearch = new Minisearch<Project>({
+	fields: ['title'],
+	storeFields: ['title', 'id'],
+	idField: 'id',
+	searchOptions: {
+		prefix: true,
+		fuzzy: 0.5,
+	},
+})
+
+export const noteSearch = new Minisearch<{ title: string, id: string }>({
 	fields: ['title'],
 	storeFields: ['title', 'id'],
 	idField: 'id',

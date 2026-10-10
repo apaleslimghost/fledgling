@@ -52,7 +52,7 @@ export default function Note({ params }: Route.ComponentProps) {
 
 	return (
 		<article className="card surface hi">
-			<title>{title(note)}</title>
+			<title>{title(note) ?? 'untitled note'}</title>
 			<Editor
 				id={note.id}
 				ref={editorRef}

@@ -318,6 +318,12 @@ menu li :is(li>a, summary, .leaf>a):hover {
 		background: lavender;
 	}
 
+	&.tertiary {
+		background: none;
+		border: 1px solid slateblue;
+		color: slateblue;
+	}
+
 	&:is(a, button):hover {
 		background: darkslateblue;
 		color: var(--lighter-salmon);
@@ -327,6 +333,12 @@ menu li :is(li>a, summary, .leaf>a):hover {
 		border-color: darkslateblue;
 		color: darkslateblue;
 		background: lightblue;
+	}
+
+	&:is(a, button).tertiary:hover {
+		background: lavender;
+		border-color: darkslateblue;
+		color: darkslateblue;
 	}
 }
 
