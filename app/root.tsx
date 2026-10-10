@@ -13,8 +13,16 @@ import type { Route } from "./+types/root";
 
 import "./app.css";
 import database from "./data/rxdb.client";
-import { useEffect } from "react";
-import { projectSearch, tagSearch } from "./data/search";
+
+export function links() {
+	return [
+		{
+			rel: "icon",
+			href: "/favicon.png",
+			type: "image/png",
+		},
+	]
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
 	return (
