@@ -1,14 +1,17 @@
-import { useState } from 'react';
+import { useState, type ComponentProps } from 'react';
 import { NavLink } from 'react-router';
 import { useWorkspace } from '~/data/context';
 import { TagTree, type TagWithNotes } from '~/lib/tag-tree'
 import { Icon } from './icon';
 
-const TagLink = ({ tree, className }: { tree: TagTree; className?: string }) => {
+const TagLink = ({ tree, className, leaf }: { tree: TagTree; className?: string, leaf?: boolean }) => {
 	const workspaceid = useWorkspace()
 	return <>
-		<NavLink className={className} to={`/workspace/${workspaceid}/tag/${tree.tag.path}`}>
-			#{tree.path[tree.path.length - 1]}
+		<NavLink className={`${className} ${leaf ? 'leaf' : ''}`} to={`/workspace/${workspaceid}/tag/${tree.tag.path}`}>
+			<Icon icon='Hashtag' className={leaf ? undefined : 'hover-hide'} />
+			{!leaf && <Icon icon='ChevronRight' className='hover-show' />}
+
+			{tree.path[tree.path.length - 1]}{leaf ? '' : '/'}
 			{' '}
 			<span className='chip'>
 				{tree.notes.length}
@@ -24,16 +27,13 @@ const TagBranch = ({ tree }: { tree: TagTree }) => {
 				Object.keys(child.children).length > 0 ? (
 					<details key={child.tag.path}>
 						<summary>
-							<Icon icon='ChevronRight' />
 							<TagLink tree={child} />
 						</summary>
 
 						<ul><TagBranch tree={child} /></ul>
 					</details>
 				) : (
-					<div className="leaf" key={child.tag.path}>
-						<TagLink tree={child} />
-					</div>
+					<TagLink leaf tree={child} key={child.tag.path} />
 				),
 			)}
 		</li>

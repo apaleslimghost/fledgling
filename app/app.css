@@ -132,8 +132,20 @@ details>summary .icon {
 	transition: transform 0.1s ease-in-out;
 }
 
-details[open]>summary .icon {
+details[open]>summary .icon.hover-show {
 	transform: rotate(90deg);
+}
+
+summary .hover-show {
+	display: none;
+}
+
+summary:hover:not(:has(a:hover)) .hover-show {
+	display: unset;
+}
+
+summary:hover:not(:has(a:hover)) .hover-hide {
+	display: none;
 }
 
 .panels {
@@ -229,7 +241,7 @@ menu ul {
 }
 
 menu li>:not(details, .leaf),
-menu .leaf a {
+menu a.leaf {
 	display: block;
 	padding: 0.25rem 0.5rem;
 }
