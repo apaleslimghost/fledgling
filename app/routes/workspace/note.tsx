@@ -5,6 +5,7 @@ import type { MentionNodeAttrs } from "@tiptap/extension-mention";
 import { useMemo, useRef } from "react";
 import database from "~/data/rxdb.client";
 import { useLiveRxQuery } from "rxdb/plugins/react";
+import { title } from "~/data/note";
 
 interface MentionNode extends JSONContent {
 	type: 'mention'
@@ -51,6 +52,7 @@ export default function Note({ params }: Route.ComponentProps) {
 
 	return (
 		<article className="card surface hi">
+			<title>{title(note)}</title>
 			<Editor
 				id={note.id}
 				ref={editorRef}

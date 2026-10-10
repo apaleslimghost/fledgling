@@ -21,6 +21,7 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 
 export default function Project({ loaderData: { project, notes, tasks }, params }: Route.ComponentProps) {
 	return <div>
+		<title>{`@${project.title}`}</title>
 		<h1>
 			<NavLink to={`/workspace/${params.workspaceId}/project/${project.id}`}>
 				@{project.title}
