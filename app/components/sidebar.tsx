@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 import { shortId } from "~/data/cuid";
 import database from "~/data/rxdb.client";
 import type { Project, Tag } from "~/data/schema";
@@ -59,10 +59,10 @@ export function Sidebar({
 			<menu>
 				{projects ? projects.map((project) => (
 					<li key={project.id}>
-						<Link to={`/workspace/${workspaceId}/project/${project.id}`}>
+						<NavLink to={`/workspace/${workspaceId}/project/${project.id}`}>
 							<Icon icon='FolderKanban' />
 							{project.title}
-						</Link>
+						</NavLink>
 					</li>
 				)) : <li className="placeholder">loading projects</li>}
 			</menu>

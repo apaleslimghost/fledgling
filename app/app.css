@@ -432,7 +432,7 @@ h1.tag-path {
 	font-weight: normal;
 }
 
-h1.tag-path a[aria-current="page"] {
+:is(h1.tag-path, menu) a[aria-current="page"] {
 	font-weight: bold;
 }
 
