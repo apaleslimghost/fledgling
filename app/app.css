@@ -109,7 +109,7 @@ button.surface:active {
 .icon {
 	width: 1em;
 	height: 1em;
-	stroke-width: calc(3px - 0.05em);
+	stroke-width: calc(3px - 0.03em);
 	margin-block: -0.15em;
 }
 
@@ -161,6 +161,22 @@ body,
 }
 
 .panels>* {
+	flex: 1;
+}
+
+.columns {
+	display: flex;
+	gap: 1rem;
+}
+
+.rows {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.columns>.rows,
+.rows>.columns {
 	flex: 1;
 }
 

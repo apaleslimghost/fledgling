@@ -8,14 +8,15 @@ import database from '~/data/rxdb.client'
 import { Icon } from './icon'
 import { title } from '~/data/note'
 
-const TagMention = (props: {
-	node: Node
+export const TagMention = (props: {
+	id: string,
+	fallbackLabel: string,
 	ref?: React.RefObject<HTMLAnchorElement | null>
 }) => {
 	const tagQuery = useMemo(
 		() => ({
-			selector: { id: props.node.attrs.id }
-		}), [props.node.attrs.id]
+			selector: { id: props.id }
+		}), [props.id]
 	)
 
 	const { results: [tag] } = useRxQuery({
@@ -27,22 +28,23 @@ const TagMention = (props: {
 
 	return (
 		<NodeViewWrapper as="span">
-			<Link ref={props.ref} to={`/workspace/${workspaceId}/tag/${tag?.path ?? props.node.attrs.id}`} className="label">
+			<Link ref={props.ref} to={`/workspace/${workspaceId}/tag/${tag?.path ?? props.id}`} className="label">
 				<Icon icon='Hashtag' />
-				{tag?.path ?? props.node.attrs.label}
+				{tag?.path ?? props.fallbackLabel}
 			</Link>
 		</NodeViewWrapper>
 	)
 }
 
-const ProjectMention = (props: {
-	node: Node
+export const ProjectMention = (props: {
+	id: string,
+	fallbackLabel: string,
 	ref?: React.RefObject<HTMLAnchorElement | null>
 }) => {
 	const projectQuery = useMemo(
 		() => ({
-			selector: { id: props.node.attrs.id }
-		}), [props.node.attrs.id]
+			selector: { id: props.id }
+		}), [props.id]
 	)
 
 	const { results: [project] } = useRxQuery({
@@ -54,23 +56,23 @@ const ProjectMention = (props: {
 
 	return (
 		<NodeViewWrapper as="span">
-			<Link ref={props.ref} to={`/workspace/${workspaceId}/project/${project?.id ?? props.node.attrs.id}`} className="label secondary">
+			<Link ref={props.ref} to={`/workspace/${workspaceId}/project/${project?.id ?? props.id}`} className="label secondary">
 				<Icon icon='FolderKanban' />
-				{project?.title ?? props.node.attrs.label}
+				{project?.title ?? props.fallbackLabel}
 			</Link>
 		</NodeViewWrapper>
 	)
 }
 
-
-const NoteMention = (props: {
-	node: Node
+export const NoteMention = (props: {
+	id: string,
+	fallbackLabel: string,
 	ref?: React.RefObject<HTMLAnchorElement | null>
 }) => {
 	const noteQuery = useMemo(
 		() => ({
-			selector: { id: props.node.attrs.id }
-		}), [props.node.attrs.id]
+			selector: { id: props.id }
+		}), [props.id]
 	)
 
 	const { results: [note] } = useRxQuery({
@@ -82,9 +84,9 @@ const NoteMention = (props: {
 
 	return (
 		<NodeViewWrapper as="span">
-			<Link ref={props.ref} to={`/workspace/${workspaceId}/note/${note?.id ?? props.node.attrs.id}`} className="label tertiary">
+			<Link ref={props.ref} to={`/workspace/${workspaceId}/note/${note?.id ?? props.id}`} className="label tertiary">
 				<Icon icon='Note01' />
-				{note ? title(note) : props.node.attrs.label}
+				{note ? title(note) : props.fallbackLabel}
 			</Link>
 		</NodeViewWrapper>
 	)
@@ -96,11 +98,11 @@ export const MentionView = (props: {
 }) => {
 	switch (props.node.attrs.mentionSuggestionChar) {
 		case '#':
-			return <TagMention {...props} />
+			return <TagMention {...props} id={props.node.attrs.id} fallbackLabel={props.node.attrs.label} />
 		case '@':
-			return <ProjectMention {...props} />
+			return <ProjectMention {...props} id={props.node.attrs.id} fallbackLabel={props.node.attrs.label} />
 		case '~':
-			return <NoteMention {...props} />
+			return <NoteMention {...props} id={props.node.attrs.id} fallbackLabel={props.node.attrs.label} />
 	}
 
 	return null
