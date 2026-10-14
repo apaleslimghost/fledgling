@@ -237,18 +237,40 @@ article {
 	overflow-x: hidden;
 }
 
-menu {
+menu,
+.react-aria-TabList {
 	background: white;
 	z-index: 10;
 	list-style: none;
 	min-width: 16rem;
 	--shadow-colour: darkslateblue;
 	--highlight: rgb(from var(--shadow-colour) r g b / 0.2);
+	color: var(--shadow-colour);
 	border: 1px solid var(--shadow-colour);
 	box-shadow: 1px 2px 0 var(--shadow-colour);
 	border-radius: 0.5rem;
 	padding: 0;
 	margin: 0;
+}
+
+.react-aria-Tab {
+	cursor: pointer;
+	padding: 0.5rem 0.75rem;
+	border-right: 1px dotted var(--shadow-colour);
+}
+
+.react-aria-Tab[aria-selected='true'] {
+	font-weight: bold;
+	background: var(--highlight);
+}
+
+.react-aria-TabList {
+	margin-bottom: 1rem;
+	--shadow-colour: steelblue;
+}
+
+.react-aria-TabList[aria-orientation='horizontal'] {
+	display: flex;
 }
 
 menu ul {
@@ -311,8 +333,9 @@ menu li.selected a:after {
 	float: right;
 }
 
-menu li :is(li>a, summary, .leaf>a):hover {
+:is(.react-aria-Tab, menu li :is(li>a, summary, .leaf>a)):hover {
 	background: rgb(from var(--highlight) r g b / 0.1);
+	color: inherit;
 }
 
 .label {

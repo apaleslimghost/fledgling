@@ -8,6 +8,7 @@ import NoteCard from "~/components/note-card";
 import { GridList, GridListItem, type DroppableCollectionDropEvent, type DroppableCollectionInsertDropEvent, type DroppableCollectionRootDropEvent } from 'react-aria-components/GridList';
 import { useDragAndDrop, DropIndicator, isTextDropItem } from 'react-aria-components/useDragAndDrop';
 import { useListData, type ListData } from 'react-aria-components/useListData';
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'react-aria-components/Tabs'
 import type { Task } from "~/data/schema";
 import { useWorkspace } from "~/data/context";
 import { Icon } from "~/components/icon";
@@ -128,11 +129,23 @@ export default function Project({ loaderData: { project, notes, tasks }, params 
 			</NavLink>
 		</h1>
 
+		<Tabs>
+			<TabList>
+				<Tab id='tasks'>Tasks</Tab>
+				<Tab id='notes'>Notes</Tab>
+			</TabList>
 
-		<Board tasks={tasks} />
+			<TabPanels>
+				<TabPanel id='tasks'>
+					<Board tasks={tasks} />
+				</TabPanel>
 
-		<div className="grid">
-			{notes.map(note => <NoteCard key={note.id} note={note} />)}
-		</div>
+				<TabPanel id='notes'>
+					<div className="grid">
+						{notes.map(note => <NoteCard key={note.id} note={note} />)}
+					</div>
+				</TabPanel>
+			</TabPanels>
+		</Tabs>
 	</div>
 }
