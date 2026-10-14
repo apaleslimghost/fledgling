@@ -44,7 +44,7 @@ export function Sidebar({
 					</button>
 
 					<div id={`qr-${workspaceId}`} popover='auto' className='card qr'>
-						<QrCode data={`https://👻🪺.ws/w/${workspaceId}`} />
+						<QrCode data={`https://fledgling.today/w/${workspaceId}`} />
 						<small>
 							this QR code gives full write access to this workspace
 						</small>
