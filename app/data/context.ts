@@ -21,10 +21,12 @@ export const useActiveTags = () => {
 	return activeTags
 }
 
-export const useSetActiveTags = (activeTags: string[]) => {
+export const useSetActiveTags = (ready: boolean, activeTags: string[]) => {
 	const [, setActiveTags] = useActiveTags()
 
 	useEffect(() => {
-		setActiveTags(activeTags)
+		if (ready) {
+			setActiveTags(activeTags)
+		}
 	}, [JSON.stringify(activeTags)])
 }

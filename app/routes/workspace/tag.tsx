@@ -42,7 +42,7 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 export default function Tag({ loaderData: { notes, projects }, params }: Route.ComponentProps) {
 	const pathParts = params['*'].split('/')
 
-	useSetActiveTags([params['*']])
+	useSetActiveTags(true, [params['*']])
 
 	return <div>
 		<title>{`#${params['*']}`}</title>

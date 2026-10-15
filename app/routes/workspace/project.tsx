@@ -10,7 +10,7 @@ import { useDragAndDrop, DropIndicator, isTextDropItem } from 'react-aria-compon
 import { useListData, type ListData } from 'react-aria-components/useListData';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'react-aria-components/Tabs'
 import type { Task } from "~/data/schema";
-import { useWorkspace } from "~/data/context";
+import { useSetActiveTags, useWorkspace } from "~/data/context";
 import { Icon } from "~/components/icon";
 import { useMemo } from "react";
 import { useRxQuery } from "rxdb/plugins/react";
@@ -120,6 +120,8 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 }
 
 export default function Project({ loaderData: { project, notes, tasks }, params }: Route.ComponentProps) {
+	useSetActiveTags(true, [])
+
 	return <div>
 		<title>{`@${project.title}`}</title>
 		<h1>

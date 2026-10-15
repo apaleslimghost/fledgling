@@ -56,7 +56,7 @@ export default function Note({ params }: Route.ComponentProps) {
 		query: tagQuery
 	})
 
-	useSetActiveTags(tags.map(tag => tag.path))
+	useSetActiveTags(!!note, tags.map(tag => tag.path))
 
 	const editorRef = useRef<TiptapEditor>(null)
 
