@@ -2,11 +2,11 @@ import { Outlet } from "react-router";
 import { Sidebar } from "~/components/sidebar";
 import type { Route } from "./+types/_root";
 import { isCuid } from "@paralleldrive/cuid2";
-import { Workspace } from "~/data/context";
+import { ActiveTags, Workspace } from "~/data/context";
 import database from "~/data/rxdb.client";
 import { useLiveRxQuery } from "rxdb/plugins/react";
 import type { Session } from "~/data/schema";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { noteSearch, projectSearch, tagSearch } from "~/data/search";
 import { title } from "~/data/note";
 
@@ -102,10 +102,14 @@ export default function ({ params }: Route.ComponentProps) {
 		query
 	})
 
+	const activeTagsState = useState<string[]>([])
+
 	return <Workspace.Provider value={params.workspaceId}>
-		<main className="panels">
-			<Sidebar tags={tagsWithNotes} projects={projects} workspaceId={params.workspaceId} />
-			<Outlet />
-		</main>
+		<ActiveTags.Provider value={activeTagsState}>
+			<main className="panels">
+				<Sidebar tags={tagsWithNotes} projects={projects} workspaceId={params.workspaceId} />
+				<Outlet />
+			</main>
+		</ActiveTags.Provider>
 	</Workspace.Provider>
 }

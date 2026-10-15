@@ -3,6 +3,7 @@ import type { Route } from "./+types/tag";
 import { Link, NavLink } from "react-router";
 import { Icon } from "~/components/icon";
 import NoteCard from "~/components/note-card";
+import { useActiveTags, useSetActiveTags } from "~/data/context";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 	const path = params['*']
@@ -40,6 +41,8 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 
 export default function Tag({ loaderData: { notes, projects }, params }: Route.ComponentProps) {
 	const pathParts = params['*'].split('/')
+
+	useSetActiveTags([params['*']])
 
 	return <div>
 		<title>{`#${params['*']}`}</title>
