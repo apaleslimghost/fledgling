@@ -22,7 +22,6 @@ const TagLink = ({ tree, className, leaf }: { tree: TagTree; className?: string,
 
 const TagBranch = ({ tree }: { tree: TagTree }) => {
 	const [activeTags] = useActiveTags()
-	console.log(activeTags)
 
 	return (
 		<li>
