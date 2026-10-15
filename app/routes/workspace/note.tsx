@@ -6,6 +6,7 @@ import { useMemo, useRef } from "react";
 import database from "~/data/rxdb.client";
 import { useLiveRxQuery } from "rxdb/plugins/react";
 import { title } from "~/data/note";
+import { useSetActiveTags } from "~/data/context";
 
 interface MentionNode extends JSONContent {
 	type: 'mention'
@@ -39,12 +40,23 @@ function* collect<T extends JSONContent>(type: T['type'], tree: JSONContent): Ge
 }
 
 export default function Note({ params }: Route.ComponentProps) {
-	const query = useMemo(() => ({ selector: { id: params.noteId } }), [params.noteId])
+	const noteQuery = useMemo(() => ({ selector: { id: params.noteId } }), [params.noteId])
 
 	const { results: [note] } = useLiveRxQuery({
 		collection: database.notes,
-		query,
+		query: noteQuery,
 	})
+
+	const tagQuery = useMemo(() => ({
+		selector: { id: { $in: note?.tags } }
+	}), [params.noteId, JSON.stringify(note?.tags)])
+
+	const { results: tags } = useLiveRxQuery({
+		collection: database.tags,
+		query: tagQuery
+	})
+
+	useSetActiveTags(tags.map(tag => tag.path))
 
 	const editorRef = useRef<TiptapEditor>(null)
 
