@@ -40,7 +40,7 @@ export default forwardRef<Editor, Omit<EditorProviderProps, 'extensions'> & { id
 
 		return (
 			<Tiptap editor={editor}>
-				<Tiptap.Content />
+				<Tiptap.Content className='scroll' />
 			</Tiptap>
 		)
 	},
