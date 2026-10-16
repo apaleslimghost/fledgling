@@ -1,8 +1,9 @@
 
-import { addRxPlugin, createRxDatabase } from 'rxdb/plugins/core'
+import { addRxPlugin, createRxDatabase, type RxStorage } from 'rxdb/plugins/core'
 import { disableWarnings, RxDBDevModePlugin } from 'rxdb/plugins/dev-mode'
 import { RxDBMigrationSchemaPlugin } from 'rxdb/plugins/migration-schema'
 import { getRxStorageLocalstorage } from 'rxdb/plugins/storage-localstorage'
+import { getRxStorageMemory } from 'rxdb/plugins/storage-memory'
 import { RxDBUpdatePlugin } from 'rxdb/plugins/update'
 import { getAjv, wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv'
 import {
@@ -19,7 +20,11 @@ import { RxDBLocalDocumentsPlugin } from 'rxdb/plugins/local-documents';
 const ajv = getAjv()
 ajv.opts.allowUnionTypes = true
 
-const storage = wrappedValidateAjvStorage({ storage: getRxStorageLocalstorage() })
+const baseStorage: RxStorage<unknown, unknown> = 'localStorage' in globalThis ? getRxStorageLocalstorage() : getRxStorageMemory()
+
+const storage = wrappedValidateAjvStorage({
+	storage: baseStorage
+})
 
 RxDBDevModePlugin.init = () => { } // fuck you and the tracking iframe you rode in on
 addRxPlugin(RxDBDevModePlugin)

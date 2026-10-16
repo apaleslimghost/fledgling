@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import { Link } from 'react-router'
 import { useRxQuery } from 'rxdb/plugins/react'
 import { useWorkspace } from '~/data/context'
-import database from '~/data/rxdb.client'
+import database from '~/data/rxdb'
 import { Icon } from './icon'
 import { title } from '~/data/note'
 
