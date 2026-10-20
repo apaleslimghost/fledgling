@@ -3,7 +3,7 @@ import { Sidebar } from "~/components/sidebar";
 import type { Route } from "./+types/_root";
 import { isCuid } from "@paralleldrive/cuid2";
 import { ActiveTags, Workspace } from "~/data/context";
-import database from "~/data/rxdb.client";
+import database from "~/data/rxdb";
 import { useLiveRxQuery } from "rxdb/plugins/react";
 import type { Session } from "~/data/schema";
 import { useEffect, useMemo, useState } from "react";

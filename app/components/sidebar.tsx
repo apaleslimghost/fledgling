@@ -1,6 +1,6 @@
 import { Link, NavLink, useNavigate } from "react-router";
 import { shortId } from "~/data/cuid";
-import database from "~/data/rxdb.client";
+import database from "~/data/rxdb";
 import type { Project, Tag } from "~/data/schema";
 import TagTreeComponent from "./tag-tree";
 import type { TagWithNotes } from "~/lib/tag-tree";

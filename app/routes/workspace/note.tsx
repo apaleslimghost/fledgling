@@ -3,7 +3,7 @@ import Editor from "~/components/editor";
 import type { Content, Editor as TiptapEditor, JSONContent } from "@tiptap/react";
 import type { MentionNodeAttrs } from "@tiptap/extension-mention";
 import { useMemo, useRef } from "react";
-import database from "~/data/rxdb.client";
+import database from "~/data/rxdb";
 import { useLiveRxQuery } from "rxdb/plugins/react";
 import { title } from "~/data/note";
 import { useSetActiveTags } from "~/data/context";

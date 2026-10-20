@@ -1,6 +1,6 @@
 import { redirect } from "react-router";
 import { cuid } from "~/data/cuid";
-import database from "~/data/rxdb.client";
+import database from "~/data/rxdb";
 import type { Session } from "~/data/schema";
 
 export async function clientLoader() {

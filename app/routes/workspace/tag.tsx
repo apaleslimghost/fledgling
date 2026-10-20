@@ -1,4 +1,4 @@
-import database from "~/data/rxdb.client";
+import database from "~/data/rxdb";
 import type { Route } from "./+types/tag";
 import { Link, NavLink } from "react-router";
 import { Icon } from "~/components/icon";
