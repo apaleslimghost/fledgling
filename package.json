@@ -33,7 +33,7 @@
 		"rxdb": "^17.5.0",
 		"rxjs": "^7.8.2",
 		"sketchicon": "^0.2.0",
-		"zod": "^4.6.5"
+		"zod": "^4.6.6"
 	},
 	"devDependencies": {
 		"@react-router/dev": "^8",
