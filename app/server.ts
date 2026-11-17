@@ -3,6 +3,7 @@ import { createRequestHandler } from "@react-router/express";
 import { createRxServer } from 'rxdb-server/plugins/server';
 import { RxServerAdapterExpress } from 'rxdb-server/plugins/adapter-express';
 import database from "./data/rxdb";
+import { replications } from "./data/replication.server";
 
 const rxServer = await createRxServer({
 	database,

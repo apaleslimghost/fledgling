@@ -70,7 +70,11 @@ export const extensions = [
 		link: {
 			openOnClick: false,
 			enableClickSelection: true
-		}
+		},
+		listItem: false,
+		bulletList: false,
+		listKeymap: false,
+		orderedList: false
 	}),
 	Document.extend({
 		content: 'title block*'
