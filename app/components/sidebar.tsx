@@ -48,6 +48,72 @@ export function Sidebar({
 						<small>
 							this QR code gives full write access to this workspace
 						</small>
+
+						<hr />
+
+						<div className="toolbar">
+							<button className="secondary" onClick={async () => {
+								const json = await database.exportJSON()
+								const blob = new Blob([
+									JSON.stringify(json)
+								], {
+									type: 'application/json'
+								})
+
+								const a = document.createElement('a')
+								a.download = `flegdling-${workspaceId}-${Date.now()}.json`
+								a.href = URL.createObjectURL(blob)
+								a.click()
+
+								requestIdleCallback(() => {
+									URL.revokeObjectURL(a.href)
+								})
+							}}>
+								<Icon icon='HardDriveDownload' /> export
+							</button>
+
+							<button className="secondary" onClick={async () => {
+								const input = document.createElement('input')
+								input.type = 'file'
+								input.accept = 'application/json'
+
+								input.addEventListener('change', () => {
+									const [file] = input.files ?? []
+									if (!file) return
+
+									const reader = new FileReader();
+									reader.readAsText(file, 'UTF-8');
+									reader.addEventListener('load', async () => {
+										const content = reader.result
+										if (!(typeof content === 'string')) return
+
+										const json = JSON.parse(content)
+										if (!('collections' in json)) {
+											alert('Invalid Fledgling export')
+											return
+										}
+
+										json.collections = json.collections.filter(
+											collection => collection.name !== 'workspaces'
+										)
+
+										for (const collection of json.collections) {
+											for (const doc of collection.docs) {
+												if (doc.workspace) {
+													doc.workspace = workspaceId
+												}
+											}
+										}
+
+										await database.importJSON(json)
+									}, { once: true })
+								}, { once: true })
+
+								input.click()
+							}}>
+								<Icon icon='HardDriveUpload' /> import
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>

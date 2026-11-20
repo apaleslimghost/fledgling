@@ -530,7 +530,7 @@ h1.tag-path {
 	padding: 0.5rem;
 }
 
-.qr svg {
+.qr>svg {
 	width: 8rem;
 	display: block;
 }
