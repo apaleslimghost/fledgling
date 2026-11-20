@@ -1,7 +1,7 @@
 import { type RouteConfig, index, route } from "@react-router/dev/routes";
 
 export default [
-	index("routes/home.ts"),
+	index("routes/home.tsx"),
 	route("/workspace/:workspaceId", "routes/workspace/_root.tsx", [
 		index("routes/workspace/home.tsx"),
 		route("note/:noteId/:taskId?", "routes/workspace/note.tsx"),
