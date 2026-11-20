@@ -115,9 +115,12 @@ export function Sidebar({
 							</button>
 
 							<button className='button danger' onClick={async () => {
-								const session = await database.getLocal<Session>('session')
-								await session?.remove()
-								navigate('/')
+								if (confirm(`Are you sure you want to close the workspace? If you ever want to get it back, keep the URL ${new URL(`/workspace/${workspaceId}`, location.href)} somewhere safe.`)) {
+
+									const session = await database.getLocal<Session>('session')
+									await session?.remove()
+									navigate('/')
+								}
 							}}>
 								<Icon icon='BookX' />
 								close
