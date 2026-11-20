@@ -1,7 +1,7 @@
 import { Link, NavLink, useNavigate } from "react-router";
 import { shortId } from "~/data/cuid";
 import database from "~/data/rxdb";
-import type { Project, Tag } from "~/data/schema";
+import type { Project, Session, Tag } from "~/data/schema";
 import TagTreeComponent from "./tag-tree";
 import type { TagWithNotes } from "~/lib/tag-tree";
 import { Icon } from "./icon";
@@ -39,8 +39,8 @@ export function Sidebar({
 
 				<div className='tooltip'>
 					<button className="secondary surface lo" popoverTarget={`qr-${workspaceId}`}>
-						<Icon icon='QrCode' />
-						connect
+						<Icon icon='FolderTransfer' />
+						workspace
 					</button>
 
 					<div id={`qr-${workspaceId}`} popover='auto' className='card qr'>
@@ -112,6 +112,15 @@ export function Sidebar({
 								input.click()
 							}}>
 								<Icon icon='HardDriveUpload' /> import
+							</button>
+
+							<button className='button danger' onClick={async () => {
+								const session = await database.getLocal<Session>('session')
+								await session?.remove()
+								navigate('/')
+							}}>
+								<Icon icon='BookX' />
+								close
 							</button>
 						</div>
 					</div>
