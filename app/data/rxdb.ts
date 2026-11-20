@@ -1,8 +1,9 @@
 
-import { addRxPlugin, createRxDatabase } from 'rxdb/plugins/core'
+import { addRxPlugin, createRxDatabase, type RxStorage } from 'rxdb/plugins/core'
 import { disableWarnings, RxDBDevModePlugin } from 'rxdb/plugins/dev-mode'
 import { RxDBMigrationSchemaPlugin } from 'rxdb/plugins/migration-schema'
 import { getRxStorageLocalstorage } from 'rxdb/plugins/storage-localstorage'
+import { getRxStorageMemory } from 'rxdb/plugins/storage-memory'
 import { RxDBUpdatePlugin } from 'rxdb/plugins/update'
 import { getAjv, wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv'
 import {
@@ -14,12 +15,16 @@ import {
 	type Collections,
 } from './schema'
 import { RxDBLocalDocumentsPlugin } from 'rxdb/plugins/local-documents';
-
+import { RxDBJsonDumpPlugin } from 'rxdb/plugins/json-dump';
 
 const ajv = getAjv()
 ajv.opts.allowUnionTypes = true
 
-const storage = wrappedValidateAjvStorage({ storage: getRxStorageLocalstorage() })
+const baseStorage: RxStorage<unknown, unknown> = 'localStorage' in globalThis ? getRxStorageLocalstorage() : getRxStorageMemory()
+
+const storage = wrappedValidateAjvStorage({
+	storage: baseStorage
+})
 
 RxDBDevModePlugin.init = () => { } // fuck you and the tracking iframe you rode in on
 addRxPlugin(RxDBDevModePlugin)
@@ -28,6 +33,7 @@ disableWarnings()
 addRxPlugin(RxDBUpdatePlugin)
 addRxPlugin(RxDBMigrationSchemaPlugin)
 addRxPlugin(RxDBLocalDocumentsPlugin);
+addRxPlugin(RxDBJsonDumpPlugin);
 
 const database = await createRxDatabase<Collections>({
 	name: 'fledgling',
@@ -61,6 +67,20 @@ await database.addCollections({
 	},
 	tasks: {
 		schema: taskSchema,
+		migrationStrategies: {
+			async 1(task) {
+				const note = await database.notes.findOne({
+					selector: {
+						id: task.note
+					}
+				}).exec()
+
+				if (!note) throw new Error(`somehow note ${task.note} doesn't exist`)
+
+				task.workspace = note.workspace
+				return task
+			}
+		}
 	},
 })
 

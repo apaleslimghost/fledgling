@@ -3,12 +3,14 @@ import { Sidebar } from "~/components/sidebar";
 import type { Route } from "./+types/_root";
 import { isCuid } from "@paralleldrive/cuid2";
 import { ActiveTags, Workspace } from "~/data/context";
-import database from "~/data/rxdb.client";
+import database from "~/data/rxdb";
 import { useLiveRxQuery } from "rxdb/plugins/react";
 import type { Session } from "~/data/schema";
 import { useEffect, useMemo, useState } from "react";
 import { noteSearch, projectSearch, tagSearch } from "~/data/search";
 import { title } from "~/data/note";
+import { replicateWorkspace, ReplicationsContext } from "~/data/replication.client";
+import type { RxServerReplicationState } from "rxdb-server/plugins/replication-server";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 	if (!isCuid(params.workspaceId)) {
@@ -102,14 +104,28 @@ export default function ({ params }: Route.ComponentProps) {
 		query
 	})
 
+	const [replications, setReplications] = useState<Record<string, RxServerReplicationState<unknown>> | null>(null)
+	useEffect(() => {
+		const replications = replicateWorkspace(params.workspaceId)
+		setReplications(replications)
+
+		return () => {
+			for (const replication of Object.values(replications)) {
+				replication.remove()
+			}
+		}
+	}, [params.workspaceId])
+
 	const activeTagsState = useState<string[]>([])
 
 	return <Workspace.Provider value={params.workspaceId}>
 		<ActiveTags.Provider value={activeTagsState}>
-			<main className="panels">
-				<Sidebar tags={tagsWithNotes} projects={projects} workspaceId={params.workspaceId} />
-				<Outlet />
-			</main>
+			<ReplicationsContext.Provider value={replications}>
+				<main className="panels">
+					<Sidebar tags={tagsWithNotes} projects={projects} workspaceId={params.workspaceId} />
+					<Outlet />
+				</main>
+			</ReplicationsContext.Provider>
 		</ActiveTags.Provider>
 	</Workspace.Provider>
 }

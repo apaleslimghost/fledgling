@@ -10,7 +10,7 @@ import { MentionView } from '../mention'
 import { makeSuggester } from './suggestion'
 import { noteSearch, projectSearch, tagSearch } from '~/data/search'
 import { shortId } from '~/data/cuid'
-import database from '~/data/rxdb.client'
+import database from '~/data/rxdb'
 import { Highlight } from './highlight-task'
 import MiniSearch from 'minisearch'
 
@@ -70,7 +70,11 @@ export const extensions = [
 		link: {
 			openOnClick: false,
 			enableClickSelection: true
-		}
+		},
+		listItem: false,
+		bulletList: false,
+		listKeymap: false,
+		orderedList: false
 	}),
 	Document.extend({
 		content: 'title block*'

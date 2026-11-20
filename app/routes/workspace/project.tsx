@@ -1,5 +1,5 @@
 import type { Node } from '@tiptap/pm/model'
-import database from "~/data/rxdb.client";
+import database from "~/data/rxdb";
 import type { Route } from "./+types/project";
 import { Link, NavLink } from "react-router";
 import Editor from "~/components/editor";

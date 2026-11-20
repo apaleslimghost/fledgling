@@ -12,7 +12,7 @@ import { RxDatabaseProvider } from 'rxdb/plugins/react';
 import type { Route } from "./+types/root";
 
 import "./app.css";
-import database from "./data/rxdb.client";
+import database from "./data/rxdb";
 
 export function links() {
 	return [

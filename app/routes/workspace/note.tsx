@@ -3,7 +3,7 @@ import Editor from "~/components/editor";
 import type { Content, Editor as TiptapEditor, JSONContent } from "@tiptap/react";
 import type { MentionNodeAttrs } from "@tiptap/extension-mention";
 import { useMemo, useRef } from "react";
-import database from "~/data/rxdb.client";
+import database from "~/data/rxdb";
 import { useLiveRxQuery } from "rxdb/plugins/react";
 import { title } from "~/data/note";
 import { useSetActiveTags } from "~/data/context";
@@ -111,7 +111,8 @@ export default function Note({ params }: Route.ComponentProps) {
 							id: t.attrs.id,
 							status: t.attrs.checked ? 'done' : 'todo',
 							content: t,
-							note: note.id
+							note: note.id,
+							workspace: params.workspaceId
 						})
 					))
 

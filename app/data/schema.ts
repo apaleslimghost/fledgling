@@ -34,6 +34,7 @@ export type Task = {
 	id: string
 	note: string
 	content: JSONContent
+	workspace: string
 	status: 'todo' | 'in-progress' | 'done' | 'archived'
 }
 
@@ -78,9 +79,10 @@ export const taskSchema: RxJsonSchema<Task> = {
 		note: { type: 'string', ref: 'note' },
 		content: { type: 'object' },
 		status: { type: 'string', enum: ['todo', 'in-progress', 'done', 'archived'] },
+		workspace: { type: 'string', ref: 'workspace', }
 	},
 	required: ['id', 'note', 'content', 'status'],
-	version: 0,
+	version: 1,
 	primaryKey: 'id',
 }
 

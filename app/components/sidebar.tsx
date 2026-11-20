@@ -1,7 +1,7 @@
 import { Link, NavLink, useNavigate } from "react-router";
 import { shortId } from "~/data/cuid";
-import database from "~/data/rxdb.client";
-import type { Project, Tag } from "~/data/schema";
+import database from "~/data/rxdb";
+import type { Project, Session, Tag } from "~/data/schema";
 import TagTreeComponent from "./tag-tree";
 import type { TagWithNotes } from "~/lib/tag-tree";
 import { Icon } from "./icon";
@@ -39,8 +39,8 @@ export function Sidebar({
 
 				<div className='tooltip'>
 					<button className="secondary surface lo" popoverTarget={`qr-${workspaceId}`}>
-						<Icon icon='QrCode' />
-						connect
+						<Icon icon='FolderTransfer' />
+						workspace
 					</button>
 
 					<div id={`qr-${workspaceId}`} popover='auto' className='card qr'>
@@ -48,6 +48,84 @@ export function Sidebar({
 						<small>
 							this QR code gives full write access to this workspace
 						</small>
+
+						<hr />
+
+						<div className="toolbar">
+							<button className="secondary" onClick={async () => {
+								const json = await database.exportJSON()
+								const blob = new Blob([
+									JSON.stringify(json)
+								], {
+									type: 'application/json'
+								})
+
+								const a = document.createElement('a')
+								a.download = `flegdling-${workspaceId}-${Date.now()}.json`
+								a.href = URL.createObjectURL(blob)
+								a.click()
+
+								requestIdleCallback(() => {
+									URL.revokeObjectURL(a.href)
+								})
+							}}>
+								<Icon icon='HardDriveDownload' /> export
+							</button>
+
+							<button className="secondary" onClick={async () => {
+								const input = document.createElement('input')
+								input.type = 'file'
+								input.accept = 'application/json'
+
+								input.addEventListener('change', () => {
+									const [file] = input.files ?? []
+									if (!file) return
+
+									const reader = new FileReader();
+									reader.readAsText(file, 'UTF-8');
+									reader.addEventListener('load', async () => {
+										const content = reader.result
+										if (!(typeof content === 'string')) return
+
+										const json = JSON.parse(content)
+										if (!('collections' in json)) {
+											alert('Invalid Fledgling export')
+											return
+										}
+
+										json.collections = json.collections.filter(
+											collection => collection.name !== 'workspaces'
+										)
+
+										for (const collection of json.collections) {
+											for (const doc of collection.docs) {
+												if (doc.workspace) {
+													doc.workspace = workspaceId
+												}
+											}
+										}
+
+										await database.importJSON(json)
+									}, { once: true })
+								}, { once: true })
+
+								input.click()
+							}}>
+								<Icon icon='HardDriveUpload' /> import
+							</button>
+
+							<button className='button danger' onClick={async () => {
+								if (confirm(`Are you sure you want to close the workspace? If you ever want to get it back, keep the URL ${new URL(`/workspace/${workspaceId}`, location.href)} somewhere safe.`)) {
+
+									const session = await database.getLocal<Session>('session')
+									await session?.remove()
+									navigate('/')
+								}
+							}}>
+								<Icon icon='BookX' />
+								close
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
