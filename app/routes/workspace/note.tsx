@@ -111,7 +111,8 @@ export default function Note({ params }: Route.ComponentProps) {
 							id: t.attrs.id,
 							status: t.attrs.checked ? 'done' : 'todo',
 							content: t,
-							note: note.id
+							note: note.id,
+							workspace: params.workspaceId
 						})
 					))
 

@@ -67,6 +67,20 @@ await database.addCollections({
 	},
 	tasks: {
 		schema: taskSchema,
+		migrationStrategies: {
+			async 1(task) {
+				const note = await database.notes.findOne({
+					selector: {
+						id: task.note
+					}
+				}).exec()
+
+				if (!note) throw new Error(`somehow note ${task.note} doesn't exist`)
+
+				task.workspace = note.workspace
+				return task
+			}
+		}
 	},
 })
 

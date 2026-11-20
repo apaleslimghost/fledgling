@@ -66,6 +66,10 @@ rxServer.addReplicationEndpoint({
 rxServer.addReplicationEndpoint({
 	name: `_replication/tasks`,
 	collection: database.collections.tasks,
+	queryModifier(authData: RxServerAuthData<AuthData>, query) {
+		query.selector.workspace = { $eq: authData.data.workspaceId }
+		return query
+	}
 })
 
 app.use(
