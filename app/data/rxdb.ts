@@ -15,7 +15,7 @@ import {
 	type Collections,
 } from './schema'
 import { RxDBLocalDocumentsPlugin } from 'rxdb/plugins/local-documents';
-
+import { RxDBJsonDumpPlugin } from 'rxdb/plugins/json-dump';
 
 const ajv = getAjv()
 ajv.opts.allowUnionTypes = true
@@ -33,6 +33,7 @@ disableWarnings()
 addRxPlugin(RxDBUpdatePlugin)
 addRxPlugin(RxDBMigrationSchemaPlugin)
 addRxPlugin(RxDBLocalDocumentsPlugin);
+addRxPlugin(RxDBJsonDumpPlugin);
 
 const database = await createRxDatabase<Collections>({
 	name: 'fledgling',

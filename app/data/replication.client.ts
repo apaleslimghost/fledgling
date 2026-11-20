@@ -12,3 +12,11 @@ export const replications = await Promise.all(
 		})
 	)
 )
+
+Object.assign(globalThis, {
+	replications: Object.fromEntries(
+		replications.map(
+			r => [r.collection.name, r]
+		)
+	)
+})
