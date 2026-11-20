@@ -1,22 +1,22 @@
+import { createContext } from "react";
 import database from "./rxdb";
-import { replicateServer } from 'rxdb-server/plugins/replication-server';
+import { replicateServer, RxServerReplicationState } from 'rxdb-server/plugins/replication-server';
+import type { RxReplicationState } from "rxdb/plugins/replication";
 
-export const replications = await Promise.all(
+export const replicateWorkspace = (workspaceId: string) => Object.fromEntries(
+
 	Object.entries(database.collections).map(
-		([name, collection]) => replicateServer({
+		([name, collection]) => [name, replicateServer({
 			collection,
 			replicationIdentifier: `rxServer/${name}`,
 			url: `/_replication/${name}/${collection.schema.version}`,
+			headers: {
+				Authorization: `Bearer ${workspaceId}`
+			},
 			push: {},
 			pull: {}
-		})
+		})]
 	)
 )
 
-Object.assign(globalThis, {
-	replications: Object.fromEntries(
-		replications.map(
-			r => [r.collection.name, r]
-		)
-	)
-})
+export const ReplicationsContext = createContext<Record<string, RxServerReplicationState<unknown>> | null>(null)
