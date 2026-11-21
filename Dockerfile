@@ -1,9 +1,9 @@
-FROM node:24-alpine AS development-dependencies-env
+FROM python-nodejs:python3.15-nodejs24-alpine AS development-dependencies-env
 COPY . /app
 WORKDIR /app
 RUN npm ci
 
-FROM node:24-alpine AS production-dependencies-env
+FROM python-nodejs:python3.15-nodejs24-alpine AS production-dependencies-env
 COPY ./package.json package-lock.json /app/
 WORKDIR /app
 RUN npm ci --omit=dev
