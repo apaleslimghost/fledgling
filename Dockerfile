@@ -1,9 +1,10 @@
-FROM python-nodejs:python3.15-nodejs24-alpine AS development-dependencies-env
+FROM node:24-alpine AS development-dependencies-env
+RUN apk add python3 make g++ krb5-dev
 COPY . /app
 WORKDIR /app
 RUN npm ci
 
-FROM python-nodejs:python3.15-nodejs24-alpine AS production-dependencies-env
+FROM node:24-alpine AS production-dependencies-env
 COPY ./package.json package-lock.json /app/
 WORKDIR /app
 RUN npm ci --omit=dev
